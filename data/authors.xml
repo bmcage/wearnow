@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$ -->
+<authors xmlns:html="http://www.w3.org/1999/xhtml">
+ <author title="author">
+  Benny Malengier &lt;<html:a href="mailto:benny.malengier@ugent.be">benny.malengier@ugent.be</html:a>&gt;
+ </author>
+ <author title="author">
+  Mahmood Ahmed &lt;<html:a href="mailto:mahmood.ahmed@ugent.be">mahmood.ahmed@ugent.be</html:a>&gt;
+ </author>
+</authors>
