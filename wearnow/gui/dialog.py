@@ -33,7 +33,6 @@ _LOG = logging.getLogger(".dialog")
 # GNOME/GTK+ modules
 #
 #-------------------------------------------------------------------------
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
@@ -42,10 +41,10 @@ from gi.repository import GdkPixbuf
 #  modules
 #
 #-------------------------------------------------------------------------
-from wearnow.gen.const import WEARNOW_LOCALE as glocale
+from wearnow.tex.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
-from wearnow.gen.const import ICON, URL_BUGHOME
-from wearnow.gen.config import config
+from wearnow.tex.const import ICON
+from wearnow.tex.config import config
 from wearnow.gui.glade import Glade
 
 try:
@@ -411,6 +410,17 @@ class MessageHideDialog(object):
     def update_checkbox(self, obj, constant):
         config.set(constant, obj.get_active())
         config.save()
+
+
+class DBErrorDialog(ErrorDialog):
+    def __init__(self, msg, parent=None):
+        ErrorDialog.__init__(
+            self,
+            _("Database corruption detected"),
+            _("WearNow has detected a problem in the underlying "
+              "database. This can be repaired from "
+              "the Family Tree Manager. Select the database and "
+              'click on the Repair button') + '\n\n' + msg, parent)
 
 ## Testing function of some of these dialogs
 def main(args):

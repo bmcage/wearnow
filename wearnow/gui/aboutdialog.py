@@ -52,12 +52,12 @@ from gi.repository import GdkPixbuf
 # modules
 #
 #-------------------------------------------------------------------------
-from wearnow.gen.const import (AUTHORS, AUTHORS_FILE, COMMENTS, COPYRIGHT_MSG, 
+from wearnow.tex.const import (AUTHORS, AUTHORS_FILE, COMMENTS, COPYRIGHT_MSG, 
                        DOCUMENTERS, LICENSE_FILE, PROGRAM_NAME, SPLASH, 
                        URL_HOMEPAGE, VERSION)
-from wearnow.gen.const import WEARNOW_LOCALE as glocale
+from wearnow.tex.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
-from wearnow.gen.constfunc import get_env_var
+from wearnow.tex.constfunc import get_env_var
 from .display import display_url
 
 def ellipses(text):
@@ -73,7 +73,7 @@ def ellipses(text):
 # WearnowAboutDialog
 #
 #-------------------------------------------------------------------------
-class WearnowAboutDialog(Gtk.AboutDialog):
+class WearNowAboutDialog(Gtk.AboutDialog):
     """Create an About dialog with all fields set."""
     def __init__(self, parent):
         """Setup all the fields shown in the About dialog."""

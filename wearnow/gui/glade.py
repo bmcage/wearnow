@@ -47,7 +47,7 @@ from gi.repository import Gtk
 # modules
 #
 #------------------------------------------------------------------------
-from wearnow.gen.const import GLADE_DIR, WEARNOW_LOCALE as glocale
+from wearnow.tex.const import GLADE_DIR, WEARNOW_LOCALE as glocale
 
 #------------------------------------------------------------------------
 #

@@ -29,7 +29,7 @@
 import sys
 import os
 import logging
-LOG = logging.getLogger(".wearnowgui")
+LOG = logging.getLogger(".wearnow_gui")
 
 #-------------------------------------------------------------------------
 #
@@ -42,6 +42,8 @@ from wearnow.tex.constfunc import has_display, win, lin
 from wearnow.tex.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
 
+from .logger import RotateHandler
+from .logger import GtkHandler
 #-------------------------------------------------------------------------
 #
 # Miscellaneous initialization
@@ -152,8 +154,6 @@ class WearNow(object):
     """
 
     def __init__(self, args):
-        from . import viewmanager
-        from .viewmanager import ViewManager
         from .dialog import WarningDialog
         import gettext
 
@@ -180,7 +180,12 @@ class WearNow(object):
                      'bold_start' : '<b>' ,
                      'bold_end'   : '</b>' } )
 
-        self.vm = ViewManager()
+        from .viewmanager import ViewManager
+        from wearnow.tex.dbstate import DbState
+        
+        dbstate = DbState()
+        order_categories = ['Textile', 'WearNow', 'Ensemble', 'Media', 'Notes']
+        self.vm = ViewManager(dbstate, order_categories)
         self.vm.init_interface()
 
         self.vm.post_init_interface()
@@ -211,7 +216,6 @@ def __startwearnow(errors, args):
             sys.exit(1)
 
         # add gui logger
-        from .logger import RotateHandler, GtkHandler
         form = logging.Formatter(fmt="%(relativeCreated)d: %(levelname)s: "
                                     "%(filename)s: line %(lineno)d: %(message)s")
         # Create the log handlers

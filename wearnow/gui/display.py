@@ -31,8 +31,7 @@ import webbrowser
 # GRAMPS modules
 #
 #------------------------------------------------------------------------
-from gramps.gen.const import GRAMPS_LOCALE as glocale
-from gramps.gen.const import URL_MANUAL_PAGE, URL_WIKISTRING
+from wearnow.tex.const import WEARNOW_LOCALE as glocale
 
 #list of manuals on wiki, map locale code to wiki extension, add language codes
 #completely, or first part, so pt_BR if Brazilian portugeze wiki manual, and 

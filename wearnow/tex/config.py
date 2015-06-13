@@ -130,6 +130,8 @@ register('behavior.check-for-updates', 0)
 register('behavior.last-check-for-updates', "1970/01/01")
 register('behavior.previously-seen-updates', [])
 register('behavior.do-not-show-previously-seen-updates', True)
+register('behavior.database-path', os.path.join( HOME_DIR, 'wearnowdb'))
+register('behavior.database-backend', 'dictionarydb')
 register('behavior.welcome', 100)
 register('behavior.web-search-url', 'http://google.com/#&q=%(text)s')
 
@@ -138,6 +140,9 @@ register('interface.height', 500)
 register('interface.statusbar', 1)
 register('interface.toolbar-on', True)
 register('interface.width', 775)
+register('interface.view', True)
+register('interface.view-categories',
+         ["Textile", "WearNow", "Ensemble", "Media", "Notes"])
 
 register('paths.recent-export-dir', '')
 register('paths.recent-file', '')
@@ -161,6 +166,8 @@ register('owner.owner-phone', '')
 register('owner.owner-postal', '')
 register('owner.owner-state', '')
 
+register('plugin.hiddenplugins', [])
+register('plugin.addonplugins', [])
 
 #---------------------------------------------------------------
 #

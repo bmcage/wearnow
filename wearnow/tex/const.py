@@ -119,6 +119,8 @@ VERSION += git_revision
 GLADE_DIR      = os.path.join(ROOT_DIR, "gui", "glade")
 GLADE_FILE     = os.path.join(GLADE_DIR, "wearnow.glade")
 
+PLUGINS_DIR        = os.path.join(ROOT_DIR, "plugins")
+
 if sys.platform == 'win32':
     USE_THUMBNAILER = False
 else:
@@ -163,7 +165,9 @@ AUTHORS        = [
     "Mahmood Ahmed",
     ]
 
-
+AUTHORS_FILE = os.path.join(DATA_DIR, "authors.xml")
+DOCUMENTERS    = [ 
+    ]
 #-------------------------------------------------------------------------
 #
 # Constants
@@ -172,3 +176,4 @@ AUTHORS        = [
 THUMBSCALE       = 96.0
 THUMBSCALE_LARGE = 180.0
 
+WEARNOW_UUID =  uuid.UUID('43615387-3622-467f-b061-c04a378317b0')

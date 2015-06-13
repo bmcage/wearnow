@@ -38,6 +38,7 @@ Manages the main window and the pluggable views
 #-------------------------------------------------------------------------
 import os,sys
 import time
+from collections import defaultdict
 
 #-------------------------------------------------------------------------
 #
@@ -59,14 +60,14 @@ from gi.repository import Gtk
 # modules
 #
 #-------------------------------------------------------------------------
+
 from wearnow.tex.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.sgettext
 from .user import User
 from .displaystate import DisplayState, RecentDocsMenu
-from wearnow.tex.const import (HOME_DIR, ICON, URL_HOMEPAGE, PLUGINS_DIR, USER_PLUGINS)
+from wearnow.tex.const import (HOME_DIR, ICON, URL_HOMEPAGE, PLUGINS_DIR)
 from wearnow.tex.db.dbconst import DBBACKEND
 from wearnow.tex.errors import DbError
-from wearnow.tex.dbstate import DbState
 from wearnow.tex.db.exceptions import (DbUpgradeRequiredError, 
                                       DbVersionError, 
                                       PythonUpgradeRequiredError,
@@ -76,11 +77,15 @@ from wearnow.tex.constfunc import is_quartz, conv_to_unicode
 from wearnow.tex.config import config
 from wearnow.tex.errors import WindowActiveError
 from wearnow.tex.recentfiles import recent_files
+from .pluginmanager import GuiPluginManager
 from .dialog import ErrorDialog, WarningDialog, QuestionDialog2, InfoDialog
+from .dbloader import DbLoader
 from .widgets import Statusbar
 from .display import display_help, display_url
 from .configure import WearNowPreferences
 from .aboutdialog import WearNowAboutDialog
+from .navigator import Navigator
+from .views.tags import Tags
 from .actiongroup import ActionGroup
 
 #-------------------------------------------------------------------------
@@ -267,7 +272,7 @@ class CLIDbLoader(object):
             with open(dbid_path) as fp:
                 dbid = fp.read().strip()
         else:
-            dbid = "bsddb"
+            dbid = "dictionarydb"
 
         db = self.dbstate.make_database(dbid)
         
@@ -420,7 +425,7 @@ class CLIManager(object):
         Register the plugins at initialization time.
         """
         self._pmgr.reg_plugins(PLUGINS_DIR, dbstate, uistate)
-        self._pmgr.reg_plugins(USER_PLUGINS, dbstate, uistate, load_on_reg=True)
+        #self._pmgr.reg_plugins(USER_PLUGINS, dbstate, uistate, load_on_reg=True)
 #-------------------------------------------------------------------------
 #
 # ViewManager
@@ -461,6 +466,8 @@ class ViewManager(CLIManager):
             self.macapp = QuartzApp.Application()
 
         self.view_category_order = view_category_order
+        #set pluginmanager to GUI one
+        self._pmgr = GuiPluginManager.get_instance()
 
         self.merge_ids = []
         self.toolactions = None
@@ -539,6 +546,14 @@ class ViewManager(CLIManager):
         self.uistate = DisplayState(self.window, self.statusbar,
                                     self.uimanager, self)
 
+        # Create history objects
+        for nav_type in ('Textile', 'Ensemble', 'Note', 'Media'):
+            self.uistate.register(self.dbstate, nav_type, 0)
+
+        self.dbstate.connect('database-changed', self.uistate.db_changed)
+
+        self.tags = Tags(self.uistate, self.dbstate)
+        
         self.sidebar_menu = self.uimanager.get_widget(
             '/MenuBar/ViewMenu/Sidebar/')
 
@@ -553,6 +568,8 @@ class ViewManager(CLIManager):
             self.uistate, self.dbstate, self._read_recent_file)
         self.recent_manager.build()
 
+        self.db_loader = DbLoader(self.dbstate, self.uistate)
+        
         self.__setup_navigator()
 
         if self.show_toolbar:
@@ -631,6 +648,8 @@ class ViewManager(CLIManager):
              self.export_data),
             ('Backup', None, _("Make Backup..."), None,
              _("Make a backup of the collection"), self.quick_backup),
+            ('Abandon', 'document-revert',
+             _('_Abandon Changes and Quit'), None, None, self.abort),
             ('WindowsMenu', None, _('_Windows')),
             ('F2', None, 'F2', "F2", None, self.__keypress),
             ('F3', None, 'F3', "F3", None, self.__keypress),
@@ -775,7 +794,7 @@ class ViewManager(CLIManager):
             self.readonlygroup.set_visible(False)
             self.undoactions.set_visible(False)
             self.redoactions.set_visible(False)
-            self.undohistoryactions.set_visible(False)
+            #self.undohistoryactions.set_visible(False)
             
         self.uistate.widget.set_sensitive(True)
         config.connect("interface.statusbar", self.__statusbar_key_update)
@@ -880,8 +899,8 @@ class ViewManager(CLIManager):
             'MainWindow', self._action_action_list)
         self.readonlygroup = self.__init_action_group(
             'AllMainWindow', self._readonly_action_list)
-        self.undohistoryactions = self.__init_action_group(
-            'UndoHistory', self._undo_history_action_list)
+        #self.undohistoryactions = self.__init_action_group(
+        #    'UndoHistory', self._undo_history_action_list)
         self.fileactions = self.__init_action_group(
             'FileWindow', self._file_action_list,
             toggles=self._file_toggle_action_list)
@@ -965,6 +984,8 @@ class ViewManager(CLIManager):
         """
         Create the page if it doesn't exist and make it the current page.
         """
+        if not (0<= cat_num < len(self.current_views)-1):
+            return None
         if view_num is None:
             view_num = self.current_views[cat_num]
         else:
@@ -1444,3 +1465,140 @@ def home_page_activate(obj):
     Display the wearnow home page
     """
     display_url(URL_HOMEPAGE)
+
+
+def run_plugin(pdata, dbstate, uistate):
+    """
+    run a plugin based on it's PluginData:
+      1/ load plugin.
+      2/ the report is run
+    """
+    pmgr = GuiPluginManager.get_instance()
+    mod = pmgr.load_plugin(pdata)
+    if not mod:
+        #import of plugin failed
+        failed = pmgr.get_fail_list()
+        if failed:
+            error_msg = failed[-1][1][1]
+        else:
+            error_msg = "(no error message)"
+        ErrorDialog(
+            _('Failed Loading Plugin'),
+            _('The plugin %(name)s did not load and reported an error.\n\n'
+              '%(error_msg)s\n\n'
+              'If you are unable to fix the fault yourself then you can '
+              'submit a bug at %(gramps_bugtracker_url)s or contact '
+              'the plugin author (%(firstauthoremail)s).\n\n'
+              'If you do not want Gramps to try and load this plugin again, '
+              'you can hide it by using the Plugin Manager on the '
+              'Help menu.') % {
+                'name': pdata.name,
+                'gramps_bugtracker_url' : URL_BUGHOME,
+                'firstauthoremail': pdata.authors_email[0] if
+                        pdata.authors_email else '...',
+                  'error_msg': error_msg})
+        return
+
+    if pdata.ptype == REPORT:
+        report(dbstate, uistate, uistate.get_active('Person'),
+               getattr(mod, pdata.reportclass),
+               getattr(mod, pdata.optionclass),
+               pdata.name, pdata.id,
+               pdata.category, pdata.require_active,
+               )
+    else:
+        tool.gui_tool(dbstate = dbstate, user = User(uistate = uistate),
+                      tool_class = getattr(mod, pdata.toolclass),
+                      options_class = getattr(mod, pdata.optionclass),
+                      translated_name = pdata.name, 
+                      name = pdata.id, 
+                      category = pdata.category,
+                      callback = dbstate.db.request_rebuild)
+
+def make_plugin_callback(pdata, dbstate, uistate):
+    """
+    Makes a callback for a report/tool menu item
+    """
+    return lambda x: run_plugin(pdata, dbstate, uistate)
+
+def get_available_views():
+    """
+    Query the views and determine what views to show and in which order
+
+    :Returns: a list of lists containing tuples (view_id, viewclass)
+    """
+    pmgr = GuiPluginManager.get_instance()
+    view_list = pmgr.get_reg_views()
+    viewstoshow = defaultdict(list)
+    for pdata in view_list:
+        mod = pmgr.load_plugin(pdata)
+        if not mod or not hasattr(mod, pdata.viewclass):
+            #import of plugin failed
+            try:
+                lasterror = pmgr.get_fail_list()[-1][1][1]
+            except:
+                lasterror = '*** No error found, probably error in gpr.py file ***'
+            ErrorDialog(
+                _('Failed Loading View'),
+                _('The view %(name)s did not load and reported an error.\n\n'
+                  '%(error_msg)s\n\n'
+                  'If you are unable to fix the fault yourself then you can '
+                  'submit a bug at %(gramps_bugtracker_url)s or contact '
+                  'the view author (%(firstauthoremail)s).\n\n'
+                  'If you do not want Gramps to try and load this view again, '
+                  'you can hide it by using the Plugin Manager on the '
+                  'Help menu.') % {
+                    'name': pdata.name,
+                    'gramps_bugtracker_url' : URL_BUGHOME,
+                    'firstauthoremail': pdata.authors_email[0] if
+                            pdata.authors_email else '...',
+                    'error_msg': lasterror})
+            continue
+        viewclass = getattr(mod, pdata.viewclass)
+
+        # pdata.category is (string, trans-string):
+        if pdata.order == START:
+            viewstoshow[pdata.category[0]].insert(0, (pdata, viewclass) )
+        else:
+            viewstoshow[pdata.category[0]].append( (pdata, viewclass) )
+
+    # First, get those in order defined, if exists:
+    resultorder = [viewstoshow[cat]
+                    for cat in config.get("interface.view-categories")
+                        if cat in viewstoshow]
+
+    # Next, get the rest in some order:
+    resultorder.extend(viewstoshow[cat]
+        for cat in sorted(viewstoshow.keys())
+            if viewstoshow[cat] not in resultorder)
+    return resultorder
+
+def views_to_show(views, use_last=True):
+    """
+    Determine based on preference setting which views should be shown
+    """
+    current_cat = 0
+    current_cat_view = 0
+    default_cat_views = [0] * len(views)
+    if use_last:
+        current_page_id = config.get('preferences.last-view')
+        default_page_ids = config.get('preferences.last-views')
+        found = False
+        for indexcat, cat_views in enumerate(views):
+            cat_view = 0
+            for pdata, page_def in cat_views:
+                if not found:
+                    if pdata.id == current_page_id:
+                        current_cat = indexcat
+                        current_cat_view = cat_view
+                        default_cat_views[indexcat] = cat_view
+                        found = True
+                        break
+                if pdata.id in default_page_ids:
+                    default_cat_views[indexcat] = cat_view
+                cat_view += 1
+        if not found:
+            current_cat = 0
+            current_cat_view = 0
+    return current_cat, current_cat_view, default_cat_views
+

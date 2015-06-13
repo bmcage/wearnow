@@ -35,7 +35,7 @@ import sys
 # modules
 #
 #-------------------------------------------------------------------------
-from wearnow.gen import user
+from wearnow.tex import user
 from .utils import ProgressMeter
 from .dialog import (WarningDialog, ErrorDialog, DBErrorDialog, 
                             InfoDialog, QuestionDialog2)

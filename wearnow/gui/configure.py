@@ -35,7 +35,6 @@ import collections
 # GTK/Gnome modules
 #
 #-------------------------------------------------------------------------
-from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
 
@@ -44,12 +43,12 @@ from gi.repository import Gtk
 # modules
 #
 #-------------------------------------------------------------------------
-from wearnow.gen.config import config
-from wearnow.gen.const import WEARNOW_LOCALE as glocale
-from wearnow.gen.constfunc import conv_to_unicode
+from wearnow.tex.config import config
+from wearnow.tex.const import WEARNOW_LOCALE as glocale
+from wearnow.tex.constfunc import conv_to_unicode
 from .managedwindow import ManagedWindow
 from .widgets import MarkupLabel, BasicLabel
-from .dialog import ErrorDialog, QuestionDialog2, OkDialog
+from .dialog import ErrorDialog, OkDialog
 _ = glocale.translation.gettext
 
 #-------------------------------------------------------------------------
