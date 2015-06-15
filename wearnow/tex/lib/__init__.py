@@ -40,3 +40,16 @@ from .styledtexttagtype import StyledTextTagType
 # Text
 from .styledtexttag import StyledTextTag
 from .styledtext import StyledText
+
+#objects
+from .attribute import Attribute
+from .attrtype import AttributeType
+from .childref import ChildRef
+from .ensemble import Ensemble
+from .mediaobj import MediaObject
+from .mediaref import MediaRef
+from .note import Note
+from .notetype import NoteType
+from .textile import Textile
+from .researcher import Researcher
+from .url import Url

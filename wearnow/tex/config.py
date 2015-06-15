@@ -155,6 +155,10 @@ register('paths.quick-backup-filename',
 
 register('preferences.use-last-view', False)
 register('preferences.last-view', '')
+register('preferences.iprefix', 'I%04d')
+register('preferences.eprefix', 'E%04d')
+register('preferences.oprefix', 'O%04d')
+register('preferences.nprefix', 'N%04d')
 
 register('owner.owner-addr', '')
 register('owner.owner-locality', '')

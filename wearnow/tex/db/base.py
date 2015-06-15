@@ -431,9 +431,9 @@ class DbReadBase(object):
         """
         raise NotImplementedError
 
-    def get_researcher(self):
+    def get_owner(self):
         """
-        Return the Researcher instance, providing information about the owner 
+        Return the owner instance, providing information about the owner 
         of the database.
         """
         raise NotImplementedError
@@ -656,16 +656,6 @@ class DbReadBase(object):
         """
         raise NotImplementedError
 
-    def set_place_id_prefix(self, val):
-        """
-        Set the naming template for WearNow Place ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
-        such as P%d or P%04d.
-        """
-        raise NotImplementedError
-
     def set_prefixes(self, textile, media, ensemble, note):
         """
         Set the prefixes for the wearnow ids for all wearnow objects
@@ -688,7 +678,7 @@ class DbReadBase(object):
         """
         raise NotImplementedError
 
-    def set_researcher(self, owner):
+    def set_owner(self, owner):
         """
         Set the information about the owner of the database.
         """

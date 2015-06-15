@@ -77,12 +77,7 @@ class DbState(Callback):
         self.db.set_prefixes(
             config.get('preferences.iprefix'),
             config.get('preferences.oprefix'),
-            config.get('preferences.fprefix'),
-            config.get('preferences.sprefix'),
-            config.get('preferences.cprefix'),
-            config.get('preferences.pprefix'),
             config.get('preferences.eprefix'),
-            config.get('preferences.rprefix'),
             config.get('preferences.nprefix') )
         self.open = True
         self.signal_change()
@@ -99,7 +94,7 @@ class DbState(Callback):
         """
         self.emit('no-database', ())
         self.db.close()
-        self.db = self.make_database("dictdb")
+        self.db = self.make_database("dictionarydb")
         self.db.db_is_open = False
         self.open = False
         self.emit('database-changed', (self.db, ))
@@ -136,6 +131,9 @@ class DbState(Callback):
             mod = pmgr.load_plugin(pdata)
             database = getattr(mod, pdata.databaseclass)
             return database()
+        else:
+            raise ValueError("No Plugin to import database of type " + str(id) + \
+                        '. Is there an import plugin?')
 
     def open_database(self, dbname, force_unlock=False, callback=None):
         """

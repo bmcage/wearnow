@@ -76,6 +76,7 @@ from wearnow.tex.plug import BasePluginManager
 from wearnow.tex.constfunc import is_quartz, conv_to_unicode
 from wearnow.tex.config import config
 from wearnow.tex.errors import WindowActiveError
+from wearnow.tex.utils.config import get_owner
 from wearnow.tex.recentfiles import recent_files
 from .pluginmanager import GuiPluginManager
 from .dialog import ErrorDialog, WarningDialog, QuestionDialog2, InfoDialog
@@ -403,14 +404,14 @@ class CLIManager(object):
 
         self.dbstate.db.set_save_path(filename)
         
-        # apply preferred researcher if loaded file has none
-        res = self.dbstate.db.get_researcher()
-        owner = get_researcher()
+        # apply preferred owner if loaded file has none
+        res = self.dbstate.db.get_owner()
+        owner = get_owner()
         # If the DB Owner Info is empty and
         # [default] Researcher is not empty and
-        # database is empty, then copy default researcher to DB owner
+        # database is empty, then copy default owner to DB owner
         if res.is_empty() and not owner.is_empty() and self.dbstate.db.is_empty():
-            self.dbstate.db.set_researcher(owner)
+            self.dbstate.db.set_owner(owner)
 
         self.dbstate.db.enable_signals()
         self.dbstate.signal_change()
@@ -622,7 +623,7 @@ class ViewManager(CLIManager):
         Initialize the actions lists for the UIManager
         """
         self._file_action_list = [
-            ('FileMenu', None, _('_Family Trees')),
+            ('FileMenu', None, _('_Collection')),
             ('Open', 'wearnow-db', _('_Manage Collections...'), "<PRIMARY>o",
              _("Manage collections"), self.__open_activate),
             ('OpenRecent', None, _('Open _Recent'), None,
@@ -1214,7 +1215,7 @@ class ViewManager(CLIManager):
         self.readonlygroup.set_visible(True)
         self.undoactions.set_visible(True)
         self.redoactions.set_visible(True)
-        self.undohistoryactions.set_visible(True)
+        #self.undohistoryactions.set_visible(True)
 
         self.recent_manager.build()
 

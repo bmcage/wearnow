@@ -30,12 +30,14 @@ creating, and deleting of databases.
 # Standard python modules
 #
 #-------------------------------------------------------------------------
-import os
+import os, io, sys
 import time
 import copy
 import shutil
 import subprocess
 from urllib.parse import urlparse
+from urllib.request import urlopen, url2pathname
+import tempfile
 
 #-------------------------------------------------------------------------
 #
@@ -44,6 +46,8 @@ from urllib.parse import urlparse
 #-------------------------------------------------------------------------
 import logging
 LOG = logging.getLogger(".DbManager")
+from wearnow.tex.db.dbconst import DBLOGNAME
+_LOG = logging.getLogger(DBLOGNAME)
 
 from wearnow.tex.constfunc import win, conv_to_unicode
 if win():
@@ -84,6 +88,7 @@ from wearnow.tex.recentfiles import rename_filename, remove_filename
 from .glade import Glade
 from wearnow.tex.db.exceptions import DbException
 from wearnow.tex.config import config
+from wearnow.tex.plug import BasePluginManager
 
 _RETURN = Gdk.keyval_from_name("Return")
 _KP_ENTER = Gdk.keyval_from_name("KP_Enter")
@@ -161,13 +166,13 @@ class CLIDbManager(object):
     def get_dbdir_summary(self, dirpath, name):
         """
         dirpath: full path to database
-        name: proper name of family tree
+        name: proper name of Collection
 
         Returns dictionary of summary item.
         Should include at least, if possible:
 
         _("Path")
-        _("Family Tree")
+        _("Collection")
         _("Last accessed")
         _("Database backend")
         _("Locked?")
@@ -178,7 +183,7 @@ class CLIDbManager(object):
         _("Version")
         _("Schema version")
         """
-        dbid = "bsddb"
+        dbid = "dictionarydb"
         dbid_path = os.path.join(dirpath, "database.txt")
         if os.path.isfile(dbid_path):
             dbid = open(dbid_path).read().strip()
@@ -189,7 +194,7 @@ class CLIDbManager(object):
         except Exception as msg:
             retval = {"Unavailable": str(msg)[:74] + "..."}
         retval.update({
-            _("Family Tree"): name,
+            _("Collection"): name,
             _("Path"): dirpath,
             _("Database backend"): dbid,
             _("Last accessed"): time_val(dirpath)[1],
@@ -199,7 +204,7 @@ class CLIDbManager(object):
 
     def family_tree_summary(self):
         """
-        Return a list of dictionaries of the known family trees.
+        Return a list of dictionaries of the known Collections.
         """
         # make the default directory if it does not exist
         summary_list = []
@@ -253,7 +258,7 @@ class CLIDbManager(object):
 
     def family_tree_list(self):
         """
-        Return a list of name, dirname of the known family trees
+        Return a list of name, dirname of the known Collections
         """
         lst = [(x[0], x[1]) for x in self.current_names]
         return lst
@@ -290,7 +295,7 @@ class CLIDbManager(object):
         if create_db:
             # write the version number into metadata
             if dbid is None:
-                dbid = "bsddb"
+                dbid = "dictionarydb"
             newdb = self.dbstate.make_database(dbid)
             newdb.write_version(new_path)
 
@@ -358,7 +363,7 @@ class CLIDbManager(object):
                 # Create a new database
                 self.__start_cursor(_("Importing data..."))
 
-                dbase = self.dbstate.make_database("bsddb")
+                dbase = self.dbstate.make_database("dictionarydb")
                 dbase.load(new_path, user.callback)
     
                 import_function = plugin.get_import_function()
@@ -402,7 +407,7 @@ class CLIDbManager(object):
             name_file.write(new_text)
             name_file.close()
         except (OSError, IOError) as msg:
-            CLIDbManager.ERROR(_("Could not rename Family Tree"),
+            CLIDbManager.ERROR(_("Could not rename Collection"),
                   str(msg))
             return None, None
         return old_text, new_text
@@ -610,7 +615,7 @@ class DbManager(CLIDbManager):
         render.connect('edited', self.__change_name)
         render.connect('editing-canceled', self.__stop_edit)
         render.connect('editing-started', self.__start_edit)
-        self.column = Gtk.TreeViewColumn(_('Family Tree name'), render, 
+        self.column = Gtk.TreeViewColumn(_('Collection name'), render, 
                                          text=NAME_COL)
         self.column.set_sort_column_id(NAME_COL)
         self.column.set_sort_indicator(True)
@@ -820,8 +825,8 @@ class DbManager(CLIDbManager):
         node = self.model.get_iter(path)
         filename = self.model.get_value(node, FILE_COL)
         if self.existing_name(new_text, skippath=path):
-            DbManager.ERROR(_("Could not rename the Family Tree."), 
-                  _("Family Tree already exists, choose a unique name."))
+            DbManager.ERROR(_("Could not rename the Collection."), 
+                  _("Collection already exists, choose a unique name."))
             return
         old_text, new_text = self.rename_database(filename, new_text)
         if not (old_text is None):
@@ -865,7 +870,7 @@ class DbManager(CLIDbManager):
         
         self.__start_cursor(_("Extracting archive..."))
 
-        dbase = self.dbstate.make_database("bsddb")
+        dbase = self.dbstate.make_database("dictionarydb")
         dbase.load(new_path, None)
         
         self.__start_cursor(_("Importing archive..."))
@@ -884,9 +889,9 @@ class DbManager(CLIDbManager):
 
         if len(path.get_indices()) == 1:
             QuestionDialog(
-                _("Remove the '%s' Family Tree?") % self.data_to_delete[0],
-                _("Removing this Family Tree will permanently destroy the data."),
-                _("Remove Family Tree"),
+                _("Remove the '%s' Collection?") % self.data_to_delete[0],
+                _("Removing this Collection will permanently destroy the data."),
+                _("Remove Collection"),
                 self.__really_delete_db, parent=self.top)
         else:
             rev = self.data_to_delete[0]
@@ -928,7 +933,7 @@ class DbManager(CLIDbManager):
                     os.unlink(os.path.join(top, filename))
             os.rmdir(directory)
         except (IOError, OSError) as msg:
-            DbManager.ERROR(_("Could not delete Family Tree"),
+            DbManager.ERROR(_("Could not delete Collection"),
                             str(msg))
         # rebuild the display
         self.__populate()
@@ -1003,33 +1008,33 @@ class DbManager(CLIDbManager):
         
         #First ask user if he is really sure :-)
         yes_no = QuestionDialog2(
-            _("Repair Family Tree?"),
+            _("Repair Collection?"),
             _(
               "If you click %(bold_start)sProceed%(bold_end)s, WearNow will "
-              "attempt to recover your Family Tree from the last good "
+              "attempt to recover your Collection from the last good "
               "backup. There are several ways this can cause unwanted "
               "effects, so %(bold_start)sbackup%(bold_end)s the "
-              "Family Tree first.\nThe Family Tree you have selected "
+              "Collection first.\nThe Collection you have selected "
               "is stored in %(dirname)s.\n\n"
-              "Before doing a repair, verify that the Family Tree can "
+              "Before doing a repair, verify that the Collection can "
               "really no longer be opened, as the database back-end can "
               "recover from some errors automatically.\n\n"
-              "%(bold_start)sDetails:%(bold_end)s Repairing a Family Tree "
-              "actually uses the last backup of the Family Tree, which "
+              "%(bold_start)sDetails:%(bold_end)s Repairing a Collection "
+              "actually uses the last backup of the Collection, which "
               "WearNow stored on last use. If you have worked for "
               "several hours/days without closing WearNow, then all "
               "this information will be lost! If the repair fails, then "
-              "the original Family Tree will be lost forever, hence "
+              "the original Collection will be lost forever, hence "
               "a backup is needed. If the repair fails, or too much "
               "information is lost, you can fix the original "
-              "Family Tree manually. For details, see the webpage\n"
+              "Collection manually. For details, see the webpage\n"
               "%(wearnow_wiki_recover_url)s\n"
-              "Before doing a repair, try to open the Family Tree "
+              "Before doing a repair, try to open the Collection "
               "in the normal manner. Several errors that trigger the "
               "repair button can be fixed automatically. "
               "If this is the case, you can disable the repair button "
               "by removing the file %(recover_file)s in the "
-              "Family Tree directory."
+              "Collection directory."
              ) % { 'bold_start'   : '<b>' ,
                    'bold_end'     : '</b>' ,
                    'recover_file' : '<i>need_recover</i>' ,
@@ -1052,10 +1057,10 @@ class DbManager(CLIDbManager):
                 fname = os.path.join(dirname, filename)
                 os.unlink(fname)
 
-        newdb = self.dbstate.make_database("bsddb")
+        newdb = self.dbstate.make_database("dictionarydb")
         newdb.write_version(dirname)
 
-        dbase = self.dbstate.make_database("bsddb")
+        dbase = self.dbstate.make_database("dictionarydb")
         dbase.set_save_path(dirname)
         dbase.load(dirname, None)
 
@@ -1101,7 +1106,7 @@ class DbManager(CLIDbManager):
             try:
                 self._create_new_db(dbid=dbid)
             except (OSError, IOError) as msg:
-                DbManager.ERROR(_("Could not create Family Tree"),
+                DbManager.ERROR(_("Could not create Collection"),
                                 str(msg))
         self.new.set_sensitive(True)
 
@@ -1128,7 +1133,6 @@ class DbManager(CLIDbManager):
         """
         drag_value = selection.get_data()
         fname = None
-        type = None
         title = None
         # Allow any type of URL ("file://", "http://", etc):
         if drag_value and urlparse(drag_value).scheme != "":

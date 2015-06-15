@@ -802,10 +802,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         ## FIXME
         return 
 
-    def set_researcher(self, owner):
+    def set_owner(self, owner):
         self.owner.set_from(owner)
 
-    def get_researcher(self):
+    def get_owner(self):
         return self.owner
 
     def request_rebuild(self):
@@ -994,7 +994,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
     def close(self):
         if self._directory:
             from wearnow.plugins.export.exportxml import XmlWriter
-            from wearnow.cli.user import User 
+            from wearnow.gui.user import User 
             writer = XmlWriter(self, User(), strip_photos=0, compress=1)
             filename = os.path.join(self._directory, "data.wearnow")
             writer.write(filename)

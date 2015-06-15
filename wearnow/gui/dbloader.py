@@ -149,7 +149,7 @@ class CLIDbLoader(object):
         On success, return with the disabled signals. The post-load routine
         should enable signals, as well as finish up with other UI goodies.
         """
-
+        print ("LOADING", filename)
         if os.path.exists(filename):
             if not os.access(filename, os.W_OK):
                 mode = "r"

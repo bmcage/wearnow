@@ -412,7 +412,7 @@ class WearNowPreferences(ConfigureDialog):
             self.add_text_panel,
             self.add_prefix_panel,
             self.add_date_panel,
-            self.add_researcher_panel,
+            self.add_owner_panel,
             self.add_advanced_panel,
             self.add_color_panel
             )
@@ -420,22 +420,22 @@ class WearNowPreferences(ConfigureDialog):
                                  WearNowPreferences, config,
                                  on_close=update_constants)
 
-    def add_researcher_panel(self, configdialog):
+    def add_owner_panel(self, configdialog):
         grid = Gtk.Grid()
         grid.set_border_width(12)
         grid.set_column_spacing(6)
         grid.set_row_spacing(6)
         self.add_text(grid, _('Enter your information so people can contact you when you'
-                        ' distribute your Family Tree'), 0, line_wrap=False)
-        self.add_entry(grid, _('Name'), 1, 'researcher.researcher-name')
-        self.add_entry(grid, _('Address'), 2, 'researcher.researcher-addr')
-        self.add_entry(grid, _('Locality'), 3, 'researcher.researcher-locality')
-        self.add_entry(grid, _('City'), 4, 'researcher.researcher-city')
-        self.add_entry(grid, _('State/County'), 5, 'researcher.researcher-state')
-        self.add_entry(grid, _('Country'), 6, 'researcher.researcher-country')
-        self.add_entry(grid, _('ZIP/Postal Code'), 7, 'researcher.researcher-postal')
-        self.add_entry(grid, _('Phone'), 8, 'researcher.researcher-phone')
-        self.add_entry(grid, _('Email'), 9, 'researcher.researcher-email')
+                        ' distribute your Collection'), 0, line_wrap=False)
+        self.add_entry(grid, _('Name'), 1, 'owner.owner-name')
+        self.add_entry(grid, _('Address'), 2, 'owner.owner-addr')
+        self.add_entry(grid, _('Locality'), 3, 'owner.owner-locality')
+        self.add_entry(grid, _('City'), 4, 'owner.owner-city')
+        self.add_entry(grid, _('State/County'), 5, 'owner.owner-state')
+        self.add_entry(grid, _('Country'), 6, 'owner.owner-country')
+        self.add_entry(grid, _('ZIP/Postal Code'), 7, 'owner.owner-postal')
+        self.add_entry(grid, _('Phone'), 8, 'owner.owner-phone')
+        self.add_entry(grid, _('Email'), 9, 'owner.owner-email')
         return _('Researcher'), grid
 
         

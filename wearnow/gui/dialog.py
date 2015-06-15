@@ -419,7 +419,7 @@ class DBErrorDialog(ErrorDialog):
             _("Database corruption detected"),
             _("WearNow has detected a problem in the underlying "
               "database. This can be repaired from "
-              "the Family Tree Manager. Select the database and "
+              "the Collection Manager. Select the database and "
               'click on the Repair button') + '\n\n' + msg, parent)
 
 ## Testing function of some of these dialogs
