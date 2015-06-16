@@ -104,6 +104,13 @@ TOOL_UTILS  = 4
 TOOL_CAT    = [ TOOL_DEBUG, TOOL_ANAL, TOOL_DBPROC, TOOL_DBFIX, TOOL_REVCTL,
                 TOOL_UTILS]
 
+#possible quickreport categories
+CATEGORY_QR_MISC       = -1
+CATEGORY_QR_TEXTILE    = 0
+CATEGORY_QR_ENSEMBLE   = 1
+CATEGORY_QR_NOTE       = 6
+CATEGORY_QR_MEDIA      = 8
+
 # Modes for generating reports
 REPORT_MODE_GUI = 1    # Standalone report using GUI
 REPORT_MODE_BKI = 2    # Book Item interface using GUI

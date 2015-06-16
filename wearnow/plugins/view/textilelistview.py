@@ -1,4 +1,4 @@
-# Gramps - a GTK+/GNOME based genealogy program
+# WearNow - a GTK+/GNOME based  program
 #
 # Copyright (C) 2000-2007  Donald N. Allingham
 # Copyright (C) 2008       Gary Burton
@@ -21,7 +21,7 @@
 #
 
 """
-Person list View
+Textile list View
 """
 
 #-------------------------------------------------------------------------
@@ -29,15 +29,15 @@ Person list View
 # Gramps modules
 #
 #-------------------------------------------------------------------------
-from gramps.plugins.lib.libpersonview import BasePersonView
-from gramps.gui.views.treemodels.peoplemodel import PersonListModel
+from gramps.plugins.lib.libpersonview import BaseTextileView
+from gramps.gui.views.treemodels.peoplemodel import TextileListModel
 
 #-------------------------------------------------------------------------
 #
 # Internationalization
 #
 #-------------------------------------------------------------------------
-from gramps.gen.const import GRAMPS_LOCALE as glocale
+from gramps.gen.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
 
 #-------------------------------------------------------------------------
@@ -45,11 +45,11 @@ _ = glocale.translation.gettext
 # PlaceTreeView
 #
 #-------------------------------------------------------------------------
-class PersonListView(BasePersonView):
+class TextileListView(BaseTextileView):
     """
     A hierarchical view of the top three levels of places.
     """
     def __init__(self, pdata, dbstate, uistate, nav_group=0):
-        BasePersonView.__init__(self, pdata, dbstate, uistate,
-                               _('Person View'), PersonListModel,
+        BaseTextileView.__init__(self, pdata, dbstate, uistate,
+                               _('Textile View'), TextileListModel,
                                nav_group=nav_group)

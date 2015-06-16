@@ -1,4 +1,4 @@
-# Gramps - a GTK+/GNOME based genealogy program
+# WearNow - a GTK+/GNOME based program
 #
 # Copyright (C) 2001-2006  Donald N. Allingham
 # Copyright (C) 2008       Gary Burton
@@ -29,7 +29,7 @@ Media View.
 # Python modules
 #
 #-------------------------------------------------------------------------
-from gramps.gen.const import GRAMPS_LOCALE as glocale
+from wearnow.tex.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
 import os
 from urllib.parse import urlparse
@@ -45,28 +45,28 @@ from gi.repository import Gtk
 
 #-------------------------------------------------------------------------
 #
-# gramps modules
+# wearnow modules
 #
 #-------------------------------------------------------------------------
-from gramps.gui.utils import open_file_with_default_application
-from gramps.gui.views.listview import ListView, TEXT, MARKUP, ICON
-from gramps.gui.views.treemodels import MediaModel
-from gramps.gen.constfunc import win, conv_to_unicode
-from gramps.gen.config import config
-from gramps.gen.utils.file import (media_path, relative_path, media_path_full,
+from wearnow.gui.utils import open_file_with_default_application
+from wearnow.gui.views.listview import ListView, TEXT, MARKUP, ICON
+from wearnow.gui.views.treemodels import MediaModel
+from wearnow.tex.constfunc import win, conv_to_unicode
+from wearnow.tex.config import config
+from wearnow.tex.utils.file import (media_path, relative_path, media_path_full,
                                    create_checksum)
-from gramps.gen.utils.db import get_media_referents
-from gramps.gui.views.bookmarks import MediaBookmarks
-from gramps.gen.mime import get_type, is_valid_type
-from gramps.gen.lib import MediaObject
-from gramps.gen.db import DbTxn
-from gramps.gui.editors import EditMedia, DeleteMediaQuery
-from gramps.gen.errors import WindowActiveError
-from gramps.gui.filters.sidebar import MediaSidebarFilter
-from gramps.gui.merge import MergeMedia
-from gramps.gui.ddtargets import DdTargets
-from gramps.gui.dialog import ErrorDialog
-from gramps.gen.plug import CATEGORY_QR_MEDIA
+from wearnow.tex.utils.db import get_media_referents
+from wearnow.gui.views.bookmarks import MediaBookmarks
+from wearnow.tex.mime import get_type, is_valid_type
+from wearnow.tex.lib import MediaObject
+from wearnow.tex.db.txn import DbTxn
+from wearnow.gui.editors import EditMedia, DeleteMediaQuery
+from wearnow.tex.errors import WindowActiveError
+from wearnow.gui.filters.sidebar import MediaSidebarFilter
+from wearnow.gui.merge import MergeMedia
+from wearnow.gui.ddtargets import DdTargets
+from wearnow.gui.dialog import ErrorDialog
+from wearnow.tex.plug import CATEGORY_QR_MEDIA
 
 #-------------------------------------------------------------------------
 #
@@ -75,7 +75,7 @@ from gramps.gen.plug import CATEGORY_QR_MEDIA
 #-------------------------------------------------------------------------
 class MediaView(ListView):
     """
-    Provide the Media View interface on the GRAMPS main window. This allows
+    Provide the Media View interface on the WEARNOW main window. This allows
     people to manage all media items in their database. This is very similar
     to the other list based views, with the exception that it also has a
     thumbnail image at the top of the view that must be updated when the
@@ -97,7 +97,7 @@ class MediaView(ListView):
         (_('Type'), TEXT, None),
         (_('Path'), TEXT, None),
         (_('Date'), TEXT, None),
-        (_('Private'), ICON, 'gramps-lock'),
+        (_('Private'), ICON, 'wearnow-lock'),
         (_('Tags'), TEXT, None),
         (_('Last Changed'), TEXT, None),
         ]
@@ -208,7 +208,7 @@ class MediaView(ListView):
 
         self._add_action('FilterEdit', None, _('Media Filter Editor'), 
                          callback=self.filter_editor)
-        self._add_action('OpenMedia', 'gramps-viewmedia', _('View'), 
+        self._add_action('OpenMedia', 'wearnow-viewmedia', _('View'), 
                          tip=_("View in the default viewer"), 
                          callback=self.view_media)
         self._add_action('OpenContainingFolder', None, 
@@ -242,7 +242,7 @@ class MediaView(ListView):
         """
         Return the icon for this view
         """
-        return 'gramps-media'
+        return 'wearnow-media'
 
     def additional_ui(self):
         """
@@ -355,11 +355,11 @@ class MediaView(ListView):
         else:
             MergeMedia(self.dbstate, self.uistate, mlist[0], mlist[1])
 
-    def get_handle_from_gramps_id(self, gid):
+    def get_handle_from_wearnow_id(self, gid):
         """
         returns the handle of the specified object
         """
-        obj = self.dbstate.db.get_object_from_gramps_id(gid)
+        obj = self.dbstate.db.get_object_from_wearnow_id(gid)
         if obj:
             return obj.get_handle()
         else:

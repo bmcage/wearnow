@@ -64,6 +64,7 @@ from gi.repository import Gtk
 from wearnow.tex.const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.sgettext
 from .user import User
+from wearnow.tex.plug import (START, END)
 from .displaystate import DisplayState, RecentDocsMenu
 from wearnow.tex.const import (HOME_DIR, ICON, URL_HOMEPAGE, PLUGINS_DIR)
 from wearnow.tex.db.dbconst import DBBACKEND

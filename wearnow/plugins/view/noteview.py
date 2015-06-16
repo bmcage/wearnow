@@ -45,7 +45,7 @@ from gi.repository import Gtk
 #
 #-------------------------------------------------------------------------
 from wearnow.gui.views.listview import ListView, TEXT, MARKUP, ICON
-from wearnow.gui.views.treemodels import NoteModel
+from wearnow.gui.views.treemodels.notemodel import NoteModel
 from wearnow.tex.utils.db import get_note_referents
 from wearnow.tex.errors import WindowActiveError
 from wearnow.gui.views.bookmarks import NoteBookmarks
@@ -53,10 +53,9 @@ from wearnow.tex.config import config
 from wearnow.tex.lib import Note
 from wearnow.gui.ddtargets import DdTargets
 from wearnow.gui.dialog import ErrorDialog
-#TODO These 3:
-#from wearnow.gui.filters.sidebar import NoteSidebarFilter
-#from wearnow.gui.editors import EditNote, DeleteNoteQuery
-#from wearnow.gui.merge import MergeNote
+from wearnow.gui.filters.sidebar import NoteSidebarFilter
+from wearnow.gui.editors import EditNote, DeleteNoteQuery
+from wearnow.gui.merge import MergeNote
 from wearnow.tex.plug import CATEGORY_QR_NOTE
 
 #-------------------------------------------------------------------------

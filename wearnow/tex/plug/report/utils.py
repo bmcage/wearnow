@@ -40,10 +40,7 @@ import os
 #------------------------------------------------------------------------
 from ...const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
-from ...datehandler import get_date
-from ...display.place import displayer as place_displayer
 from ...utils.file import media_path_full
-from ..docgen import IndexMark, INDEX_TYPE_ALP
 
 # _T_ is a gramps-defined keyword -- see po/update_po.py and po/genpot.sh
 def _T_(value): # enable deferred translations (see Python docs 22.1.3.4)
@@ -114,19 +111,6 @@ def roman(num):
 
 #-------------------------------------------------------------------------
 #
-# 
-#
-#-------------------------------------------------------------------------
-def place_name(db, place_handle):
-    if place_handle:
-        place = db.get_place_from_handle(place_handle)
-        name = place_displayer.display(db, place)
-    else:
-        name = ""
-    return str(name)
-    
-#-------------------------------------------------------------------------
-#
 # Functions commonly used in reports
 #
 #-------------------------------------------------------------------------
@@ -185,38 +169,6 @@ def find_marriage(database, family):
 # Indexing function
 #
 #-------------------------------------------------------------------------
-def get_person_mark(db, person):
-    """
-    Return a IndexMark that can be used to index a person in a report
-    
-    :param db: the Gramps database instance
-    :param person: the key is for
-    """
-    if not person:
-        return None
-    
-    name = person.get_primary_name().get_name()
-    birth = " "
-    death = " "
-    key = ""
-    
-    birth_ref = person.get_birth_ref()
-    if birth_ref:
-        birthEvt = db.get_event_from_handle(birth_ref.ref)
-        birth = get_date(birthEvt)
-
-    death_ref = person.get_death_ref()
-    if death_ref:
-        deathEvt = db.get_event_from_handle(death_ref.ref)
-        death = get_date(deathEvt)
-
-    if birth == death == " ":
-        key = name
-    else:
-        key = "%s (%s - %s)" % (name, birth, death)
-        
-    return IndexMark( key, INDEX_TYPE_ALP )
-
 #-------------------------------------------------------------------------
 #
 # Address String

@@ -274,9 +274,13 @@ class BasePluginManager(object):
                     else:
                         LOG.warning("Plugin error (from '%s'): %s"
                                         % (pdata.mod_name, err))
+                        import traceback
+                        traceback.print_exc()
                 except ImportError as err:
                     LOG.warning("Plugin error (from '%s'): %s"
-                                    % (pdata.mod_name, err))
+                                    % (pdata.mod_name, err))        
+                    import traceback
+                    traceback.print_exc()
                 sys.path.pop(0)
             else:
                 print("WARNING: module cannot be loaded")

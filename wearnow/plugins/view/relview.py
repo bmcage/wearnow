@@ -58,7 +58,7 @@ from gi.repository import Pango
 from gramps.gen.lib import (ChildRef, EventRoleType, EventType, Family, 
                             FamilyRelType, Name, Person, Surname)
 from gramps.gen.lib.date import Today
-from gramps.gen.db import DbTxn
+from gramps.gen.db.txn import DbTxn
 from gramps.gui.views.navigationview import NavigationView
 from gramps.gui.actiongroup import ActionGroup
 from gramps.gui.editors import EditPerson, EditFamily

@@ -30,6 +30,8 @@ from ._pluginreg import (PluginData, PluginRegister, REPORT, TOOL,
             CATEGORY_WEB, CATEGORY_BOOK, CATEGORY_GRAPHVIZ,
             TOOL_DEBUG, TOOL_ANAL, TOOL_DBPROC, TOOL_DBFIX, TOOL_REVCTL,
             TOOL_UTILS,
+            CATEGORY_QR_MISC, CATEGORY_QR_TEXTILE, CATEGORY_QR_ENSEMBLE,
+            CATEGORY_QR_NOTE, CATEGORY_QR_MEDIA,
             START, END, make_environment,
             )
 from ._import import ImportPlugin

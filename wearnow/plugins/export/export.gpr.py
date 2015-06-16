@@ -25,22 +25,22 @@ MODULE_VERSION="0.0"
 # GRAMPS package (portable XML)
 #
 #------------------------------------------------------------------------
-
-plg = newplugin()
-plg.id    = 'ex_gpkg'
-plg.name  = _('WearNow XML Package (collection and media)')
-plg.name_accell  = _('WearNow XML _Package (collection and media)')
-plg.description =  _('WearNow package is an archived XML collection together '
-                 'with the media object files.')
-plg.version = '0.0'
-plg.wearnow_target_version = MODULE_VERSION
-plg.status = STABLE
-plg.fname = 'exportpkg.py'
-plg.ptype = EXPORT
-plg.export_function = 'writeData'
-plg.export_options = 'WriterOptionBox'
-plg.export_options_title = _('WearNow package export options')
-plg.extension = "gpkg"
+#
+#plg = newplugin()
+#plg.id    = 'ex_gpkg'
+#plg.name  = _('WearNow XML Package (collection and media)')
+#plg.name_accell  = _('WearNow XML _Package (collection and media)')
+#plg.description =  _('WearNow package is an archived XML collection together '
+#                 'with the media object files.')
+#plg.version = '0.0'
+#plg.wearnow_target_version = MODULE_VERSION
+#plg.status = STABLE
+#plg.fname = 'exportpkg.py'
+#plg.ptype = EXPORT
+#plg.export_function = 'writeData'
+#plg.export_options = 'WriterOptionBox'
+#plg.export_options_title = _('WearNow package export options')
+#plg.extension = "gpkg"
 
 #------------------------------------------------------------------------
 #

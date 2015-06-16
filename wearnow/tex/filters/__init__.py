@@ -25,7 +25,7 @@ Package providing filtering framework for GRAMPS.
 #SystemFilters = None
 CustomFilters = None
 
-#from ..const import CUSTOM_FILTERS
+from ..const import CUSTOM_FILTERS
 from ._filterlist import FilterList
 from ._genericfilter import GenericFilter, GenericFilterFactory, DeferredFilter
 from ._paramfilter import ParamFilter

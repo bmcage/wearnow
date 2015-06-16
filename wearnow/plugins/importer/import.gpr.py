@@ -26,18 +26,18 @@ MODULE_VERSION="0.0"
 #
 #------------------------------------------------------------------------
 
-plg = newplugin()
-plg.id    = 'im_gpkg'
-plg.name  = _('WearNow package (portable XML)')
-plg.description =  _('Import data from a WearNow package (an archived XML '
-                     'Collection together with the media object files.)')
-plg.version = '0.0'
-plg.wearnow_target_version = MODULE_VERSION
-plg.status = STABLE
-plg.fname = 'importwpkg.py'
-plg.ptype = IMPORT
-plg.import_function = 'impData'
-plg.extension = "wpkg"
+#plg = newplugin()
+#plg.id    = 'im_gpkg'
+#plg.name  = _('WearNow package (portable XML)')
+#plg.description =  _('Import data from a WearNow package (an archived XML '
+#                     'Collection together with the media object files.)')
+#plg.version = '0.0'
+#plg.wearnow_target_version = MODULE_VERSION
+#plg.status = STABLE
+#plg.fname = 'importwpkg.py'
+#plg.ptype = IMPORT
+#plg.import_function = 'impData'
+#plg.extension = "wpkg"
 
 #------------------------------------------------------------------------
 #

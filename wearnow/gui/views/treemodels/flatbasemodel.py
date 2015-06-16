@@ -71,8 +71,7 @@ from gi.repository import Gtk
 #
 #-------------------------------------------------------------------------
 from wearnow.tex.filters import SearchFilter, ExactSearchFilter
-from wearnow.tex.constfunc import conv_to_unicode, handle2internal
-wearnow.tex.const import WEARNOW_LOCALE as glocale
+from wearnow.tex.const import WEARNOW_LOCALE as glocale
 
 #-------------------------------------------------------------------------
 #
