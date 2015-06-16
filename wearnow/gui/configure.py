@@ -406,15 +406,8 @@ class WearNowPreferences(ConfigureDialog):
     def __init__(self, uistate, dbstate):
         page_funcs = (
             self.add_behavior_panel,
-            self.add_famtree_panel,
-            self.add_formats_panel,
-            self.add_places_panel,
-            self.add_text_panel,
-            self.add_prefix_panel,
-            self.add_date_panel,
+            #self.add_prefix_panel,
             self.add_owner_panel,
-            self.add_advanced_panel,
-            self.add_color_panel
             )
         ConfigureDialog.__init__(self, uistate, dbstate, page_funcs, 
                                  WearNowPreferences, config,

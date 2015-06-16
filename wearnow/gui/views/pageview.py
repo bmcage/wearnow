@@ -148,7 +148,8 @@ class PageView(DbGUIElement):
 
         widget = self.build_widget()
         widget.show_all()
-        self.sidebar_toggled(self.sidebar.get_property('visible'))
+        if self.sidebar:
+            self.sidebar_toggled(self.sidebar.get_property('visible'))
 
         return widget
 
@@ -291,12 +292,14 @@ class PageView(DbGUIElement):
         View. The user typically defines self.action_list and 
         self.action_toggle_list in this function. 
         """
-        self._add_toggle_action('Sidebar', None, _('_Sidebar'), 
-             "<shift><PRIMARY>R", None, self.__sidebar_toggled,
-             self.sidebar.get_property('visible'))
-        self._add_toggle_action('Bottombar', None, _('_Bottombar'), 
-             "<shift><PRIMARY>B", None, self.__bottombar_toggled,
-             self.bottombar.get_property('visible'))
+        if self.sidebar:
+            self._add_toggle_action('Sidebar', None, _('_Sidebar'), 
+                 "<shift><PRIMARY>R", None, self.__sidebar_toggled,
+                 self.sidebar.get_property('visible'))
+        if self.bottombar:
+            self._add_toggle_action('Bottombar', None, _('_Bottombar'), 
+                 "<shift><PRIMARY>B", None, self.__bottombar_toggled,
+                 self.bottombar.get_property('visible'))
 
     def __build_action_group(self):
         """
@@ -401,8 +404,10 @@ class PageView(DbGUIElement):
         Method called on shutdown. Data views should put code here
         that should be called when quiting the main application.
         """
-        self.sidebar.on_delete()
-        self.bottombar.on_delete()
+        if self.sidebar:
+            self.sidebar.on_delete()
+        if self.bottombar:
+            self.bottombar.on_delete()
         self._config.save()
 
     def init_config(self):

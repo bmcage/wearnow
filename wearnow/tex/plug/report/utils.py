@@ -42,7 +42,7 @@ from ...const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
 from ...utils.file import media_path_full
 
-# _T_ is a gramps-defined keyword -- see po/update_po.py and po/genpot.sh
+# _T_ is a wearnow-defined keyword -- see po/update_po.py and po/genpot.sh
 def _T_(value): # enable deferred translations (see Python docs 22.1.3.4)
     return value
 

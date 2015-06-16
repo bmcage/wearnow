@@ -57,7 +57,7 @@ UICATEGORY = '''<ui>
 
 CATEGORY_ICON = {
     'Textile': 'wearnow-textile',
-    'WearNow': 'wearnow-WearNow',
+    'WearNow': 'wearnow-wearnow',
     'Ensemble': 'wearnow-ensemble',
     'Media': 'wearnow-media',
     'Notes': 'wearnow-notes',

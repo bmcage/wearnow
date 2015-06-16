@@ -368,7 +368,10 @@ class DisplayState(Callback):
     
     #nav_type to message
     NAV2MES = {
-        'TEXTILE': _("No active garment"),
+        'Textile': _("No active garment"),
+        'Ensemble': _("No active family"),
+        'Media': _("No active media"),
+        'Note': _("No active note"),
         }
 
     BUSY_CURSOR = Gdk.Cursor.new(Gdk.CursorType.WATCH)

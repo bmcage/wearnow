@@ -1,5 +1,5 @@
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# wearnow - a GTK+/GNOME based  program
 #
 # Copyright (C) 2000-2007  Donald N. Allingham
 # Copyright (C) 2010       Michiel D. Nauta
@@ -21,12 +21,12 @@
 #
 
 """
-Note class for Gramps.
+Note class for wearnow.
 """
 
 #-------------------------------------------------------------------------
 #
-# GRAMPS modules
+# wearnow modules
 #
 #-------------------------------------------------------------------------
 from .primaryobj import BasicPrimaryObject
@@ -38,13 +38,13 @@ from .handle import Handle
 
 #-------------------------------------------------------------------------
 #
-# Class for notes used throughout the majority of GRAMPS objects
+# Class for notes used throughout the majority of wearnow objects
 #
 #-------------------------------------------------------------------------
 class Note(BasicPrimaryObject):
     """Define a text note.
     
-    Starting from Gramps 3.1 Note object stores the text in
+    Note object stores the text in
     :class:`~.styledtext.StyledText` instance, thus it can have text formatting
     information.
 

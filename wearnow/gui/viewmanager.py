@@ -138,6 +138,10 @@ UIDEFAULT = '''<ui>
     <menuitem action="Fullscreen"/>
     <separator/>
   </menu>
+  <menu action="GoMenu">
+    <placeholder name="CommonGo"/>
+    <placeholder name="CommonHistory"/>
+  </menu>
   <menu action="WindowsMenu">
     <placeholder name="WinMenu"/>
   </menu>
@@ -652,6 +656,7 @@ class ViewManager(CLIManager):
              _("Make a backup of the collection"), self.quick_backup),
             ('Abandon', 'document-revert',
              _('_Abandon Changes and Quit'), None, None, self.abort),
+            ('GoMenu', None, _('_Go')),
             ('WindowsMenu', None, _('_Windows')),
             ('F2', None, 'F2', "F2", None, self.__keypress),
             ('F3', None, 'F3', "F3", None, self.__keypress),
@@ -986,8 +991,6 @@ class ViewManager(CLIManager):
         """
         Create the page if it doesn't exist and make it the current page.
         """
-        if not (0<= cat_num < len(self.current_views)-1):
-            return None
         if view_num is None:
             view_num = self.current_views[cat_num]
         else:

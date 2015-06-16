@@ -155,7 +155,7 @@ class MediaModel(FlatBaseModel):
 
     def column_private(self, data):
         if data[12]:
-            return 'gramps-lock'
+            return 'wearnow-lock'
         else:
             # There is a problem returning None here.
             return ''

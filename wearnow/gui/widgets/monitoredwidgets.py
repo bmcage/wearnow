@@ -1,5 +1,5 @@
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# wearnow - a GTK+/GNOME based genealogy program
 #
 # Copyright (C) 2000-2006  Donald N. Allingham
 # Copyright (C) 2010       Nick Hall
@@ -45,7 +45,7 @@ from gi.repository import Pango
 
 #-------------------------------------------------------------------------
 #
-# Gramps modules
+# wearnow modules
 #
 #-------------------------------------------------------------------------
 from wearnow.tex.const import WEARNOW_LOCALE as glocale
@@ -756,7 +756,7 @@ class MonitoredTagList(object):
         self.label.set_halign(Gtk.Align.START)
         self.label.set_ellipsize(Pango.EllipsizeMode.END)
         image = Gtk.Image()
-        image.set_from_icon_name('gramps-tag', Gtk.IconSize.MENU)
+        image.set_from_icon_name('wearnow-tag', Gtk.IconSize.MENU)
         button.set_image (image)
         button.set_tooltip_text(_('Edit the tag list'))
         button.connect('button-press-event', self.cb_edit)

@@ -1,5 +1,5 @@
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# wearnow - a GTK+/GNOME based genealogy program
 #
 # Copyright (C) 2000-2006  Donald N. Allingham
 #
@@ -156,11 +156,11 @@ class PrivacyButton(object):
             obj.remove(child)
         image = Gtk.Image()
         if obj.get_active():
-            image.set_from_icon_name('gramps-lock', Gtk.IconSize.MENU)
+            image.set_from_icon_name('wearnow-lock', Gtk.IconSize.MENU)
             obj.set_tooltip_text(_('Record is private'))
             self.obj.set_privacy(True)
         else:
-            image.set_from_icon_name('gramps-unlock', Gtk.IconSize.MENU)
+            image.set_from_icon_name('wearnow-unlock', Gtk.IconSize.MENU)
             obj.set_tooltip_text(_('Record is public'))
             self.obj.set_privacy(False)
         image.show()

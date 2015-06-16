@@ -36,7 +36,7 @@ from gi.repository import GLib
 
 #-------------------------------------------------------------------------
 #
-# GRAMPS classes
+# wearnow classes
 #
 #-------------------------------------------------------------------------
 from wearnow.tex.errors import WindowActiveError
@@ -76,7 +76,7 @@ class NoteTab(EmbeddedList, DbGUIElement):
     _column_names = [
         (_('Type'), 0, 100, TEXT_COL, -1, None),
         (_('Preview'), 1, 200, TEXT_COL, -1, None),
-        (_('Private'), 2, 30, ICON_COL, -1, 'gramps-lock')
+        (_('Private'), 2, 30, ICON_COL, -1, 'wearnow-lock')
     ]
 
     def __init__(self, dbstate, uistate, track, data, callertitle=None, 
@@ -182,7 +182,7 @@ class NoteTab(EmbeddedList, DbGUIElement):
         """
         Return the stock-id icon name associated with the display tab
         """
-        return 'gramps-notes'
+        return 'wearnow-notes'
         
     def note_delete(self, del_note_handle_list):
         """

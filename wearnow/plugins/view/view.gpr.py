@@ -44,21 +44,21 @@ MODULE_VERSION="0.0"
 #viewclass = 'EnsembleView',
 #order = START,
 #  )
-#
-#register(VIEW, 
-#id    = 'mediaview',
-#name  = _("Media"),
-#description =  _("The view showing all the media objects"),
-#version = '0.0',
-#wearnow_target_version = MODULE_VERSION,
-#status = STABLE,
-#fname = 'mediaview.py',
-#authors = ["UGent Dep. Textiles"],
-#authors_email = ["http://www.ugent.be/ea/textiles/"],
-#category = ("Media", _("Media")),
-#viewclass = 'MediaView',
-#order = START,
-#  )
+
+register(VIEW, 
+id    = 'mediaview',
+name  = _("Media"),
+description =  _("The view showing all the media objects"),
+version = '0.0',
+wearnow_target_version = MODULE_VERSION,
+status = STABLE,
+fname = 'mediaview.py',
+authors = ["UGent Dep. Textiles"],
+authors_email = ["http://www.ugent.be/ea/textiles/"],
+category = ("Media", _("Media")),
+viewclass = 'MediaView',
+order = START,
+  )
 
 register(VIEW, 
 id    = 'noteview',

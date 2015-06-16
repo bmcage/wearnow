@@ -1,5 +1,5 @@
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# WearNow - a GTK+/GNOME based program
 #
 # Copyright (C) 2000-2007 Donald N. Allingham
 # Copyright (C) 2011       Tim G L Lyons
@@ -20,12 +20,12 @@
 #
 
 """
-Basic Primary Object class for Gramps.
+Basic Primary Object class for WearNow.
 """
 
 #-------------------------------------------------------------------------
 #
-# GRAMPS modules
+# WearNow modules
 #
 #-------------------------------------------------------------------------
 from .tableobj import TableObject
@@ -46,8 +46,8 @@ class BasicPrimaryObject(TableObject, PrivacyBase, TagBase):
     
     The :class:`PrimaryObject` is the base class for all other primary objects
     in the database. Primary objects are the core objects in the database.
-    Each object has a database handle and a Gramps ID value. The database
-    handle is used as the record number for the database, and the Gramps
+    Each object has a database handle and a WearNow ID value. The database
+    handle is used as the record number for the database, and the WearNow
     ID is the user visible version.
     """
     
@@ -66,27 +66,27 @@ class BasicPrimaryObject(TableObject, PrivacyBase, TagBase):
         PrivacyBase.__init__(self, source)
         TagBase.__init__(self)
         if source:
-            self.gramps_id = source.gramps_id
+            self.wearnow_id = source.wearnow_id
         else:
-            self.gramps_id = None
+            self.wearnow_id = None
 
-    def set_gramps_id(self, gramps_id):
+    def set_wearnow_id(self, wearnow_id):
         """
-        Set the Gramps ID for the primary object.
+        Set the WearNow ID for the primary object.
         
-        :param gramps_id: Gramps ID
-        :type gramps_id: str
+        :param wearnow_id: WearNow ID
+        :type wearnow_id: str
         """
-        self.gramps_id = gramps_id
+        self.wearnow_id = wearnow_id
 
-    def get_gramps_id(self):
+    def get_wearnow_id(self):
         """
-        Return the Gramps ID for the primary object.
+        Return the WearNow ID for the primary object.
 
-        :returns: Gramps ID associated with the object
+        :returns: WearNow ID associated with the object
         :rtype: str
         """
-        return self.gramps_id
+        return self.wearnow_id
 
     def has_handle_reference(self, classname, handle):
         """
@@ -139,15 +139,6 @@ class BasicPrimaryObject(TableObject, PrivacyBase, TagBase):
         """
         return False
 
-    def remove_citation_references(self, handle_list):
-        """
-        Remove the specified source references from the object. 
-        
-        In the base class no such references exist. Derived classes should 
-        override this if they provide source references.
-        """
-        pass
-
     def remove_media_references(self, handle_list):
         """
         Remove the specified media references from the object. 
@@ -155,9 +146,6 @@ class BasicPrimaryObject(TableObject, PrivacyBase, TagBase):
         In the base class no such references exist. Derived classes should 
         override this if they provide media references.
         """
-        pass
-
-    def replace_citation_references(self, old_handle, new_handle):
         pass
 
     def replace_media_references(self, old_handle, new_handle):
@@ -174,8 +162,8 @@ class PrimaryObject(BasicPrimaryObject):
     database. 
     
     Primary objects are the core objects in the database.
-    Each object has a database handle and a Gramps ID value. The database
-    handle is used as the record number for the database, and the Gramps
+    Each object has a database handle and a WearNow ID value. The database
+    handle is used as the record number for the database, and the WearNow
     ID is the user visible version.
     """
     

@@ -1,5 +1,5 @@
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# wearnow - a GTK+/GNOME based genealogy program
 #
 # Copyright (C) 2008  Zsolt Foldvari
 #
@@ -46,7 +46,7 @@ from gi.repository import Pango
 
 #-------------------------------------------------------------------------
 #
-# GRAMPS modules
+# wearnow modules
 #
 #-------------------------------------------------------------------------
 from wearnow.tex.lib import StyledTextTagType
@@ -309,13 +309,13 @@ class StyledTextEditor(Gtk.TextView):
         Return a string useful for a tooltip given a LinkTag object.
         """
         return "tooltip link"
-#        from gramps.gen.simple import SimpleAccess
+#        from wearnow.tex.simple import SimpleAccess
 #        win_obj = find_parent_with_attr(self, attr="dbstate")
 #        display = link_tag.data
 #        if win_obj:
 #            simple_access = SimpleAccess(win_obj.dbstate.db)
 #            url = link_tag.data
-#            if url.startswith("gramps://"):
+#            if url.startswith("wearnow://"):
 #                obj_class, prop, value = url[9:].split("/")
 #                display = simple_access.display(obj_class, prop, value) or url
 #        return display
@@ -463,9 +463,9 @@ class StyledTextEditor(Gtk.TextView):
 
         # ...then the normal actions, which have a ToolButton as proxy
         format_actions = [
-            (str(StyledTextTagType.FONTCOLOR), 'gramps-font-color', None, None,
+            (str(StyledTextTagType.FONTCOLOR), 'wearnow-font-color', None, None,
              _('Font Color'), self._on_action_activate),
-            (str(StyledTextTagType.HIGHLIGHT), 'gramps-font-bgcolor', None,
+            (str(StyledTextTagType.HIGHLIGHT), 'wearnow-font-bgcolor', None,
             None, _('Background Color'), self._on_action_activate),
             (str(StyledTextTagType.LINK), 'go-jump', None, None,
              _('Link'), self._on_link_activate),
@@ -739,9 +739,9 @@ class StyledTextEditor(Gtk.TextView):
         elif flavor == GENURL:
             pass
         elif flavor == LINK:
-            # gramps://person/id/VALUE
-            # gramps://person/handle/VALUE
-            if url.startswith("gramps://"):
+            # wearnow://person/id/VALUE
+            # wearnow://person/handle/VALUE
+            if url.startswith("wearnow://"):
                 # if in a window:
                 win_obj = find_parent_with_attr(self, attr="dbstate")
                 if win_obj:
@@ -842,7 +842,7 @@ def uri_dialog(self, uri, callback):
                                  "Repository", "Source", "Media"]:
                 handle = obj.uistate.get_active(object_class)
                 if handle:
-                    uri = "gramps://%s/handle/%s" % (object_class, handle)
+                    uri = "wearnow://%s/handle/%s" % (object_class, handle)
         EditLink(obj.dbstate, obj.uistate, obj.track, uri, callback)
 
 #-------------------------------------------------------------------------
