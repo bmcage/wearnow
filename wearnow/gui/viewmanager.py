@@ -1488,13 +1488,13 @@ def run_plugin(pdata, dbstate, uistate):
             _('The plugin %(name)s did not load and reported an error.\n\n'
               '%(error_msg)s\n\n'
               'If you are unable to fix the fault yourself then you can '
-              'submit a bug at %(gramps_bugtracker_url)s or contact '
+              'submit a bug at %(wearnow_bugtracker_url)s or contact '
               'the plugin author (%(firstauthoremail)s).\n\n'
-              'If you do not want Gramps to try and load this plugin again, '
+              'If you do not want WearNow to try and load this plugin again, '
               'you can hide it by using the Plugin Manager on the '
               'Help menu.') % {
                 'name': pdata.name,
-                'gramps_bugtracker_url' : URL_BUGHOME,
+                'wearnow_bugtracker_url' : URL_HOMEPAGE,
                 'firstauthoremail': pdata.authors_email[0] if
                         pdata.authors_email else '...',
                   'error_msg': error_msg})
@@ -1544,13 +1544,13 @@ def get_available_views():
                 _('The view %(name)s did not load and reported an error.\n\n'
                   '%(error_msg)s\n\n'
                   'If you are unable to fix the fault yourself then you can '
-                  'submit a bug at %(gramps_bugtracker_url)s or contact '
+                  'submit a bug at %(wearnow_bugtracker_url)s or contact '
                   'the view author (%(firstauthoremail)s).\n\n'
-                  'If you do not want Gramps to try and load this view again, '
+                  'If you do not want WearNow to try and load this view again, '
                   'you can hide it by using the Plugin Manager on the '
                   'Help menu.') % {
                     'name': pdata.name,
-                    'gramps_bugtracker_url' : URL_BUGHOME,
+                    'wearnow_bugtracker_url' : URL_HOMEPAGE,
                     'firstauthoremail': pdata.authors_email[0] if
                             pdata.authors_email else '...',
                     'error_msg': lasterror})

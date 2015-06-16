@@ -519,8 +519,6 @@ class WearNowParser(UpdateCallback):
             "childref": (self.start_childref, self.stop_childref), 
             "created": (self.start_created, None), 
             "database": (self.start_database, self.stop_database), 
-            "description": (None, self.stop_description), 
-            "type": (None, self.stop_type), 
             "ensembles": (None, self.stop_ensembles), 
             "ensemble": (self.start_ensemble, self.stop_ensemble), 
             "header": (None, self.stop_header), 
@@ -702,7 +700,6 @@ class WearNowParser(UpdateCallback):
                          ) % self.mediapath )
     
             self.fix_not_instantiated()
-            self.fix_ensembles()
             for key in list(self.func_map.keys()):
                 del self.func_map[key]
             del self.func_map
@@ -754,7 +751,7 @@ class WearNowParser(UpdateCallback):
                     "latest version of WearNow and try again." ) % {
                     'newer' : self.__wearnow_version, 'older' : VERSION }
             raise WearNowImportError('', msg)
-        if self.__xml_version < (1, 0, 0):
+        if self.__xml_version < (0, 0, 0):
             msg = _("The .wnow file you are importing was made by version "
                     "%(oldwearnow)s of WearNow, while you are running a more "
                     "recent version %(newwearnow)s.\n\n"
@@ -767,7 +764,7 @@ class WearNowParser(UpdateCallback):
                         'wearnow_wiki_xml_url': URL_HOMEPAGE ,
                         }
             raise WearNowImportError(_('The file will not be imported'), msg)
-        elif self.__xml_version < (1, 1, 0):
+        elif self.__xml_version < (0, 0, 0):
             msg = _("The .wnow file you are importing was made by version "
                     "%(oldwearnow)s of WearNow, while you are running a much "
                     "more recent version %(newwearnow)s.\n\n"
