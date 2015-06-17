@@ -151,19 +151,18 @@ class MediaModel(FlatBaseModel):
 
     def column_handle(self,data):
         return str(data[0])
-
     def column_private(self, data):
-        if data[12]:
+        if data[8]:
             return 'wearnow-lock'
         else:
             # There is a problem returning None here.
             return ''
 
     def sort_change(self,data):
-        return "%012x" % data[9]
+        return "%012x" % data[6]
 
     def column_change(self,data):
-        return format_time(data[9])
+        return format_time(data[6])
 
     def column_tooltip(self,data):
         return 'Media tooltip'
@@ -180,7 +179,7 @@ class MediaModel(FlatBaseModel):
         """
         tag_color = "#000000000000"
         tag_priority = None
-        for handle in data[11]:
+        for handle in data[7]:
             tag = self.db.get_tag_from_handle(handle)
             this_priority = tag.get_priority()
             if tag_priority is None or this_priority < tag_priority:
@@ -192,5 +191,5 @@ class MediaModel(FlatBaseModel):
         """
         Return the sorted list of tags.
         """
-        tag_list = list(map(self.get_tag_name, data[11]))
+        tag_list = list(map(self.get_tag_name, data[7]))
         return ', '.join(sorted(tag_list, key=glocale.sort_key))

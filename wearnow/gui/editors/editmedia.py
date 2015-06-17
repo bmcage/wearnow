@@ -113,7 +113,7 @@ class EditMedia(EditPrimary):
         self._add_db_signal('media-rebuild', self._do_close)
         self._add_db_signal('media-delete', self.check_for_close)
 
-#    def _setup_fields(self):
+    def _setup_fields(self):
 #        self.date_field = MonitoredDate(self.glade.get_object("date_entry"),
 #                                        self.glade.get_object("date_edit"),
 #                                        self.obj.get_date_object(),

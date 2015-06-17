@@ -530,6 +530,7 @@ class WearNowParser(UpdateCallback):
             "textile": (self.start_textile, self.stop_textile), 
             "objref": (self.start_objref, self.stop_objref), 
             "object": (self.start_object, self.stop_object), 
+            "file": (self.start_file, None), 
             "owner": (None, self.stop_research), 
             "resname": (None, self.stop_resname), 
             "resaddr": (None, self.stop_resaddr), 
@@ -888,6 +889,28 @@ class WearNowParser(UpdateCallback):
         if self.textile:
             self.textile.add_url(url)
 
+    def start_file(self, attrs):
+        self.object.mime = attrs['mime']
+        if 'description' in attrs:
+            self.object.desc = attrs['description']
+        else:
+            self.object.desc = ""
+        #keep value of path, no longer make absolute paths on import
+        src = attrs["src"]
+        if src:
+            self.object.path = src
+            if self.all_abs and not os.path.isabs(src):
+                self.all_abs = False
+                self.info.add('relative-path', None, None)
+        if 'checksum' in attrs:
+            self.object.checksum = attrs['checksum']
+        else:
+            if os.path.isabs(src):
+                full_path = src
+            else:
+                full_path = os.path.join(self.mediapath, src)
+            self.object.checksum = create_checksum(full_path)
+
     def start_ensemble(self, attrs):
         """
         Add a ensemble object to db if it doesn't exist yet and assign
@@ -1090,14 +1113,6 @@ class WearNowParser(UpdateCallback):
         self.object.change = int(attrs.get('change', self.change))
         self.info.add('new-object', MEDIA_KEY, self.object)
 
-        # wearnow LEGACY: src, mime, and description attributes
-        # now belong to the <file> tag. Here we are supporting
-        # the old format of <object src="blah"...>
-        self.object.mime = attrs.get('mime', '')
-        self.object.desc = attrs.get('description', '')
-        src = attrs.get("src", '')
-        if src:
-            self.object.path = src
         if self.default_tag: 
             self.object.add_tag(self.default_tag.handle)
         return self.object

@@ -93,7 +93,7 @@ def get_media_referents(media_handle, db):
     to a given media handle in a given database.
     
     """
-    _primaries = ('Textile', )
+    _primaries = ('Textile', 'Ensemble')
     
     return (get_referents(media_handle, db, _primaries))
 

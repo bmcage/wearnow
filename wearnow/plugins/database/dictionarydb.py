@@ -247,6 +247,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
                 "commit_func": self.commit_media_object,
                 "iter_func": self.iter_media_objects,
             })
+        self._tables['MediaObject'] = self._tables['Media']
         self._tables['Note'].update(
             {
                 "handle_func": self.get_note_from_handle, 
@@ -442,7 +443,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Helper function for find_next_<object>_wearnow_id methods
         """
         index = prefix % map_index
-        while trans.get(str(index), txn=self.txn) is not None:
+        while trans.get(str(index)) is not None:
             map_index += 1
             index = prefix % map_index
         map_index += 1
@@ -455,11 +456,9 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         """
         if self.pmap_index == 0: 
             #determine a good start value
-            last = sorted(self.textile_id_map.keys())[-1]
-            #not very good,just remove first letter:
-            self.pmap_index = int(last[1:]) + 1
+            self.pmap_index = len(self.textile_id_map.keys())
         self.pmap_index, gid = self.__find_next_wearnow_id(self.textile_prefix,
-                                          self.pmap_index, self.id_trans)
+                                          self.pmap_index, self.textile_id_map)
         return gid
 
     def find_next_object_wearnow_id(self):
@@ -469,11 +468,9 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         """
         if self.omap_index == 0: 
             #determine a good start value
-            last = sorted(self.media_id_map.keys())[-1]
-            #not very good,just remove first letter:
-            self.omap_index = int(last[1:]) + 1
+            self.omap_index = len(self.media_id_map.keys())
         self.omap_index, gid = self.__find_next_wearnow_id(self.mediaobject_prefix,
-                                          self.omap_index, self.oid_trans)
+                                          self.omap_index, self.media_id_map)
         return gid
 
     def find_next_ensemble_wearnow_id(self):
@@ -483,11 +480,9 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         """
         if self.fmap_index == 0: 
             #determine a good start value
-            last = sorted(self.ensemble_id_map.keys())[-1]
-            #not very good,just remove first letter:
-            self.fmap_index = int(last[1:]) + 1
+            self.fmap_index = len(self.ensemble_id_map.keys())
         self.fmap_index, gid = self.__find_next_wearnow_id(self.ensemble_prefix,
-                                          self.fmap_index, self.fid_trans)
+                                          self.fmap_index, self.ensemble_id_map)
         return gid
 
     def find_next_note_wearnow_id(self):
@@ -497,11 +492,9 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         """
         if self.nmap_index == 0: 
             #determine a good start value
-            last = sorted(self.note_id_map.keys())[-1]
-            #not very good,just remove first letter:
-            self.nmap_index = int(last[1:]) + 1
+            self.nmap_index = len(self.note_id_map.keys())
         self.nmap_index, gid = self.__find_next_wearnow_id(self.note_prefix,
-                                          self.nmap_index, self.nid_trans)
+                                          self.nmap_index, self.note_id_map)
         return gid
 
     def get_mediapath(self):
@@ -610,7 +603,6 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         return None
 
     def get_note_from_wearnow_id(self, wearnow_id):
-        print ('searching',wearnow_id,'in',self.note_id_map)
         if wearnow_id in self.note_id_map:
             return Note.create(self.note_id_map[wearnow_id])
         return None

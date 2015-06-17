@@ -135,6 +135,8 @@ register('behavior.database-backend', 'dictionarydb')
 register('behavior.welcome', 100)
 register('behavior.web-search-url', 'http://google.com/#&q=%(text)s')
 register('behavior.spellcheck', False)
+register('behavior.addmedia-image-dir', '')
+register('behavior.addmedia-relative-path', False)
 
 register('interface.fullscreen', False)
 register('interface.dont-ask', False)
