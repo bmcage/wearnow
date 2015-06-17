@@ -1,9 +1,7 @@
-# WearNow - a GTK+/GNOME based  program
 #
-# Copyright (C) 2000-2007  Donald N. Allingham
-# Copyright (C) 2008       Gary Burton
-# Copyright (C) 2009       Nick Hall
-# Copyright (C) 2010       Benny Malengier
+# Gramps - a GTK+/GNOME based genealogy program
+#
+# Copyright (C) 2002-2006  Donald N. Allingham
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,36 +18,38 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""
-Textile list View
-"""
-
 #-------------------------------------------------------------------------
 #
-# wearnow modules
+# Standard Python modules
 #
 #-------------------------------------------------------------------------
-from wearnow.plugins.lib.libtextileview import BaseTextileView
-from wearnow.gui.views.treemodels.textilemodel import TextileListModel
-
-#-------------------------------------------------------------------------
-#
-# Internationalization
-#
-#-------------------------------------------------------------------------
-from wearnow.tex.const import WEARNOW_LOCALE as glocale
+import re
+from ...const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
 
 #-------------------------------------------------------------------------
 #
-# PlaceTreeView
+# GRAMPS modules
 #
 #-------------------------------------------------------------------------
-class TextileListView(BaseTextileView):
-    """
-    A hierarchical view of the top three levels of places.
-    """
-    def __init__(self, pdata, dbstate, uistate, nav_group=0):
-        BaseTextileView.__init__(self, pdata, dbstate, uistate,
-                               _('Textile View'), TextileListModel,
-                               nav_group=nav_group)
+from . import Rule
+
+#-------------------------------------------------------------------------
+# Objects having notes that contain a substring or match a regular expression
+#-------------------------------------------------------------------------
+class HasNoteRegexBase(Rule):
+    """Objects having notes containing <text>."""
+
+    labels      = [ _('Text:')]
+    name        = 'Objects having notes containing <text>'
+    description = ("Matches objects whose notes contain a substring "
+                   "or match a regular expression")
+    category    = _('General filters')
+    allow_regex = True
+
+    def apply(self, db, textile):
+        for handle in textile.get_note_list():
+            note = db.get_note_from_handle(handle)
+            if self.match_substring(0, note.get()):
+                return True
+        return False

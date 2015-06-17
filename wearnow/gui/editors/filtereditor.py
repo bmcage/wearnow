@@ -296,7 +296,7 @@ class MyID(Gtk.Box):
     def name_from_wearnow_id(self, wearnow_id):
         if self.namespace == 'Textile':
             textile = self.db.get_textile_from_wearnow_id(wearnow_id)
-            name = textile.name
+            name = textile.description
         elif self.namespace == 'Ensemble':
             ensemble = self.db.get_ensemble_from_wearnow_id(wearnow_id)
             name = ensemble.name
@@ -844,7 +844,7 @@ class ShowResults(ManagedWindow):
     def get_name_id(self, handle):
         if self.namespace == 'Textile':
             textile = self.db.get_textile_from_handle(handle)
-            name = textile.name
+            name = textile.description
             gid = textile.get_wearnow_id()
         elif self.namespace == 'Ensemble':
             ensemble = self.db.get_ensemble_from_handle(handle)

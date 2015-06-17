@@ -38,6 +38,7 @@ from .urlbase import UrlBase
 from .tagbase import TagBase
 from .attrtype import AttributeType
 from .attribute import Attribute
+from .textiletype import TextileType
 from .const import IDENTICAL, EQUAL, DIFFERENT
 from ..const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
@@ -78,6 +79,8 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         MediaBase.__init__(self)
         AttributeBase.__init__(self)
         UrlBase.__init__(self)
+        self.description = ""
+        self.type = TextileType()
         if data:
             self.unserialize(data)
 
@@ -108,6 +111,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         return (
             self.handle,                                         #  0
             self.wearnow_id,                                     #  1
+            self.description,
             MediaBase.serialize(self),                           # 10
             AttributeBase.serialize(self),                       # 12
             UrlBase.serialize(self),                             # 13
@@ -115,6 +119,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
             self.change,                                         # 17
             TagBase.serialize(self),                             # 18
             self.private,                                        # 19
+            self.type.serialize(),
             )
 
     def to_struct(self):
@@ -141,6 +146,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
             "_class": "Textile",
             "handle":  Handle("Textile", self.handle),            #  0
             "wearnow_id": self.wearnow_id,                         #  1
+            "description": self.description,
             "media_list": MediaBase.to_struct(self),             # 10
             "attribute_list": AttributeBase.to_struct(self),     # 12
             "urls": UrlBase.to_struct(self),                     # 13
@@ -148,6 +154,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
             "change": self.change,                               # 17
             "tag_list": TagBase.to_struct(self),                 # 18
             "private": self.private,                             # 19
+            "type": self.type.to_struct(), 
             }
 
     @classmethod
@@ -161,7 +168,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         return (
             Handle.from_struct(struct.get("handle", default.handle)),
             struct.get("wearnow_id", default.wearnow_id),
-            struct.get("gender", default.gender),
+            struct.get("description", default.description),
             MediaBase.from_struct(struct.get("media_list", default.media_list)),
             AttributeBase.from_struct(struct.get("attribute_list", default.attribute_list)),
             UrlBase.from_struct(struct.get("urls", default.urls)),
@@ -169,22 +176,8 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
             struct.get("change", default.change),
             TagBase.from_struct(struct.get("tag_list", default.tag_list)),
             struct.get("private", default.private),
+            TextileType.from_struct(struct.get("type", {})), 
         )
-
-    @classmethod
-    def get_schema(cls):
-        return {
-            "handle":  Handle("Textile", "TEXTILE-HANDLE"),
-            "wearnow_id": str,
-            "gender": int,
-            "media_list": [MediaRef],
-            "attribute_list": [Attribute],
-            "urls": [Url],
-            "note_list": [Handle("Note", "NOTE-HANDLE")], 
-            "change": int,
-            "tag_list": [Handle("Tag", "TAG-HANDLE")],
-            "private": bool,
-        }
 
     def unserialize(self, data):
         """
@@ -197,6 +190,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         """
         (self.handle,             #  0
          self.wearnow_id,          #  1
+         self.description,
          media_list,              # 10
          attribute_list,          # 12
          urls,                    # 13
@@ -204,6 +198,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
          self.change,             # 17
          tag_list,                # 18
          self.private,            # 19
+         the_type,
          ) = data
 
         MediaBase.unserialize(self, media_list)
@@ -211,8 +206,32 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         UrlBase.unserialize(self, urls)
         NoteBase.unserialize(self, note_list)
         TagBase.unserialize(self, tag_list)
+        self.type = TextileType()
+        self.type.unserialize(the_type)
         return self
             
+    def set_type(self, the_type):
+        """Set descriptive type of the Note.
+        
+        :param the_type: descriptive type of the Note
+        :type the_type: str
+        """
+        self.type.set(the_type)
+
+    def get_type(self):
+        """Get descriptive type of the Note.
+        
+        :returns: the descriptive type of the Note
+        :rtype: str
+        """
+        return self.type
+
+    def set_description(self, descr):
+        self.description = descr
+        
+    def get_description(self):
+        return self.description
+
     def _has_handle_reference(self, classname, handle):
         """
         Return True if the object has reference to a given handle of given 
@@ -241,7 +260,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         :returns: Returns the list of all textual attributes of the object.
         :rtype: list
         """
-        return [self.wearnow_id]
+        return [self.wearnow_id, self.description]
 
     def get_text_data_child_list(self):
         """

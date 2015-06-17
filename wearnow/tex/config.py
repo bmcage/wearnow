@@ -146,7 +146,7 @@ register('interface.toolbar-on', True)
 register('interface.width', 775)
 register('interface.view', True)
 register('interface.view-categories',
-         ["Textile", "WearNow", "Ensemble", "Media", "Notes"])
+         ["Garments", "WearNow", "Ensemble", "Media", "Notes"])
 register('interface.note-height', 500)
 register('interface.note-sel-height', 450)
 register('interface.note-sel-width', 600)

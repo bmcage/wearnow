@@ -1,10 +1,7 @@
 #
-# WearNow - a GTK+/GNOME based program
+# Gramps - a GTK+/GNOME based genealogy program
 #
-# Copyright (C) 2002-2007  Donald N. Allingham
-# Copyright (C) 2007-2008   Brian G. Matherly
-# Copyright (C) 2011       Tim G L Lyons
-# Copyright (C) 2011       Doug Blank <doug.blank@gmail.com>
+# Copyright (C) 2002-2006  Donald N. Allingham
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,29 +18,27 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""
-Package providing filter rules for WearNow
-"""
+#-------------------------------------------------------------------------
+#
+# Standard Python modules
+#
+#-------------------------------------------------------------------------
+from ....const import WEARNOW_LOCALE as glocale
+_ = glocale.translation.gettext
 
-from ._everyone import Everyone
-from ._matchesfilter import MatchesFilter
-from ._textilesprivate import TextilesPrivate
-from ._hasnoteregexp import HasNoteRegexp
-from ._hastag import HasTag
-from ._regexpidof import RegExpIdOf
-from ._regexpname import RegExpName
 #-------------------------------------------------------------------------
 #
-# This is used by Custom Filter Editor tool
+# GRAMPS modules
 #
 #-------------------------------------------------------------------------
-editor_rule_list = [
-    Everyone,
-    MatchesFilter,
-    TextilesPrivate,
-    HasNoteRegexp,
-    HasTag,
-    RegExpIdOf,
-    RegExpName,
-]
+from .._hasnoteregexbase import HasNoteRegexBase
+
+#-------------------------------------------------------------------------
+# "People having notes that contain a substring"
+#-------------------------------------------------------------------------
+class HasNoteRegexp(HasNoteRegexBase):
+
+    name        = _('Garments having notes containing <text>')
+    description = _("Matches garments whose notes contain text "
+                    "matching a regular expression")
 

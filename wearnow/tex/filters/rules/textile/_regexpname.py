@@ -1,9 +1,8 @@
-# WearNow - a GTK+/GNOME based  program
 #
-# Copyright (C) 2000-2007  Donald N. Allingham
-# Copyright (C) 2008       Gary Burton
-# Copyright (C) 2009       Nick Hall
-# Copyright (C) 2010       Benny Malengier
+# Gramps - a GTK+/GNOME based genealogy program
+#
+# Copyright (C) 2002-2007  Donald N. Allingham
+# Copyright (C) 2007-2008  Brian G. Matherly
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,36 +19,38 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""
-Textile list View
-"""
-
 #-------------------------------------------------------------------------
 #
-# wearnow modules
+# Standard Python modules
 #
 #-------------------------------------------------------------------------
-from wearnow.plugins.lib.libtextileview import BaseTextileView
-from wearnow.gui.views.treemodels.textilemodel import TextileListModel
-
-#-------------------------------------------------------------------------
-#
-# Internationalization
-#
-#-------------------------------------------------------------------------
-from wearnow.tex.const import WEARNOW_LOCALE as glocale
+from ....const import WEARNOW_LOCALE as glocale
 _ = glocale.translation.gettext
 
 #-------------------------------------------------------------------------
 #
-# PlaceTreeView
+# GRAMPS modules
 #
 #-------------------------------------------------------------------------
-class TextileListView(BaseTextileView):
-    """
-    A hierarchical view of the top three levels of places.
-    """
-    def __init__(self, pdata, dbstate, uistate, nav_group=0):
-        BaseTextileView.__init__(self, pdata, dbstate, uistate,
-                               _('Textile View'), TextileListModel,
-                               nav_group=nav_group)
+from .. import Rule
+
+#-------------------------------------------------------------------------
+#
+# HasNameOf
+#
+#-------------------------------------------------------------------------
+class RegExpName(Rule):
+    """Rule that checks for full or partial description matches"""
+
+    labels      = [_('Text:')]
+    name        = _('Garments with a description matching <text>')
+    description = _("Matches garments' names containing a substring or "
+                    "matching a regular expression")
+    category    = _('General filters')
+    allow_regex = True
+
+    def apply(self,db,textile):
+        if self.match_substring(0, textile.description):
+            return True
+        else:
+            return False

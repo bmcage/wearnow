@@ -244,9 +244,9 @@ class NavigationView(PageView):
 
         active_handle = self.uistate.get_active('Textile')
         active_textile = self.dbstate.db.get_textile_from_handle(active_handle)
-        if active_person:
+        if active_textile:
             self.bookmarks.add(active_handle)
-            name = active_textile.name
+            name = active_textile.description
             self.uistate.push_message(self.dbstate, 
                                       _("%s has been bookmarked") % name)
         else:
