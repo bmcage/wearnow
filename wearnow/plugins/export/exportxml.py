@@ -412,6 +412,15 @@ class WearNowXmlWriter(UpdateCallback):
     def write_textile(self,textile,index=1):
         sp = "  "*index
         self.write_primary_tag("textile",textile,index)
+        desc = textile.get_description()
+        if desc:
+            self.g.write(' description="%s"' % self.fix(desc))
+        else:
+            self.g.write(' description=""')
+            
+        ttype = escxml(textile.get_type().xml_str())
+        self.g.write(' type="%s"' % ttype)
+        self.g.write('>\n')
 
         self.write_media_list(textile.get_media_list(),index+1)
 

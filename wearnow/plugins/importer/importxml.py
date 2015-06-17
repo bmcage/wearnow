@@ -50,7 +50,8 @@ from wearnow.tex.mime import get_type
 from wearnow.tex.lib import (Attribute, AttributeType, ChildRef, Ensemble,
                             MediaObject, MediaRef, Note, NoteType, Textile,
                             Researcher, StyledText,
-                            StyledTextTag, StyledTextTagType, Tag, Url)
+                            StyledTextTag, StyledTextTagType, Tag, 
+                            TextileType, Url)
 from wearnow.tex.db.txn import DbTxn
 #from wearnow.tex.db.write import CLASS_TO_KEY_MAP
 from wearnow.tex.errors import WearNowImportError
@@ -850,9 +851,16 @@ class WearNowParser(UpdateCallback):
             orig_textile = self.db.get_textile_from_handle(orig_handle)
             self.info.add('merge-candidate', TEXTILE_KEY, orig_textile,
                           self.textile)
+        if 'description' in attrs:
+            self.textile.desc = attrs['description']
+        else:
+            self.textile.desc = ""
         self.textile.private = bool(attrs.get("priv"))
         self.textile.change = int(attrs.get('change', self.change))
         self.info.add('new-object', TEXTILE_KEY, self.textile)
+        
+        self.textile.type.set_from_xml_str(attrs.get('type',
+                                                  TextileType.UNKNOWN))
         
         if self.default_tag: 
             self.textile.add_tag(self.default_tag.handle)
