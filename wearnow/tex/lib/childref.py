@@ -36,15 +36,15 @@ from .handle import Handle
 
 #-------------------------------------------------------------------------
 #
-# Person References for Person/Family
+# Textile References for Textile
 #
 #-------------------------------------------------------------------------
 class ChildRef(SecondaryObject, RefBase):
     """
-    Person reference class.
+    Textile reference class.
 
     This class is for keeping information about how the person relates
-    to another person from the database, if not through family.
+    to another person from the database, if not through ensemble
     Examples would be: godparent, friend, etc.
     """
 
@@ -78,7 +78,7 @@ class ChildRef(SecondaryObject, RefBase):
         :rtype: dict
         """
         return {"_class": "ChildRef",
-                "ref": Handle("Person", self.ref),
+                "ref": Handle("Textile", self.ref),
                }
 
     @classmethod
@@ -136,7 +136,7 @@ class ChildRef(SecondaryObject, RefBase):
         :rtype: list
         """
         if self.ref:
-            ret += [('Person', self.ref)]
+            ret += [('Textile', self.ref)]
         return ret
 
     def get_handle_referents(self):

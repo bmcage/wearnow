@@ -142,6 +142,11 @@ UIDEFAULT = '''<ui>
     <placeholder name="CommonGo"/>
     <placeholder name="CommonHistory"/>
   </menu>
+  <menu action="BookMenu">
+    <placeholder name="AddEditBook"/>
+    <separator/>
+    <placeholder name="GoToBook"/>
+  </menu>
   <menu action="WindowsMenu">
     <placeholder name="WinMenu"/>
   </menu>
@@ -560,8 +565,8 @@ class ViewManager(CLIManager):
 
         self.tags = Tags(self.uistate, self.dbstate)
         
-        self.sidebar_menu = self.uimanager.get_widget(
-            '/MenuBar/ViewMenu/Sidebar/')
+#        self.sidebar_menu = self.uimanager.get_widget(
+#            '/MenuBar/ViewMenu/Sidebar/')
 
         # handle OPEN button, insert it into the toolbar. Unfortunately,
         # UIManager has no built in support for and Open Recent button
@@ -696,6 +701,7 @@ class ViewManager(CLIManager):
         self._action_action_list = [
             ('Import', 'wearnow-import', _('_Import...'), "<PRIMARY>i", None,
              self.import_data),
+            ('BookMenu', None, _('_Bookmarks')),
             ('ConfigView', 'wearnow-config', _('_Configure...'),
              '<shift><PRIMARY>c', _('Configure the active view'),
              self.config_view),

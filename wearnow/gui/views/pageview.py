@@ -103,11 +103,13 @@ class PageView(DbGUIElement):
         self.additional_uis = []
         self.ui_def = '''<ui>
           <menubar name="MenuBar">
-            <menu action="ViewMenu">
-              <placeholder name="Bars">
-                <menuitem action="Sidebar"/>
-                <menuitem action="Bottombar"/>
-              </placeholder>
+            <menu action="ViewMenu">'''
+#        self.ui_def += '''
+#              <placeholder name="Bars">
+#                <menuitem action="Sidebar"/>
+#                <menuitem action="Bottombar"/>
+#              </placeholder>'''
+        self.ui_def += '''
             </menu>
           </menubar>
         </ui>'''

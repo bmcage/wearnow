@@ -50,7 +50,7 @@ from gi.repository import Gtk
 #-------------------------------------------------------------------------
 from wearnow.gui.utils import open_file_with_default_application
 from wearnow.gui.views.listview import ListView, TEXT, MARKUP, ICON
-from wearnow.gui.views.treemodels import MediaModel
+from wearnow.gui.views.treemodels.mediamodel import MediaModel
 from wearnow.tex.constfunc import win, conv_to_unicode
 from wearnow.tex.config import config
 from wearnow.tex.utils.file import (media_path, relative_path, media_path_full,

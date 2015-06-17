@@ -411,7 +411,7 @@ class WearNowPreferences(ConfigureDialog):
             )
         ConfigureDialog.__init__(self, uistate, dbstate, page_funcs, 
                                  WearNowPreferences, config,
-                                 on_close=update_constants)
+                                 on_close=None)
 
     def add_owner_panel(self, configdialog):
         grid = Gtk.Grid()

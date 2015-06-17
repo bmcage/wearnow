@@ -139,19 +139,21 @@ class NoteView(ListView):
         """
         Defines the UI string for UIManager
         """
-        return '''<ui>
+        ui = '''<ui>
           <menubar name="MenuBar">
             <menu action="FileMenu">
               <placeholder name="LocalExport">
                 <menuitem action="ExportTab"/>
               </placeholder>
-            </menu>
+            </menu>'''
+        ui += '''
             <menu action="BookMenu">
               <placeholder name="AddEditBook">
                 <menuitem action="AddBook"/>
                 <menuitem action="EditBook"/>
               </placeholder>
-            </menu>
+            </menu>'''
+        ui += '''            
             <menu action="GoMenu">
               <placeholder name="CommonGo">
                 <menuitem action="Back"/>
@@ -193,6 +195,7 @@ class NoteView(ListView):
             <menu name="QuickReport" action="QuickReport"/>
          </popup>
         </ui>'''
+        return ui
 
     def define_actions(self):
         ListView.define_actions(self)

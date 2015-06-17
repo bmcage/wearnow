@@ -124,10 +124,10 @@ class ExportAssistant(Gtk.Assistant, ManagedWindow) :
         #set up callback method for the export plugins
         self.callback = self.pulse_progressbar
             
-        person_handle = self.uistate.get_active('Person')
-        self.person = self.dbstate.db.get_person_from_handle(person_handle)
-        if not self.person:
-            self.person = self.dbstate.db.find_initial_person()
+        textile_handle = self.uistate.get_active('Textile')
+        self.textile = self.dbstate.db.get_textile_from_handle(textile_handle)
+        if not self.textile:
+            self.textile = self.dbstate.db.find_initial_textile()
             
         pmgr = GuiPluginManager.get_instance()
         self.__exporters = pmgr.get_export_plugins()
@@ -270,7 +270,7 @@ class ExportAssistant(Gtk.Assistant, ManagedWindow) :
         list(map(vbox.remove, vbox.get_children()))
         # add new content
         if config_box_class:
-            self.option_box_instance = config_box_class(self.person, self.dbstate, self.uistate)
+            self.option_box_instance = config_box_class(self.textile, self.dbstate, self.uistate)
             box = self.option_box_instance.get_option_box()
             vbox.add(box)
         else: 
@@ -598,7 +598,7 @@ class ExportAssistant(Gtk.Assistant, ManagedWindow) :
         except:
             #an error not catched in the export_function itself
             success = False
-            log.error(_("Error exporting your Family Tree"), exc_info=True)
+            log.error(_("Error exporting your Collection"), exc_info=True)
         return success
     
     def pre_save(self,page):

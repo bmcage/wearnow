@@ -496,6 +496,7 @@ class WearNowParser(UpdateCallback):
         self.fidswap = {}
         self.pidswap = {}
         self.oidswap = {}
+        self.nidswap = {}
         self.import_handles = {}
 
         if default_tag_format:
