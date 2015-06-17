@@ -1,8 +1,7 @@
 #
-# WEARNOW - a GTK+/GNOME based genealogy program
+# WearNow - a GTK+/GNOME based program
 #
-# Copyright (C) 2002-2006  Donald N. Allingham
-# Copyright (C) 2011       Tim G L Lyons
+# Copyright (C) 2000-2006  Donald N. Allingham
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,12 +18,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""
-Package providing sidebar filters for WEARNOW.
-"""
+#-------------------------------------------------------------------------
+#
+# GRAMPS classes
+#
+#-------------------------------------------------------------------------
+from .backrefmodel import BackRefModel
+from .backreflist import BackRefList
 
-from ._sidebarfilter import SidebarFilter
-#from ._personsidebarfilter import PersonSidebarFilter
-#from ._familysidebarfilter import FamilySidebarFilter
-from ._mediasidebarfilter import MediaSidebarFilter
-from ._notesidebarfilter import NoteSidebarFilter
+class MediaBackRefList(BackRefList):
+
+    def __init__(self, dbstate, uistate, track, obj, callback=None):
+        BackRefList.__init__(self, dbstate, uistate, track, obj, 
+                             BackRefModel, callback=callback)
+
+    def get_icon_name(self):
+        return 'wearnow-media'

@@ -41,8 +41,7 @@ from gi.repository import Gtk
 # WearNow modules
 #
 #-------------------------------------------------------------------------
-from wearnow.tex.datehandler import displayer, format_time
-from wearnow.tex.lib import Date, MediaObject
+from wearnow.tex.datehandler import format_time
 from wearnow.tex.constfunc import conv_to_unicode
 from .flatbasemodel import FlatBaseModel
 
@@ -63,7 +62,7 @@ class MediaModel(FlatBaseModel):
             self.column_id,
             self.column_mime,
             self.column_path,
-            self.column_date,
+#            self.column_date,
             self.column_private,
             self.column_tags,
             self.column_change,
@@ -75,7 +74,7 @@ class MediaModel(FlatBaseModel):
             self.column_id,
             self.column_mime,
             self.column_path,
-            self.sort_date,
+#            self.sort_date,
             self.column_private,
             self.column_tags,
             self.sort_change,
@@ -99,7 +98,7 @@ class MediaModel(FlatBaseModel):
         """
         Return the color column.
         """
-        return 8
+        return 7
 
     def on_get_n_columns(self):
         return len(self.fmap)+1
@@ -133,22 +132,22 @@ class MediaModel(FlatBaseModel):
 
     def column_id(self,data):
         return str(data[1])
-
-    def column_date(self,data):
-        if data[10]:
-            date = Date()
-            date.unserialize(data[10])
-            return str(displayer.display(date))
-        return ''
-
-    def sort_date(self,data):
-        obj = MediaObject()
-        obj.unserialize(data)
-        d = obj.get_date_object()
-        if d:
-            return "%09d" % d.get_sort_value()
-        else:
-            return ''
+#
+#    def column_date(self,data):
+#        if data[10]:
+#            date = Date()
+#            date.unserialize(data[10])
+#            return str(displayer.display(date))
+#        return ''
+#
+#    def sort_date(self,data):
+#        obj = MediaObject()
+#        obj.unserialize(data)
+#        d = obj.get_date_object()
+#        if d:
+#            return "%09d" % d.get_sort_value()
+#        else:
+#            return ''
 
     def column_handle(self,data):
         return str(data[0])

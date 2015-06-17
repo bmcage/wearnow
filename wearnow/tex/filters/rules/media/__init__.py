@@ -1,8 +1,7 @@
 #
-# WEARNOW - a GTK+/GNOME based genealogy program
+# Gramps - a GTK+/GNOME based genealogy program
 #
 # Copyright (C) 2002-2006  Donald N. Allingham
-# Copyright (C) 2011       Tim G L Lyons
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,11 +19,21 @@
 #
 
 """
-Package providing sidebar filters for WEARNOW.
+Package providing filter rules for GRAMPS.
 """
 
-from ._sidebarfilter import SidebarFilter
-#from ._personsidebarfilter import PersonSidebarFilter
-#from ._familysidebarfilter import FamilySidebarFilter
-from ._mediasidebarfilter import MediaSidebarFilter
-from ._notesidebarfilter import NoteSidebarFilter
+from ._allmedia import AllMedia
+from ._regexpidof import RegExpIdOf
+from ._mediaprivate import MediaPrivate
+from ._matchesfilter import MatchesFilter
+from ._hasmedia import HasMedia
+from ._hastag import HasTag
+
+editor_rule_list = [
+    AllMedia,
+    RegExpIdOf,
+    MediaPrivate,
+    MatchesFilter,
+    HasMedia,
+    HasTag,
+]

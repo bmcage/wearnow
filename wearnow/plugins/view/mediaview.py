@@ -60,10 +60,10 @@ from wearnow.gui.views.bookmarks import MediaBookmarks
 from wearnow.tex.mime import get_type, is_valid_type
 from wearnow.tex.lib import MediaObject
 from wearnow.tex.db.txn import DbTxn
-from wearnow.gui.editors import EditMedia, DeleteMediaQuery
+from wearnow.gui.editors.editmedia import EditMedia, DeleteMediaQuery
 from wearnow.tex.errors import WindowActiveError
 from wearnow.gui.filters.sidebar import MediaSidebarFilter
-from wearnow.gui.merge import MergeMedia
+from wearnow.gui.merge.mergemedia import MergeMedia
 from wearnow.gui.ddtargets import DdTargets
 from wearnow.gui.dialog import ErrorDialog
 from wearnow.tex.plug import CATEGORY_QR_MEDIA

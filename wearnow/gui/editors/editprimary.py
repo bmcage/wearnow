@@ -343,11 +343,15 @@ class EditPrimary(ManagedWindow, DbGUIElement):
         
         """
         original = self.get_from_handle(self.obj.get_handle())
+        print ('dupli', original)
         if original and original.get_wearnow_id() == self.obj.get_wearnow_id():
             return (False, 0)
         else:
             idval = self.obj.get_wearnow_id()
-            if self.get_from_wearnow_id(idval):
+            print ('searching with' , idval)
+            obj = self.get_from_wearnow_id(idval)
+            print ('found', obj)
+            if obj:
                 return (True, idval)
             return (False, 0)
             

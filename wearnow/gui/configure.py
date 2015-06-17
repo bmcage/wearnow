@@ -474,5 +474,9 @@ class WearNowPreferences(ConfigureDialog):
                    "Please try again later."),
                  self.window)
 
+    def check_for_updates_changed(self, obj):
+        active = obj.get_active()
+        config.set('behavior.check-for-updates', active)
+        
     def build_menu_names(self, obj):
         return (_('Preferences'), _('Preferences'))

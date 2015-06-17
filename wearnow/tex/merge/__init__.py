@@ -24,5 +24,5 @@
 
 #from .mergetextilequery import *
 #from .mergeensemblequery import *
-#from .mergemediaquery import *
+from .mergemediaquery import *
 from .mergenotequery import *

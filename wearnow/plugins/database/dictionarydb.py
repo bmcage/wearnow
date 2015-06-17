@@ -453,6 +453,11 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Return the next available GRAMPS' ID for a textile object based off the 
         textile ID prefix.
         """
+        if self.pmap_index == 0: 
+            #determine a good start value
+            last = sorted(self.textile_id_map.keys())[-1]
+            #not very good,just remove first letter:
+            self.pmap_index = int(last[1:]) + 1
         self.pmap_index, gid = self.__find_next_wearnow_id(self.textile_prefix,
                                           self.pmap_index, self.id_trans)
         return gid
@@ -462,6 +467,11 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Return the next available GRAMPS' ID for a MediaObject object based
         off the media object ID prefix.
         """
+        if self.omap_index == 0: 
+            #determine a good start value
+            last = sorted(self.media_id_map.keys())[-1]
+            #not very good,just remove first letter:
+            self.omap_index = int(last[1:]) + 1
         self.omap_index, gid = self.__find_next_wearnow_id(self.mediaobject_prefix,
                                           self.omap_index, self.oid_trans)
         return gid
@@ -471,6 +481,11 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Return the next available GRAMPS' ID for a ensemble object based off the 
         ensemble ID prefix.
         """
+        if self.fmap_index == 0: 
+            #determine a good start value
+            last = sorted(self.ensemble_id_map.keys())[-1]
+            #not very good,just remove first letter:
+            self.fmap_index = int(last[1:]) + 1
         self.fmap_index, gid = self.__find_next_wearnow_id(self.ensemble_prefix,
                                           self.fmap_index, self.fid_trans)
         return gid
@@ -480,6 +495,11 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Return the next available GRAMPS' ID for a Note object based off the 
         note ID prefix.
         """
+        if self.nmap_index == 0: 
+            #determine a good start value
+            last = sorted(self.note_id_map.keys())[-1]
+            #not very good,just remove first letter:
+            self.nmap_index = int(last[1:]) + 1
         self.nmap_index, gid = self.__find_next_wearnow_id(self.note_prefix,
                                           self.nmap_index, self.nid_trans)
         return gid
@@ -584,12 +604,13 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             return Ensemble.create(self.ensemble_id_map[wearnow_id])
         return None
 
-    def get_media_from_wearnow_id(self, wearnow_id):
+    def get_object_from_wearnow_id(self, wearnow_id):
         if wearnow_id in self.media_id_map:
             return MediaObject.create(self.media_id_map[wearnow_id])
         return None
 
     def get_note_from_wearnow_id(self, wearnow_id):
+        print ('searching',wearnow_id,'in',self.note_id_map)
         if wearnow_id in self.note_id_map:
             return Note.create(self.note_id_map[wearnow_id])
         return None
@@ -727,12 +748,17 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def commit_textile(self, textile, trans, change_time=None):
         emit = None
-        if not trans.batch:
-            if textile.handle in self.textile_map:
+        oldid = False
+        if textile.handle in self.textile_map:
+            oldid = self.textile_map[textile.handle][1]
+            if not trans.batch:
                 emit = "textile-update"
-            else:
+        else:
+            if not trans.batch:
                 emit = "textile-add"
         self.textile_map[textile.handle] = textile.serialize()
+        if not (oldid is False):
+            del self.textile_id_map[oldid]
         self.textile_id_map[textile.wearnow_id] = self.textile_map[textile.handle]
         # Emit after added:
         if emit:
@@ -740,12 +766,17 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def commit_ensemble(self, ensemble, trans, change_time=None):
         emit = None
-        if not trans.batch:
-            if ensemble.handle in self.ensemble_map:
+        oldid = False
+        if ensemble.handle in self.ensemble_map:
+            oldid = self.ensemble_map[ensemble.handle][1]
+            if not trans.batch:
                 emit = "ensemble-update"
-            else:
-                emit = "ensemble-add"
+        else:
+            if not trans.batch:
+                    emit = "ensemble-add"
         self.ensemble_map[ensemble.handle] = ensemble.serialize()
+        if not (oldid is False):
+            del self.ensemble_id_map[oldid]
         self.ensemble_id_map[ensemble.wearnow_id] = self.ensemble_map[ensemble.handle]
         # Emit after added:
         if emit:
@@ -753,12 +784,17 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def commit_note(self, note, trans, change_time=None):
         emit = None
-        if not trans.batch:
-            if note.handle in self.note_map:
+        oldid = False
+        if note.handle in self.note_map:
+            oldid = self.note_map[note.handle][1]
+            if not trans.batch:
                 emit = "note-update"
-            else:
+        else:
+            if not trans.batch:
                 emit = "note-add"
         self.note_map[note.handle] = note.serialize()
+        if not (oldid is False):
+            del self.note_id_map[oldid]
         self.note_id_map[note.wearnow_id] = self.note_map[note.handle]
         # Emit after added:
         if emit:
@@ -778,12 +814,17 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def commit_media_object(self, media, trans, change_time=None):
         emit = None
-        if not trans.batch:
-            if media.handle in self.media_map:
+        oldid = False
+        if media.handle in self.media_map:
+            oldid = self.media_map[media.handle][1]
+            if not trans.batch:
                 emit = "media-update"
-            else:
+        else:
+            if not trans.batch:
                 emit = "media-add"
         self.media_map[media.handle] = media.serialize()
+        if not (oldid is False):
+            del self.media_id_map[oldid]
         self.media_id_map[media.wearnow_id] = self.media_map[media.handle]
         # Emit after added:
         if emit:
