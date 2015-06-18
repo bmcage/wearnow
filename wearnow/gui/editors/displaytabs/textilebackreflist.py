@@ -1,8 +1,7 @@
 #
-# WearNow - a GTK+/GNOME based program
+# wearnow - a GTK+/GNOME based genealogy program
 #
 # Copyright (C) 2000-2006  Donald N. Allingham
-# Copyright (C) 2011       Tim G L Lyons
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,27 +18,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-
 #-------------------------------------------------------------------------
 #
-# set up logging
+# wearnow classes
 #
 #-------------------------------------------------------------------------
-import logging
-log = logging.getLogger("gui.editors.displaytabs")
-
-# first import models
-#from .childmodel import ChildModel
-
-# Then import tab classes
-from .wearnowtab import WearNowTab
-from .embeddedlist import EmbeddedList, TEXT_COL, MARKUP_COL, ICON_COL
-from .attrembedlist import AttrEmbedList
+from .backrefmodel import BackRefModel
 from .backreflist import BackRefList
-from .gallerytab import GalleryTab
-from .mediabackreflist import MediaBackRefList
-from .notebackreflist import NoteBackRefList
-from .notetab import NoteTab
-#from .textilerefembedlist import TextileRefEmbedList
-from .textilebackreflist import TextileBackRefList
-from .webembedlist import WebEmbedList
+
+class TextileBackRefList(BackRefList):
+
+    def __init__(self, dbstate, uistate, track, obj, callback=None):
+        BackRefList.__init__(self, dbstate, uistate, track, obj,
+                             BackRefModel, callback=callback)
+
+    def get_icon_name(self):
+        return 'wearnow-relation'

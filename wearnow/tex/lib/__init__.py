@@ -51,5 +51,6 @@ from .mediaref import MediaRef
 from .note import Note
 from .notetype import NoteType
 from .textile import Textile
+from .textiletype import TextileType
 from .researcher import Researcher
 from .url import Url

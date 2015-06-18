@@ -55,8 +55,8 @@ class TextileBaseModel(object):
     def __init__(self, db):
         self.db = db
         self.gen_cursor = db.get_textile_cursor
-        self.map = db.get_raw_object_data
-        
+        self.map = db.get_raw_textile_data
+
         self.fmap = [
             self.column_description,
             self.column_id,
@@ -65,7 +65,7 @@ class TextileBaseModel(object):
             self.column_change,
             self.column_tag_color,
             ]
-        
+
         self.smap = [
             self.column_description,
             self.column_id,
@@ -95,7 +95,7 @@ class TextileBaseModel(object):
         return len(self.fmap)+1
 
     def column_description(self, data):
-        descr = data[2] 
+        descr = data[2]
         if isinstance(descr, str):
             return descr
         try:
@@ -116,7 +116,7 @@ class TextileBaseModel(object):
 #    def sort_date(self,data):
 #        obj = MediaObject()
 #        obj.unserialize(data)
-#        d = obj.get_date_object()
+#        d = obj.get_date_textile()
 #        if d:
 #            return "%09d" % d.get_sort_value()
 #        else:
@@ -146,7 +146,7 @@ class TextileBaseModel(object):
         Return the tag name from the given tag handle.
         """
         return self.db.get_tag_from_handle(tag_handle).get_name()
-        
+
     def column_tag_color(self, data):
         """
         Return the tag color.

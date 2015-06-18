@@ -80,7 +80,7 @@ except:
 strip_dict = dict.fromkeys(list(range(9))+list(range(11,13))+list(range(14, 32)))
 
 def escxml(d):
-    return escape(d, 
+    return escape(d,
                   {'"' : '&quot;',
                    '<' : '&lt;',
                    '>' : '&gt;',
@@ -144,7 +144,7 @@ class WearNowXmlWriter(UpdateCallback):
                                        'Please select another directory '
                                        'or create it.') % base )
                 return 0
-                
+
             if os.path.exists(filename):
                 if not os.access(filename, os.W_OK):
                     raise DbWriteFailure(
@@ -154,7 +154,7 @@ class WearNowXmlWriter(UpdateCallback):
                             "Please make sure you have write access to the "
                             "file and try again."))
                     return 0
-        
+
             self.fileroot = os.path.dirname(filename)
             try:
                 if self.compress and _gzip_ok:
@@ -195,7 +195,7 @@ class WearNowXmlWriter(UpdateCallback):
         self.write_xml_data()
         g.close()
         return 1
-            
+
     def write_xml_data(self):
 
         date = time.localtime(time.time())
@@ -204,15 +204,15 @@ class WearNowXmlWriter(UpdateCallback):
         textile_len = self.db.get_number_of_textiles()
         ensemble_len = self.db.get_number_of_ensembles()
         obj_len = self.db.get_number_of_media_objects()
-        note_len = self.db.get_number_of_notes()        
-        tag_len = self.db.get_number_of_tags()        
-        
+        note_len = self.db.get_number_of_notes()
+        tag_len = self.db.get_number_of_tags()
+
         total_steps = (textile_len + ensemble_len + obj_len + note_len +
                        tag_len
                       )
 
         self.set_total(total_steps)
-        
+
         self.g.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         self.g.write('<!DOCTYPE database '
                      'PUBLIC "-//WearNow//DTD WearNow XML %s//EN"\n'
@@ -289,7 +289,7 @@ class WearNowXmlWriter(UpdateCallback):
         self.write_bookmarks()
 
         self.g.write("</database>\n")
-        
+
 #        self.status.end()
 #        self.status = None
 
@@ -308,7 +308,7 @@ class WearNowXmlWriter(UpdateCallback):
 
         bm_len = (bm_textile_len + bm_ensemble_len + bm_obj_len + bm_note_len
                   )
-        
+
         if bm_len > 0:
             self.g.write("  <bookmarks>\n")
 
@@ -342,7 +342,7 @@ class WearNowXmlWriter(UpdateCallback):
         self.g.write(' color="%s"' % tag.get_color())
         self.g.write(' priority="%d"' % tag.get_priority())
         self.g.write('/>\n')
-        
+
     def fix(self,line):
         try:
             l = str(line)
@@ -371,7 +371,7 @@ class WearNowXmlWriter(UpdateCallback):
         if format != note.FLOWED:
             self.g.write(' format="%d"' % format)
         self.g.write('>\n')
-        
+
         self.write_text('text', text, index + 1)
 
         if styles:
@@ -381,43 +381,43 @@ class WearNowXmlWriter(UpdateCallback):
             self.write_ref("tagref", tag_handle, index+1)
 
         self.g.write('  ' * index + '</note>\n')
-        
+
     def write_styles(self, styles, index=3):
         for style in styles:
             name = style.name.xml_str()
             value = style.value
-            
+
             self.g.write('  ' * index + '<style name="%s"' % name)
             if value:
                 self.g.write(' value="%s"' % escxml(str(value)))
             self.g.write('>\n')
-            
+
             for (start, end) in style.ranges:
                 self.g.write(('  ' * (index + 1)) +
                              '<range start="%d" end="%d"/>\n' % (start, end))
-            
+
             self.g.write('  ' * index + '</style>\n')
-    
+
     def write_text(self, val, text, indent=0):
         if not text:
             return
-        
+
         if indent:
             self.g.write('  ' * indent)
-        
+
         self.g.write('<%s>' % val)
         self.g.write(self.fix(text.rstrip()))
         self.g.write("</%s>\n" % val)
 
     def write_textile(self,textile,index=1):
         sp = "  "*index
-        self.write_primary_tag("textile",textile,index)
+        self.write_primary_tag("textile",textile,index,close=False)
         desc = textile.get_description()
         if desc:
             self.g.write(' description="%s"' % self.fix(desc))
         else:
             self.g.write(' description=""')
-            
+
         ttype = escxml(textile.get_type().xml_str())
         self.g.write(' type="%s"' % ttype)
         self.g.write('>\n')
@@ -455,10 +455,10 @@ class WearNowXmlWriter(UpdateCallback):
             return
         sp = "  "*index
         priv_text = conf_priv(childref)
-        
+
         self.write_ref('childref',childref.ref,index,close=True,
                        extra_text=priv_text)
-        
+
     def write_ref(self,tagname, handle,index=1,close=True,extra_text=''):
         if handle:
             if close:
@@ -494,9 +494,9 @@ class WearNowXmlWriter(UpdateCallback):
             change_text = ' change="%d"' %  obj.get_change_time()
         except:
             change_text = ' change="%d"' %  0
-            
+
         handle_text = ' handle="_%s"' % obj.get_handle()
-        
+
         obj_text = '%s<%s' % (sp, tagname)
         self.g.write(obj_text + handle_text + change_text)
         if close:
@@ -512,7 +512,7 @@ class WearNowXmlWriter(UpdateCallback):
                          ('  '*indent,tagname,self.fix(value),tagname))
 
     def write_line_nofix(self,tagname,value,indent=1):
-        """Writes a line, but does not escape characters. 
+        """Writes a line, but does not escape characters.
             Use this instead of write_line if the value is already fixed,
             this avoids &amp; becoming &amp;amp;
         """
@@ -634,10 +634,10 @@ class WearNowXmlWriter(UpdateCallback):
             path = path[1:]
         if win():
             # Always export path with \ replaced with /. Otherwise import
-            # from Windows to Linux of gpkg's path to images does not work. 
+            # from Windows to Linux of gpkg's path to images does not work.
             path = path.replace('\\','/')
         self.g.write('%s<file src="%s" mime="%s"%s%s/>\n'
-                     % ("  "*(index+1), self.fix(path), self.fix(mime_type), 
+                     % ("  "*(index+1), self.fix(path), self.fix(mime_type),
                         checksum_text, desc_text))
 
         for tag_handle in obj.get_tag_list():

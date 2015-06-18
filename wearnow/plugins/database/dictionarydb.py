@@ -95,7 +95,7 @@ class Table(object):
 class Map(dict):
     """
     Implements the map API for textile_map, etc.
-    
+
     Takes a Table() as argument.
     """
     def __init__(self, tbl, *args, **kwargs):
@@ -197,7 +197,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
                                [(list,), (list,),  (list,),   None]
                        )
                    )
-    
+
     # 2. Signals for long operations
     __signals__.update(('long-op-'+op, signal) for op, signal in zip(
         ['start',  'heartbeat', 'end'],
@@ -216,7 +216,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Callback.__init__(self)
         self._tables['Textile'].update(
             {
-                "handle_func": self.get_textile_from_handle, 
+                "handle_func": self.get_textile_from_handle,
                 "wearnow_id_func": self.get_textile_from_wearnow_id,
                 "class_func": Textile,
                 "cursor_func": self.get_textile_cursor,
@@ -227,7 +227,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             })
         self._tables['Ensemble'].update(
             {
-                "handle_func": self.get_ensemble_from_handle, 
+                "handle_func": self.get_ensemble_from_handle,
                 "wearnow_id_func": self.get_ensemble_from_wearnow_id,
                 "class_func": Ensemble,
                 "cursor_func": self.get_ensemble_cursor,
@@ -238,7 +238,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             })
         self._tables['Media'].update(
             {
-                "handle_func": self.get_object_from_handle, 
+                "handle_func": self.get_object_from_handle,
                 "wearnow_id_func": self.get_object_from_wearnow_id,
                 "class_func": MediaObject,
                 "cursor_func": self.get_media_cursor,
@@ -250,7 +250,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         self._tables['MediaObject'] = self._tables['Media']
         self._tables['Note'].update(
             {
-                "handle_func": self.get_note_from_handle, 
+                "handle_func": self.get_note_from_handle,
                 "wearnow_id_func": self.get_note_from_wearnow_id,
                 "class_func": Note,
                 "cursor_func": self.get_note_cursor,
@@ -261,7 +261,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             })
         self._tables['Tag'].update(
             {
-                "handle_func": self.get_tag_from_handle, 
+                "handle_func": self.get_tag_from_handle,
                 "wearnow_id_func": None,
                 "class_func": Tag,
                 "cursor_func": self.get_tag_cursor,
@@ -397,10 +397,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def set_textile_id_prefix(self, val):
         """
-        Set the naming template for GRAMPS textile ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
+        Set the naming template for GRAMPS textile ID values.
+
+        The string is expected to be in the form of a simple text string, or
+        in a format that contains a C/Python style format string using %d,
         such as I%d or I%04d.
         """
         self.textile_prefix = self._validated_id_prefix(val, "I")
@@ -408,10 +408,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def set_object_id_prefix(self, val):
         """
-        Set the naming template for GRAMPS MediaObject ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
+        Set the naming template for GRAMPS MediaObject ID values.
+
+        The string is expected to be in the form of a simple text string, or
+        in a format that contains a C/Python style format string using %d,
         such as O%d or O%04d.
         """
         self.mediaobject_prefix = self._validated_id_prefix(val, "O")
@@ -429,10 +429,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def set_note_id_prefix(self, val):
         """
-        Set the naming template for GRAMPS Note ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
+        Set the naming template for GRAMPS Note ID values.
+
+        The string is expected to be in the form of a simple text string, or
+        in a format that contains a C/Python style format string using %d,
         such as N%d or N%04d.
         """
         self.note_prefix = self._validated_id_prefix(val, "N")
@@ -448,13 +448,13 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             index = prefix % map_index
         map_index += 1
         return (map_index, index)
-        
+
     def find_next_textile_wearnow_id(self):
         """
-        Return the next available GRAMPS' ID for a textile object based off the 
+        Return the next available GRAMPS' ID for a textile object based off the
         textile ID prefix.
         """
-        if self.pmap_index == 0: 
+        if self.pmap_index == 0:
             #determine a good start value
             self.pmap_index = len(self.textile_id_map.keys())
         self.pmap_index, gid = self.__find_next_wearnow_id(self.textile_prefix,
@@ -466,7 +466,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         Return the next available GRAMPS' ID for a MediaObject object based
         off the media object ID prefix.
         """
-        if self.omap_index == 0: 
+        if self.omap_index == 0:
             #determine a good start value
             self.omap_index = len(self.media_id_map.keys())
         self.omap_index, gid = self.__find_next_wearnow_id(self.mediaobject_prefix,
@@ -475,10 +475,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def find_next_ensemble_wearnow_id(self):
         """
-        Return the next available GRAMPS' ID for a ensemble object based off the 
+        Return the next available GRAMPS' ID for a ensemble object based off the
         ensemble ID prefix.
         """
-        if self.fmap_index == 0: 
+        if self.fmap_index == 0:
             #determine a good start value
             self.fmap_index = len(self.ensemble_id_map.keys())
         self.fmap_index, gid = self.__find_next_wearnow_id(self.ensemble_prefix,
@@ -487,10 +487,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def find_next_note_wearnow_id(self):
         """
-        Return the next available GRAMPS' ID for a Note object based off the 
+        Return the next available GRAMPS' ID for a Note object based off the
         note ID prefix.
         """
-        if self.nmap_index == 0: 
+        if self.nmap_index == 0:
             #determine a good start value
             self.nmap_index = len(self.note_id_map.keys())
         self.nmap_index, gid = self.__find_next_wearnow_id(self.note_prefix,
@@ -520,7 +520,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         # FIXME: implement sort
         return self.tag_map.keys()
 
-    def get_ensemble_from_handle(self, handle): 
+    def get_ensemble_from_handle(self, handle):
         if isinstance(handle, bytes):
             handle = str(handle, "utf-8")
         ensemble = None
@@ -639,7 +639,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def has_wearnow_id(self, obj_key, wearnow_id):
         key2table = {
-            TEXTILE_KEY:     self.textile_id_map, 
+            TEXTILE_KEY:     self.textile_id_map,
             ENSEMBLE_KEY:     self.ensemble_id_map,
             MEDIA_KEY:      self.media_id_map,
             NOTE_KEY:       self.note_id_map,
@@ -728,7 +728,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
         """
         Add a MediaObject to the database, assigning internal IDs if they have
         not already been defined.
-        
+
         If not set_gid, then wearnow_id is not set.
         """
         if not obj.handle:
@@ -833,7 +833,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def transaction_begin(self, transaction):
         ## FIXME
-        return 
+        return
 
     def set_owner(self, owner):
         self.owner.set_from(owner)
@@ -897,8 +897,8 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def remove_textile(self, handle, transaction):
         """
-        Remove the textile specified by the database handle from the database, 
-        preserving the change in the passed transaction. 
+        Remove the textile specified by the database handle from the database,
+        preserving the change in the passed transaction.
         """
 
         if self.readonly or not handle:
@@ -912,33 +912,33 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
     def remove_object(self, handle, transaction):
         """
         Remove the MediaObject specified by the database handle from the
-        database, preserving the change in the passed transaction. 
+        database, preserving the change in the passed transaction.
         """
-        self.__do_remove(handle, transaction, self.media_map, 
+        self.__do_remove(handle, transaction, self.media_map,
                          self.media_id_map, MEDIA_KEY)
 
     def remove_ensemble(self, handle, transaction):
         """
         Remove the Ensemble specified by the database handle from the
-        database, preserving the change in the passed transaction. 
+        database, preserving the change in the passed transaction.
         """
-        self.__do_remove(handle, transaction, self.ensemble_map, 
+        self.__do_remove(handle, transaction, self.ensemble_map,
                          self.ensemble_id_map, ENSEMBLE_KEY)
 
     def remove_note(self, handle, transaction):
         """
         Remove the Note specified by the database handle from the
-        database, preserving the change in the passed transaction. 
+        database, preserving the change in the passed transaction.
         """
-        self.__do_remove(handle, transaction, self.note_map, 
+        self.__do_remove(handle, transaction, self.note_map,
                          self.note_id_map, NOTE_KEY)
 
     def remove_tag(self, handle, transaction):
         """
         Remove the Tag specified by the database handle from the
-        database, preserving the change in the passed transaction. 
+        database, preserving the change in the passed transaction.
         """
-        self.__do_remove(handle, transaction, self.tag_map, 
+        self.__do_remove(handle, transaction, self.tag_map,
                          None, TAG_KEY)
 
     def is_empty(self):
@@ -971,19 +971,19 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             ret = primary_cur.set(handle)
         except:
             ret = None
-        
+
         remove_list = set()
         while (ret is not None):
             (key, data) = ret
-            
+
             # data values are of the form:
             #   ((primary_object_class_name, primary_object_handle),
             #    (referenced_object_class_name, referenced_object_handle))
-            
+
             # so we need the second tuple give us a reference that we can
             # combine with the primary_handle to get the main key.
             main_key = (handle.decode('utf-8'), pickle.loads(data)[1][1])
-            
+
             # The trick is not to remove while inside the cursor,
             # but collect them all and remove after the cursor is closed
             remove_list.add(main_key)
@@ -998,7 +998,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
 
     def __remove_reference(self, key, transaction, txn):
         """
-        Remove the reference specified by the key, preserving the change in 
+        Remove the reference specified by the key, preserving the change in
         the passed transaction.
         """
         if isinstance(key, tuple):
@@ -1027,7 +1027,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
     def close(self):
         if self._directory:
             from wearnow.plugins.export.exportxml import XmlWriter
-            from wearnow.gui.user import User 
+            from wearnow.gui.user import User
             writer = XmlWriter(self, User(), strip_photos=0, compress=1)
             filename = os.path.join(self._directory, "data.wearnow")
             writer.write(filename)
@@ -1082,6 +1082,10 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
     def get_note_bookmarks(self):
         return self.note_bookmarks
 
+    def get_textile_types(self):
+        ## FIXME
+        return []
+
     def get_note_types(self):
         ## FIXME
         return []
@@ -1115,13 +1119,13 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
     def iter_tags(self):
         return (Tag.create(key) for key in self.tag_map.values())
 
-    def load(self, directory, callback=None, mode=None, 
-             force_schema_upgrade=False, 
-             force_bsddb_upgrade=False, 
-             force_bsddb_downgrade=False, 
+    def load(self, directory, callback=None, mode=None,
+             force_schema_upgrade=False,
+             force_bsddb_upgrade=False,
+             force_bsddb_downgrade=False,
              force_python_upgrade=False):
         from wearnow.plugins.importer.importxml import importData
-        from wearnow.gui.user import User 
+        from wearnow.gui.user import User
         self._directory = directory
         self.full_name = os.path.abspath(self._directory)
         self.path = self.full_name

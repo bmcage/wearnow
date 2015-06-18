@@ -10,7 +10,7 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful, 
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -50,9 +50,9 @@ class DbReadBase(object):
 
     def __init__(self):
         """
-        Create a new DbReadBase instance. 
-        
-        A new DbReadBase class should never be directly created. Only classes 
+        Create a new DbReadBase instance.
+
+        A new DbReadBase class should never be directly created. Only classes
         derived from this class should be created.
         """
         self.basedb = self
@@ -74,7 +74,7 @@ class DbReadBase(object):
 
     def set_feature(self, feature, value):
         """
-        Databases can implement certain features. 
+        Databases can implement certain features.
         """
         self.__feature[feature] = value
 
@@ -99,23 +99,23 @@ class DbReadBase(object):
     def find_backlink_handles(self, handle, include_classes=None):
         """
         Find all objects that hold a reference to the object handle.
-        
+
         Returns an iterator over a list of (class_name, handle) tuples.
-        
+
         :param handle: handle of the object to search for.
         :type handle: database handle
         :param include_classes: list of class names to include in the results.
             Default is None which includes all classes.
         :type include_classes: list of class names
-        
+
         This default implementation does a sequential scan through all
         the primary object databases and is very slow. Backends can
         override this method to provide much faster implementations that
         make use of additional capabilities of the backend.
-        
+
         Note that this is a generator function, it returns a iterator for
         use in loops. If you want a list of the results use::
-        
+
             result_list = list(find_backlink_handles(handle))
         """
         raise NotImplementedError
@@ -128,14 +128,14 @@ class DbReadBase(object):
 
     def find_next_ensemble_wearnow_id(self):
         """
-        Return the next available WearNow ID for a Family object based off the 
+        Return the next available WearNow ID for a Family object based off the
         family ID prefix.
         """
         raise NotImplementedError
 
     def find_next_note_wearnow_id(self):
         """
-        Return the next available WearNow ID for a Note object based off the 
+        Return the next available WearNow ID for a Note object based off the
         note ID prefix.
         """
         raise NotImplementedError
@@ -149,7 +149,7 @@ class DbReadBase(object):
 
     def find_next_textile_wearnow_id(self):
         """
-        Return the next available WearNow ID for a Person object based off the 
+        Return the next available WearNow ID for a Person object based off the
         person ID prefix.
         """
         raise NotImplementedError
@@ -193,7 +193,7 @@ class DbReadBase(object):
     def get_ensemble_from_wearnow_id(self, val):
         """
         Find a ensemble in the database from the passed WearNow ID.
-        
+
         If no such ensemble exists, None is returned.
         Need to be overridden by the derived class.
         """
@@ -202,7 +202,7 @@ class DbReadBase(object):
     def get_ensemble_from_handle(self, handle):
         """
         Find a ensemble in the database from the passed WearNow ID.
-        
+
         If no such ensemble exists, None is returned.
         """
         raise NotImplementedError
@@ -242,8 +242,8 @@ class DbReadBase(object):
     def get_media_object_handles(self, sort_handles=False):
         """
         Return a list of database handles, one handle for each MediaObject in
-        the database. 
-        
+        the database.
+
         If sort_handles is True, the list is sorted by title.
         """
         raise NotImplementedError
@@ -278,22 +278,29 @@ class DbReadBase(object):
     def get_note_from_handle(self, handle):
         """
         Find a Note in the database from the passed WearNow ID.
-        
+
         If no such Note exists, None is returned.
         """
         raise NotImplementedError
 
     def get_note_handles(self):
         """
-        Return a list of database handles, one handle for each Note in the 
+        Return a list of database handles, one handle for each Note in the
         database.
         """
         raise NotImplementedError
 
     def get_note_types(self):
         """
-        Return a list of all custom note types associated with Note instances 
+        Return a list of all custom note types associated with Note instances
         in the database.
+        """
+        raise NotImplementedError
+
+    def get_textile_types(self):
+        """
+        Return a list of all custom names types associated with Textile
+        instances in the database.
         """
         raise NotImplementedError
 
@@ -339,14 +346,14 @@ class DbReadBase(object):
     def get_object_from_handle(self, handle):
         """
         Find an Object in the database from the passed WearNow ID.
-        
+
         If no such Object exists, None is returned.
         """
         raise NotImplementedError
 
     def get_textile_attribute_types(self):
         """
-        Return a list of all Attribute types associated with textile instances 
+        Return a list of all Attribute types associated with textile instances
         in the database.
         """
         raise NotImplementedError
@@ -360,7 +367,7 @@ class DbReadBase(object):
     def get_textile_from_wearnow_id(self, val):
         """
         Find a textile in the database from the passed WearNow ID.
-        
+
         If no such textile exists, None is returned.
         Needs to be overridden by the derived class.
         """
@@ -369,7 +376,7 @@ class DbReadBase(object):
     def get_textile_from_handle(self, handle):
         """
         Find a textile in the database from the passed WearNow ID.
-        
+
         If no such textile exists, None is returned.
         """
         raise NotImplementedError
@@ -377,8 +384,8 @@ class DbReadBase(object):
     def get_textile_handles(self, sort_handles=False):
         """
         Return a list of database handles, one handle for each textile in
-        the database. 
-        
+        the database.
+
         If sort_handles is True, the list is sorted by name.
         """
         raise NotImplementedError
@@ -433,7 +440,7 @@ class DbReadBase(object):
 
     def get_owner(self):
         """
-        Return the owner instance, providing information about the owner 
+        Return the owner instance, providing information about the owner
         of the database.
         """
         raise NotImplementedError
@@ -453,7 +460,7 @@ class DbReadBase(object):
     def get_tag_from_handle(self, handle):
         """
         Find a Tag in the database from the passed handle.
-        
+
         If no such Tag exists, None is returned.
         """
         raise NotImplementedError
@@ -461,7 +468,7 @@ class DbReadBase(object):
     def get_tag_from_name(self, val):
         """
         Find a Tag in the database from the passed Tag name.
-        
+
         If no such Tag exists, None is returned.
         Needs to be overridden by the derived class.
         """
@@ -471,7 +478,7 @@ class DbReadBase(object):
         """
         Return a list of database handles, one handle for each Tag in
         the database.
-        
+
         If sort_handles is True, the list is sorted by Tag name.
         """
         raise NotImplementedError
@@ -628,30 +635,30 @@ class DbReadBase(object):
 
     def set_note_id_prefix(self, val):
         """
-        Set the naming template for WearNow Note ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
+        Set the naming template for WearNow Note ID values.
+
+        The string is expected to be in the form of a simple text string, or
+        in a format that contains a C/Python style format string using %d,
         such as N%d or N%04d.
         """
         raise NotImplementedError
 
     def set_object_id_prefix(self, val):
         """
-        Set the naming template for WearNow MediaObject ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
+        Set the naming template for WearNow MediaObject ID values.
+
+        The string is expected to be in the form of a simple text string, or
+        in a format that contains a C/Python style format string using %d,
         such as O%d or O%04d.
         """
         raise NotImplementedError
 
     def set_textile_id_prefix(self, val):
         """
-        Set the naming template for WearNow textile ID values. 
-        
-        The string is expected to be in the form of a simple text string, or 
-        in a format that contains a C/Python style format string using %d, 
+        Set the naming template for WearNow textile ID values.
+
+        The string is expected to be in the form of a simple text string, or
+        in a format that contains a C/Python style format string using %d,
         such as I%d or I%04d.
         """
         raise NotImplementedError
@@ -671,9 +678,9 @@ class DbReadBase(object):
     def set_redo_callback(self, callback):
         """
         Define the callback function that is called whenever an redo operation
-        is executed. 
-        
-        The callback function receives a single argument that is a text string 
+        is executed.
+
+        The callback function receives a single argument that is a text string
         that defines the operation.
         """
         raise NotImplementedError
@@ -693,9 +700,9 @@ class DbReadBase(object):
     def set_undo_callback(self, callback):
         """
         Define the callback function that is called whenever an undo operation
-        is executed. 
-        
-        The callback function receives a single argument that is a text string 
+        is executed.
+
+        The callback function receives a single argument that is a text string
         that defines the operation.
         """
         raise NotImplementedError
@@ -721,9 +728,9 @@ class DbWriteBase(DbReadBase):
 
     def __init__(self):
         """
-        Create a new DbWriteBase instance. 
-        
-        A new DbWriteBase class should never be directly created. Only classes 
+        Create a new DbWriteBase instance.
+
+        A new DbWriteBase class should never be directly created. Only classes
         derived from this class should be created.
         """
         DbReadBase.__init__(self)
@@ -732,7 +739,7 @@ class DbWriteBase(DbReadBase):
         """
         Add a ensemble to the database, assigning internal IDs if they have
         not already been defined.
-        
+
         If not set_gid, then wearnow_id is not set.
         """
         raise NotImplementedError
@@ -741,7 +748,7 @@ class DbWriteBase(DbReadBase):
         """
         Add a Note to the database, assigning internal IDs if they have
         not already been defined.
-        
+
         If not set_gid, then wearnow_id is not set.
         """
         raise NotImplementedError
@@ -750,7 +757,7 @@ class DbWriteBase(DbReadBase):
         """
         Add a MediaObject to the database, assigning internal IDs if they have
         not already been defined.
-        
+
         If not set_gid, then wearnow_id is not set.
         """
         raise NotImplementedError
@@ -759,7 +766,7 @@ class DbWriteBase(DbReadBase):
         """
         Add a textile to the database, assigning internal IDs if they have
         not already been defined.
-        
+
         If not set_gid, then wearnow_id is not set.
         """
         raise NotImplementedError
@@ -773,14 +780,14 @@ class DbWriteBase(DbReadBase):
 
     def commit_base(self, obj, data_map, key, transaction, change_time):
         """
-        Commit the specified object to the database, storing the changes as 
+        Commit the specified object to the database, storing the changes as
         part of the transaction.
         """
         raise NotImplementedError
 
     def commit_ensemble(self, ensemble, transaction, change_time=None):
         """
-        Commit the specified ensemble to the database, storing the changes as 
+        Commit the specified ensemble to the database, storing the changes as
         part of the transaction.
         """
         raise NotImplementedError
@@ -794,30 +801,30 @@ class DbWriteBase(DbReadBase):
 
     def commit_note(self, note, transaction, change_time=None):
         """
-        Commit the specified Note to the database, storing the changes as part 
+        Commit the specified Note to the database, storing the changes as part
         of the transaction.
         """
         raise NotImplementedError
 
     def commit_textile(self, textile, transaction, change_time=None):
         """
-        Commit the specified textile to the database, storing the changes as 
+        Commit the specified textile to the database, storing the changes as
         part of the transaction.
         """
         raise NotImplementedError
 
     def commit_tag(self, tag, transaction, change_time=None):
         """
-        Commit the specified Tag to the database, storing the changes as 
+        Commit the specified Tag to the database, storing the changes as
         part of the transaction.
         """
         raise NotImplementedError
 
     def delete_primary_from_reference_map(self, handle, transaction):
         """
-        Called each time an object is removed from the database. 
-        
-        This can be used by subclasses to update any additional index tables 
+        Called each time an object is removed from the database.
+
+        This can be used by subclasses to update any additional index tables
         that might need to be changed.
         """
         raise NotImplementedError
@@ -849,8 +856,8 @@ class DbWriteBase(DbReadBase):
     def remove_ensemble(self, handle, transaction):
         """
         Remove the ensemble specified by the database handle from the
-        database, preserving the change in the passed transaction. 
-        
+        database, preserving the change in the passed transaction.
+
         This method must be overridden in the derived class.
         """
         raise NotImplementedError
@@ -858,8 +865,8 @@ class DbWriteBase(DbReadBase):
     def remove_note(self, handle, transaction):
         """
         Remove the Note specified by the database handle from the
-        database, preserving the change in the passed transaction. 
-        
+        database, preserving the change in the passed transaction.
+
         This method must be overridden in the derived class.
         """
         raise NotImplementedError
@@ -867,17 +874,17 @@ class DbWriteBase(DbReadBase):
     def remove_object(self, handle, transaction):
         """
         Remove the MediaObjectPerson specified by the database handle from the
-        database, preserving the change in the passed transaction. 
-        
+        database, preserving the change in the passed transaction.
+
         This method must be overridden in the derived class.
         """
         raise NotImplementedError
 
     def remove_textile(self, handle, transaction):
         """
-        Remove the textile specified by the database handle from the database, 
-        preserving the change in the passed transaction. 
-        
+        Remove the textile specified by the database handle from the database,
+        preserving the change in the passed transaction.
+
         This method must be overridden in the derived class.
         """
         raise NotImplementedError
@@ -885,8 +892,8 @@ class DbWriteBase(DbReadBase):
     def remove_tag(self, handle, transaction):
         """
         Remove the Tag specified by the database handle from the
-        database, preserving the change in the passed transaction. 
-        
+        database, preserving the change in the passed transaction.
+
         This method must be overridden in the derived class.
         """
         raise NotImplementedError
@@ -906,7 +913,7 @@ class DbWriteBase(DbReadBase):
     def transaction_begin(self, transaction):
         """
         Prepare the database for the start of a new transaction.
-        
+
         Two modes should be provided: transaction.batch=False for ordinary
         database operations that will be encapsulated in database transactions
         to make them ACID and that are added to WearNow transactions so that
@@ -937,9 +944,9 @@ class DbWriteBase(DbReadBase):
 
     def update_reference_map(self, obj, transaction):
         """
-        Called each time an object is writen to the database. 
-        
-        This can be used by subclasses to update any additional index tables 
+        Called each time an object is writen to the database.
+
+        This can be used by subclasses to update any additional index tables
         that might need to be changed.
         """
         raise NotImplementedError
@@ -954,24 +961,24 @@ class DbWriteBase(DbReadBase):
         """
         Deletes a textile from the database, cleaning up all associated references.
         """
-    
+
         # clear out the default person if the person is the default person
         if self.get_default_textile() == textile:
             self.set_default_textile_handle(None)
-    
-        # loop through the ensemble list 
+
+        # loop through the ensemble list
         for ensemble_handle in textile.get_ensemble_handle_list():
             if not ensemble_handle:
                 continue
-    
+
             ensemble = self.get_ensemble_from_handle(ensemble_handle)
-    
+
             ensemble.remove_textile(textile.get_handle())
             self.commit_ensemble(ensemble, trans)
-    
+
         handle = textile.get_handle()
         self.remove_textile(handle, trans)
-    
+
     def get_total(self):
         """
         Get the total of primary objects.
@@ -979,5 +986,5 @@ class DbWriteBase(DbReadBase):
         textile_len = self.get_number_of_textiles()
         ensemble_len = self.get_number_of_ensembles()
         obj_len = self.get_number_of_media_objects()
-    
+
         return textile_len + ensemble_len  + obj_len

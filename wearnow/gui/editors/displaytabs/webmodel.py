@@ -1,8 +1,7 @@
 #
-# WearNow - a GTK+/GNOME based program
+# wearnow - a GTK+/GNOME based genealogy program
 #
 # Copyright (C) 2000-2006  Donald N. Allingham
-# Copyright (C) 2011       Tim G L Lyons
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,27 +18,30 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""
+The TreeModel for the URL list in the Url Tab.
+"""
 
 #-------------------------------------------------------------------------
 #
-# set up logging
+# GTK libraries
 #
 #-------------------------------------------------------------------------
-import logging
-log = logging.getLogger("gui.editors.displaytabs")
+from gi.repository import Gtk
 
-# first import models
-#from .childmodel import ChildModel
+#-------------------------------------------------------------------------
+#
+# WebModel
+#
+#-------------------------------------------------------------------------
+class WebModel(Gtk.ListStore):
+    """
+    WebModel derives from the ListStore, defining te items in the list
+    """
+    def __init__(self, obj_list, dbase):
 
-# Then import tab classes
-from .wearnowtab import WearNowTab
-from .embeddedlist import EmbeddedList, TEXT_COL, MARKUP_COL, ICON_COL
-from .attrembedlist import AttrEmbedList
-from .backreflist import BackRefList
-from .gallerytab import GalleryTab
-from .mediabackreflist import MediaBackRefList
-from .notebackreflist import NoteBackRefList
-from .notetab import NoteTab
-#from .textilerefembedlist import TextileRefEmbedList
-from .textilebackreflist import TextileBackRefList
-from .webembedlist import WebEmbedList
+        Gtk.ListStore.__init__(self, str, str, str, bool, object)
+        self.db = dbase
+        for obj in obj_list:
+            self.append(row=[str(obj.type), obj.path, obj.desc,
+                    obj.get_privacy(), obj])

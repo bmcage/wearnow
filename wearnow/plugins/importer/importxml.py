@@ -13,7 +13,7 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful, 
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -50,7 +50,7 @@ from wearnow.tex.mime import get_type
 from wearnow.tex.lib import (Attribute, AttributeType, ChildRef, Ensemble,
                             MediaObject, MediaRef, Note, NoteType, Textile,
                             Researcher, StyledText,
-                            StyledTextTag, StyledTextTagType, Tag, 
+                            StyledTextTag, StyledTextTagType, Tag,
                             TextileType, Url)
 from wearnow.tex.db.txn import DbTxn
 #from wearnow.tex.db.write import CLASS_TO_KEY_MAP
@@ -85,7 +85,7 @@ INSTANTIATED = 1
 
 #-------------------------------------------------------------------------
 #
-# Importing data into the currently open database. 
+# Importing data into the currently open database.
 # Must takes care of renaming media files according to their new IDs.
 #
 #-------------------------------------------------------------------------
@@ -97,12 +97,12 @@ def importData(database, filename, user):
     database.fmap = {}
     line_cnt = 0
     textile_cnt = 0
-    
+
     database.prepare_import()
     with ImportOpenFileContextManager(filename, user) as xml_file:
         if xml_file is None:
             return
-    
+
         if filename == '-':
             change = time.time()
         else:
@@ -111,17 +111,17 @@ def importData(database, filename, user):
             parser = WearNowParser(database, user, change, None)
         else:
             parser = WearNowParser(database, user, change,
-                                  (config.get('preferences.tag-on-import-format') if 
+                                  (config.get('preferences.tag-on-import-format') if
                                    config.get('preferences.tag-on-import') else None))
 
         if filename != '-':
             linecounter = LineParser(filename)
             line_cnt = linecounter.get_count()
             textile_cnt = linecounter.get_textile_count()
-    
+
         read_only = database.readonly
         database.readonly = False
-        
+
         try:
             info = parser.parse(xml_file, line_cnt, textile_cnt)
         except WearNowImportError as err: # version error
@@ -133,7 +133,7 @@ def importData(database, filename, user):
             traceback.print_exc()
             return
         except ExpatError as msg:
-            user.notify_error(_("Error reading %s") % filename, 
+            user.notify_error(_("Error reading %s") % filename,
                         str(msg) + "\n" +
                         _("The file is probably either corrupt or not a "
                           "valid WearNow database."))
@@ -143,7 +143,7 @@ def importData(database, filename, user):
     database.readonly = read_only
     return info
 
-##  TODO - WITH MEDIA PATH, IS THIS STILL NEEDED? 
+##  TODO - WITH MEDIA PATH, IS THIS STILL NEEDED?
 ##         BETTER LEAVE ALL RELATIVE TO NEW RELATIVE PATH
 ##   save_path is in .wearnow/dbbase, no good place !
 ##    # copy all local images into <database>.images directory
@@ -151,7 +151,7 @@ def importData(database, filename, user):
 ##    db_base = os.path.basename(database.get_save_path())
 ##    img_dir = os.path.join(db_dir, db_base)
 ##    first = not os.path.exists(img_dir)
-##    
+##
 ##    for m_id in database.get_media_object_handles():
 ##        mobject = database.get_object_from_handle(m_id)
 ##        oldfile = mobject.get_path()
@@ -187,7 +187,7 @@ def fix_spaces(text_list):
 
 #-------------------------------------------------------------------------
 #
-# 
+#
 #
 #-------------------------------------------------------------------------
 
@@ -199,15 +199,15 @@ class ImportInfo(object):
     key2data = {
             TEXTILE_KEY : 0,
             ENSEMBLE_KEY : 1,
-            MEDIA_KEY: 2, 
+            MEDIA_KEY: 2,
             NOTE_KEY: 3,
             TAG_KEY: 4,
             }
-    
+
     def __init__(self):
         """
         Init of the import class.
-        
+
         This creates the datastructures to hold info
         """
         self.data_mergecandidate = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
@@ -216,7 +216,7 @@ class ImportInfo(object):
         self.data_ensembles = ''
         self.expl_note = ''
         self.data_relpath = False
-        
+
     def add(self, category, key, obj, sec_obj=None):
         """
         Add info of a certain category. Key is one of the predefined keys,
@@ -234,12 +234,12 @@ class ImportInfo(object):
 
     def _extract_mergeinfo(self, key, obj, sec_obj):
         """
-        Extract info from obj about 'merge-candidate', Key is one of the 
+        Extract info from obj about 'merge-candidate', Key is one of the
         predefined keys.
         """
         if key == TEXTILE_KEY:
             return _("  %(id)s - with id %(id2)s\n") % {
-                        'id': obj.wearnow_id, 
+                        'id': obj.wearnow_id,
                         'id2': sec_obj.wearnow_id
                         }
         elif key == ENSEMBLE_KEY :
@@ -298,11 +298,11 @@ class ImportInfo(object):
                 datakey = self.key2data[key]
                 for handle in list(self.data_mergecandidate[datakey].keys()):
                     txt += self.data_mergecandidate[datakey][handle]
-        
+
         if self.data_ensembles:
             txt += "\n\n"
             txt += self.data_ensembles
-        
+
         return txt
 
 class LineParser(object):
@@ -386,7 +386,7 @@ class ImportOpenFileContextManager:
         return False
 
     def open_file(self, filename):
-        """ 
+        """
         Open the xml file.
         Return a valid file handle if the file opened sucessfully.
         Return None if the file was not able to be opened.
@@ -415,7 +415,7 @@ class ImportOpenFileContextManager:
         except:
             self.user.notify_error(_("%s could not be opened") % filename)
             xml_file = None
-            
+
         return xml_file
 
 #-------------------------------------------------------------------------
@@ -451,7 +451,7 @@ class WearNowParser(UpdateCallback):
         # it can be advantageous to preserve the orginal handle.
         self.replace_import_handle = (self.db.get_number_of_textiles() > 0 and
                                       not LOG.isEnabledFor(logging.DEBUG))
-        
+
         # Similarly, if the data is imported into an empty collection, we also
         # import the owner; if the tree was not empty, the existing
         # owner is retained
@@ -469,13 +469,13 @@ class WearNowParser(UpdateCallback):
         self.textile = None
         self.ensemble = None
         self.attribute = None
-        
+
         self.resname = ""
-        self.resaddr = "" 
+        self.resaddr = ""
         self.reslocality = ""
         self.rescity = ""
         self.resstate = ""
-        self.rescon = "" 
+        self.rescon = ""
         self.respos = ""
         self.resphone = ""
         self.resemail = ""
@@ -512,42 +512,42 @@ class WearNowParser(UpdateCallback):
             self.default_tag = None
 
         self.func_map = {
-            "childlist": (None, None),  
-            "attribute": (self.start_attribute, self.stop_attribute), 
-            "attr_type": (None, self.stop_attr_type), 
+            "childlist": (None, None),
+            "attribute": (self.start_attribute, self.stop_attribute),
+            "attr_type": (None, self.stop_attr_type),
             "attr_value": (None, self.stop_attr_value),
-            "bookmark": (self.start_bmark, None), 
-            "bookmarks": (None, None), 
-            "childref": (self.start_childref, self.stop_childref), 
-            "created": (self.start_created, None), 
-            "database": (self.start_database, self.stop_database), 
-            "ensembles": (None, self.stop_ensembles), 
-            "ensemble": (self.start_ensemble, self.stop_ensemble), 
-            "header": (None, self.stop_header), 
+            "bookmark": (self.start_bmark, None),
+            "bookmarks": (None, None),
+            "childref": (self.start_childref, self.stop_childref),
+            "created": (self.start_created, None),
+            "database": (self.start_database, self.stop_database),
+            "ensembles": (None, self.stop_ensembles),
+            "ensemble": (self.start_ensemble, self.stop_ensemble),
+            "header": (None, self.stop_header),
             "mediapath": (None, self.stop_mediapath),
-            "note": (self.start_note, self.stop_note), 
-            "noteref": (self.start_noteref, None), 
-            "textiles": (self.start_textiles, self.stop_textiles), 
-            "textile": (self.start_textile, self.stop_textile), 
-            "objref": (self.start_objref, self.stop_objref), 
-            "object": (self.start_object, self.stop_object), 
-            "file": (self.start_file, None), 
-            "owner": (None, self.stop_research), 
-            "resname": (None, self.stop_resname), 
-            "resaddr": (None, self.stop_resaddr), 
-            "reslocality": (None, self.stop_reslocality), 
-            "rescity": (None, self.stop_rescity), 
-            "resstate": (None, self.stop_resstate), 
-            "rescountry": (None, self.stop_rescountry), 
-            "respostal": (None, self.stop_respostal), 
-            "resphone": (None, self.stop_resphone), 
-            "resemail": (None, self.stop_resemail), 
+            "note": (self.start_note, self.stop_note),
+            "noteref": (self.start_noteref, None),
+            "textiles": (self.start_textiles, self.stop_textiles),
+            "textile": (self.start_textile, self.stop_textile),
+            "objref": (self.start_objref, self.stop_objref),
+            "object": (self.start_object, self.stop_object),
+            "file": (self.start_file, None),
+            "owner": (None, self.stop_research),
+            "resname": (None, self.stop_resname),
+            "resaddr": (None, self.stop_resaddr),
+            "reslocality": (None, self.stop_reslocality),
+            "rescity": (None, self.stop_rescity),
+            "resstate": (None, self.stop_resstate),
+            "rescountry": (None, self.stop_rescountry),
+            "respostal": (None, self.stop_respostal),
+            "resphone": (None, self.stop_resphone),
+            "resemail": (None, self.stop_resemail),
             "style": (self.start_style, None),
             "tag": (self.start_tag, self.stop_tag),
             "tagref": (self.start_tagref, None),
             "tags": (None, None),
             "text": (None, self.stop_text),
-            "url": (self.start_url, None), 
+            "url": (self.start_url, None),
         }
         self.wearnowuri = re.compile(r"^wearnow://(?P<object_class>[A-Z][a-z]+)/"
             "handle/(?P<handle>\w+)$")
@@ -579,7 +579,7 @@ class WearNowParser(UpdateCallback):
         if (orig_handle in self.import_handles and
                 target in self.import_handles[orig_handle]):
             handle = self.import_handles[handle][target][HANDLE]
-            if not isinstance(prim_obj, collections.Callable): 
+            if not isinstance(prim_obj, collections.Callable):
                 # This method is called by a start_<primary_object> method.
                 get_raw_obj_data = {"textile": self.db.get_raw_textile_data,
                                     "ensemble": self.db.get_raw_ensemble_data,
@@ -631,7 +631,7 @@ class WearNowParser(UpdateCallback):
                     find_next_wearnow_id):
         """
         Given an import id, adjust it so that it fits with the existing data.
-        
+
         :param id_: The id as it is in the Xml import file, might be None.
         :type id_: str
         :param key: Indicates kind of primary object this id is for.
@@ -686,7 +686,7 @@ class WearNowParser(UpdateCallback):
             if self.home is not None:
                 textile = self.db.get_textile_from_handle(self.home)
                 self.db.set_default_textile_handle(textile.handle)
-    
+
             #set media path, this should really do some parsing to convert eg
             # windows path to unix ?
             if self.mediapath:
@@ -694,14 +694,14 @@ class WearNowParser(UpdateCallback):
                 if not oldpath:
                     self.db.set_mediapath(self.mediapath)
                 elif not oldpath == self.mediapath:
-                    self.user.notify_error(_("Could not change media path"), 
+                    self.user.notify_error(_("Could not change media path"),
                         _("The opened file has media path %s, which conflicts with"
                           " the media path of the Collection you import into. "
                           "The original media path has been retained. Copy the "
                           "files to a correct directory or change the media "
                           "path in the Preferences."
                          ) % self.mediapath )
-    
+
             self.fix_not_instantiated()
             for key in list(self.func_map.keys()):
                 del self.func_map[key]
@@ -725,7 +725,7 @@ class WearNowParser(UpdateCallback):
                 #leave version at 1.0.0 although it could be 0.0.0 ??
                 pass
         else:
-            #1.0 or before xml, no dtd schema yet on 
+            #1.0 or before xml, no dtd schema yet on
             # http://www.wearnow-project.org/xml/
             self.__xml_version = (0, 0, 0)
 
@@ -761,7 +761,7 @@ class WearNowParser(UpdateCallback):
                     "The file will not be imported. Please use an older version"
                     " of WearNow that supports version %(xmlversion)s of the "
                     "xml.\nSee\n  %(wearnow_wiki_xml_url)s\n for more info."
-                    ) % {'oldwearnow': self.__wearnow_version, 
+                    ) % {'oldwearnow': self.__wearnow_version,
                         'newwearnow': VERSION,
                         'xmlversion': xmlversion_str,
                         'wearnow_wiki_xml_url': URL_HOMEPAGE ,
@@ -776,7 +776,7 @@ class WearNowParser(UpdateCallback):
                     "older version of WearNow in the meantime to import this "
                     "file, which is version %(xmlversion)s of the xml.\nSee\n  "
                     "%(wearnow_wiki_xml_url)s\nfor more info."
-                    ) % {'oldwearnow': self.__wearnow_version, 
+                    ) % {'oldwearnow': self.__wearnow_version,
                         'newwearnow': VERSION,
                         'xmlversion': xmlversion_str,
                         'wearnow_wiki_xml_url': URL_HOMEPAGE ,
@@ -830,7 +830,7 @@ class WearNowParser(UpdateCallback):
             if (self.db.get_note_from_handle(handle) is not None
                     and handle not in self.db.note_bookmarks.get() ):
                 self.db.note_bookmarks.append(handle)
-        
+
     def start_textile(self, attrs):
         """
         Add a textile to db if it doesn't exist yet and assign
@@ -838,7 +838,7 @@ class WearNowParser(UpdateCallback):
         """
         self.update(self.p.CurrentLineNumber)
         self.textile = Textile()
-        
+
         orig_handle = attrs['handle'].replace('_', '')
         is_merge_candidate = (self.replace_import_handle and
                               self.db.has_textile_handle(orig_handle))
@@ -851,18 +851,19 @@ class WearNowParser(UpdateCallback):
             orig_textile = self.db.get_textile_from_handle(orig_handle)
             self.info.add('merge-candidate', TEXTILE_KEY, orig_textile,
                           self.textile)
+
         if 'description' in attrs:
-            self.textile.desc = attrs['description']
+            self.textile.description = attrs['description']
         else:
-            self.textile.desc = ""
+            self.textile.description = ""
         self.textile.private = bool(attrs.get("priv"))
         self.textile.change = int(attrs.get('change', self.change))
         self.info.add('new-object', TEXTILE_KEY, self.textile)
-        
+
         self.textile.type.set_from_xml_str(attrs.get('type',
                                                   TextileType.UNKNOWN))
-        
-        if self.default_tag: 
+
+        if self.default_tag:
             self.textile.add_tag(self.default_tag.handle)
         return self.textile
 
@@ -926,7 +927,7 @@ class WearNowParser(UpdateCallback):
         """
         self.update(self.p.CurrentLineNumber)
         self.ensemble = Ensemble()
-        
+
         orig_handle = attrs['handle'].replace('_', '')
         is_merge_candidate = (self.replace_import_handle and
                               self.db.has_ensemble_handle(orig_handle))
@@ -935,7 +936,7 @@ class WearNowParser(UpdateCallback):
                                     self.fidswap, self.db.fid2user_format,
                                     self.db.find_next_ensemble_wearnow_id)
         self.ensemble.set_wearnow_id(wearnow_id)
-        
+
         if is_merge_candidate:
             orig_ensemble = self.db.get_ensemble_from_handle(orig_handle)
             self.info.add('merge-candidate', ENSEMBLE_KEY, orig_ensemble,
@@ -943,7 +944,7 @@ class WearNowParser(UpdateCallback):
         self.ensemble.private = bool(attrs.get("priv"))
         self.ensemble.change = int(attrs.get('change', self.change))
         self.info.add('new-object', ENSEMBLE_KEY, self.ensemble)
-        if self.default_tag: 
+        if self.default_tag:
             self.ensemble.add_tag(self.default_tag.handle)
         return self.ensemble
 
@@ -971,7 +972,7 @@ class WearNowParser(UpdateCallback):
             tagvalue = None
         except ValueError:
             return
-        
+
         self.note_tags.append(StyledTextTag(tagtype, tagvalue))
 
     def start_tag(self, attrs):
@@ -1021,18 +1022,18 @@ class WearNowParser(UpdateCallback):
     def start_range(self, attrs):
         self.note_tags[-1].ranges.append((int(attrs['start']),
                                           int(attrs['end'])))
-        
+
     def start_note(self, attrs):
         """
         Add a note to db if it doesn't exist yet and assign
         id, privacy, changetime, format and type.
         """
         self.in_note = 0
-        
+
         # This is new note, with ID and handle already existing
         self.update(self.p.CurrentLineNumber)
         self.note = Note()
-        
+
         orig_handle = attrs['handle'].replace('_', '')
         is_merge_candidate = (self.replace_import_handle and
                               self.db.has_note_handle(orig_handle))
@@ -1041,22 +1042,22 @@ class WearNowParser(UpdateCallback):
                                   self.nidswap, self.db.nid2user_format,
                                   self.db.find_next_note_wearnow_id)
         self.note.set_wearnow_id(wearnow_id)
-        if is_merge_candidate: 
+        if is_merge_candidate:
             orig_note = self.db.get_note_from_handle(orig_handle)
             self.info.add('merge-candicate', NOTE_KEY, orig_note,
                               self.note)
-                              
+
         self.note.private = bool(attrs.get("priv"))
         self.note.change = int(attrs.get('change', self.change))
         self.info.add('new-object', NOTE_KEY, self.note)
         self.note.format = int(attrs.get('format', Note.FLOWED))
         self.note.type.set_from_xml_str(attrs.get('type',
                                                   NoteType.UNKNOWN))
-        
+
         self.note_text = None
         self.note_tags = []
-            
-        if self.default_tag: 
+
+        if self.default_tag:
             self.note.add_tag(self.default_tag.handle)
         return self.note
 
@@ -1121,7 +1122,7 @@ class WearNowParser(UpdateCallback):
         self.object.change = int(attrs.get('change', self.change))
         self.info.add('new-object', MEDIA_KEY, self.object)
 
-        if self.default_tag: 
+        if self.default_tag:
             self.object.add_tag(self.default_tag.handle)
         return self.object
 
@@ -1132,7 +1133,7 @@ class WearNowParser(UpdateCallback):
         self.update(self.p.CurrentLineNumber)
 
     def stop_object(self, *tag):
-        self.db.commit_media_object(self.object, self.trans, 
+        self.db.commit_media_object(self.object, self.trans,
                                     self.object.get_change_time())
         self.object = None
 
@@ -1155,7 +1156,7 @@ class WearNowParser(UpdateCallback):
 
     def stop_childref(self, tag):
         self.childref = None
-        
+
     def stop_ensembles(self, *tag):
         self.ensemble = None
 
@@ -1166,14 +1167,14 @@ class WearNowParser(UpdateCallback):
 
     def stop_text(self, tag):
         self.note_text = tag
-        
+
     def stop_note(self, tag):
         self.in_note = 0
         if self.note_text is not None:
             text = self.note_text
         else:
             text = tag
-            
+
         self.note.set_styledtext(StyledText(text, self.note_tags))
 
         # The order in this long if-then statement should reflect the
@@ -1247,9 +1248,9 @@ class WearNowParser(UpdateCallback):
     def endElement(self, tag):
         if self.func:
             self.func(''.join(self.tlist))
-        self.func_index -= 1    
+        self.func_index -= 1
         self.func, self.tlist = self.func_list[self.func_index]
-        
+
     def characters(self, data):
         if self.func:
             self.tlist.append(data)

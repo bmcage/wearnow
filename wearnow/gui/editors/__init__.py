@@ -21,7 +21,7 @@
 # gui/editors/__init__.py
 
 #from .editaddress import EditAddress
-#from .editattribute import EditAttribute, EditSrcAttribute
+from .editattribute import EditAttribute
 #from .editchildref import EditChildRef
 #from .editcitation import EditCitation, DeleteCitationQuery
 #from .editdate import EditDate
@@ -30,11 +30,11 @@
 #from .editfamily import EditFamily
 #from .editldsord import EditLdsOrd, EditFamilyLdsOrd
 #from .editlocation import EditLocation
-#from .editmedia import EditMedia, DeleteMediaQuery
+from .editmedia import EditMedia, DeleteMediaQuery
 #from .editmediaref import EditMediaRef
 #from .editname import EditName
 from .editnote import EditNote, DeleteNoteQuery
-#from .editperson import EditPerson
+from .edittextile import EditTextile
 #from .editpersonref import EditPersonRef
 #from .editplace import EditPlace, DeletePlaceQuery
 #from .editplacename import EditPlaceName
@@ -42,22 +42,22 @@ from .editnote import EditNote, DeleteNoteQuery
 #from .editrepository import EditRepository, DeleteRepositoryQuery
 #from .editreporef import EditRepoRef
 #from .editsource import EditSource, DeleteSrcQuery
-#from .edittaglist import EditTagList
-#from .editurl import EditUrl
+from .edittaglist import EditTagList
+from .editurl import EditUrl
 #from .editlink import EditLink
 from .filtereditor import FilterEditor, EditFilter
 
 # Map from wearnow.gen.lib name to Editor:
 EDITORS = {
-#    'Person': EditPerson,
+    'Textile': EditTextile,
 #    'Family': EditFamily,
-#    'Media': EditMedia,
+    'Media': EditMedia,
     'Note': EditNote,
     }
 
 def EditObject(dbstate, uistate, track, obj_class, prop=None, value=None, callback=None):
     """
-    Generic Object Editor. 
+    Generic Object Editor.
     obj_class is Textile, etc.
     prop is 'handle', 'wearnow_id', or None (for new object)
     value is string handle, string wearnow_id, or None (for new object)
@@ -70,16 +70,16 @@ def EditObject(dbstate, uistate, track, obj_class, prop=None, value=None, callba
             try:
                 EDITORS[obj_class](dbstate, uistate, track, obj, callback=callback)
             except Exception as msg:
-                LOG.warn(str(msg)) 
+                LOG.warn(str(msg))
         elif prop in ("wearnow_id", "handle"):
             obj = dbstate.db.get_table_metadata(obj_class)[prop + "_func"](value)
             if obj:
                 try:
                     EDITORS[obj_class](dbstate, uistate, track, obj, callback=callback)
                 except Exception as msg:
-                    LOG.warn(str(msg)) 
+                    LOG.warn(str(msg))
             else:
-                LOG.warn("wearnow://%s/%s/%s not found" % 
+                LOG.warn("wearnow://%s/%s/%s not found" %
                          (obj_class, prop, value))
         else:
             LOG.warn("unknown property to edit '%s'; "
