@@ -80,7 +80,7 @@ class AttrEmbedList(EmbeddedList):
         return EditAttribute
 
     def get_user_values(self):
-        return self.dbstate.db.get_person_attribute_types()
+        return self.dbstate.db.get_textile_attribute_types()
 
     def get_icon_name(self):
         return 'wearnow-attribute'

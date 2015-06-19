@@ -69,8 +69,8 @@ from .displaystate import DisplayState, RecentDocsMenu
 from wearnow.tex.const import (HOME_DIR, ICON, URL_HOMEPAGE, PLUGINS_DIR)
 from wearnow.tex.db.dbconst import DBBACKEND
 from wearnow.tex.errors import DbError
-from wearnow.tex.db.exceptions import (DbUpgradeRequiredError, 
-                                      DbVersionError, 
+from wearnow.tex.db.exceptions import (DbUpgradeRequiredError,
+                                      DbVersionError,
                                       PythonUpgradeRequiredError,
                                       PythonDowngradeError)
 from wearnow.tex.plug import BasePluginManager
@@ -203,13 +203,13 @@ class CLIDbLoader(object):
     """
     def __init__(self, dbstate):
         self.dbstate = dbstate
-    
+
     def _warn(self, title, warnmessage):
         """
         Issue a warning message. Inherit for GUI action
         """
         print(_('WARNING: %s') % warnmessage, file=sys.stderr)
-    
+
     def _errordialog(self, title, errormessage):
         """
         Show the error. A title for the error and an errormessage
@@ -217,28 +217,28 @@ class CLIDbLoader(object):
         """
         print(_('ERROR: %s') % errormessage, file=sys.stderr)
         sys.exit(1)
-    
+
     def _dberrordialog(self, msg):
         """
-        Show a database error. 
+        Show a database error.
         :param msg: an error message
         :type msg : string
         .. note:: Inherit for GUI action
         """
-        self._errordialog( '', _("Low level database corruption detected") 
+        self._errordialog( '', _("Low level database corruption detected")
             + '\n' +
             _("WearNow has detected a problem in the underlying "
               "Collection. This can be repaired from "
               "the Collection Manager. Select the collection and "
               'click on the Repair button') + '\n\n' + str(msg))
-    
+
     def _begin_progress(self):
         """
         Convenience method to allow to show a progress bar if wanted on load
         actions. Inherit if needed
         """
         pass
-    
+
     def _pulse_progress(self, value):
         """
         Convenience method to allow to show a progress bar if wanted on load
@@ -256,9 +256,9 @@ class CLIDbLoader(object):
     def read_file(self, filename):
         """
         This method takes care of changing database, and loading the data.
-        In 3.0 we only allow reading of real databases of filetype 
+        In 3.0 we only allow reading of real databases of filetype
         'x-directory/normal'
-        
+
         This method should only return on success.
         Returning on failure makes no sense, because we cannot recover,
         since database has already been changed.
@@ -270,7 +270,7 @@ class CLIDbLoader(object):
         if os.path.exists(filename):
             if not os.access(filename, os.W_OK):
                 mode = "r"
-                self._warn(_('Read only database'), 
+                self._warn(_('Read only database'),
                                              _('You do not have write access '
                                                'to the selected file.'))
             else:
@@ -286,12 +286,12 @@ class CLIDbLoader(object):
             dbid = "dictionarydb"
 
         db = self.dbstate.make_database(dbid)
-        
+
         self.dbstate.change_database(db)
         self.dbstate.db.disable_signals()
 
         self._begin_progress()
-        
+
         try:
             self.dbstate.db.load(filename, self._pulse_progress, mode)
             self.dbstate.db.set_save_path(filename)
@@ -328,8 +328,8 @@ class CLIDbLoader(object):
 
 class CLIManager(object):
     """
-    Sessionmanager for WearNow. This is in effect a reduced :class:`.ViewManager` 
-    instance (see gui/viewmanager), suitable for CLI actions. 
+    Sessionmanager for WearNow. This is in effect a reduced :class:`.ViewManager`
+    instance (see gui/viewmanager), suitable for CLI actions.
     Aim is to manage a dbstate on which to work (load, unload), and interact
     with the plugin session
     """
@@ -348,14 +348,14 @@ class CLIManager(object):
         Open and make a family tree active
         """
         self._read_recent_file(path)
-    
+
     def _errordialog(self, title, errormessage):
         """
         Show the error. A title for the error and an errormessage
         """
         print(_('ERROR: %s') % errormessage, file=sys.stderr)
         sys.exit(1)
-        
+
     def _read_recent_file(self, filename):
         """
         Called when a file needs to be loaded
@@ -365,7 +365,7 @@ class CLIManager(object):
         #  also updated the recent file menu info in displaystate.py
         if not  os.path.isdir(filename):
             self._errordialog(
-                    _("Could not load a recent Textile Collection."), 
+                    _("Could not load a recent Textile Collection."),
                     _("Textile Collection does not exist, as it has been deleted."))
             return
 
@@ -387,21 +387,21 @@ class CLIManager(object):
                 title = filename
 
             self._post_load_newdb(filename, 'x-directory/normal', title)
-    
+
     def _post_load_newdb(self, filename, filetype, title=None):
         """
-        The method called after load of a new database. 
+        The method called after load of a new database.
         Here only CLI stuff is done, inherit this method to add extra stuff
         """
         self._post_load_newdb_nongui(filename, title)
-    
+
     def _post_load_newdb_nongui(self, filename, title=None):
         """
         Called after a new database is loaded.
         """
         if not filename:
             return
-        
+
         if filename[-1] == os.path.sep:
             filename = filename[:-1]
         name = os.path.basename(filename)
@@ -413,7 +413,7 @@ class CLIManager(object):
         # Window title, recent files, etc related to new file.
 
         self.dbstate.db.set_save_path(filename)
-        
+
         # apply preferred owner if loaded file has none
         res = self.dbstate.db.get_owner()
         owner = get_owner()
@@ -564,7 +564,7 @@ class ViewManager(CLIManager):
         self.dbstate.connect('database-changed', self.uistate.db_changed)
 
         self.tags = Tags(self.uistate, self.dbstate)
-        
+
 #        self.sidebar_menu = self.uimanager.get_widget(
 #            '/MenuBar/ViewMenu/Sidebar/')
 
@@ -580,7 +580,7 @@ class ViewManager(CLIManager):
         self.recent_manager.build()
 
         self.db_loader = DbLoader(self.dbstate, self.uistate)
-        
+
         self.__setup_navigator()
 
         if self.show_toolbar:
@@ -741,7 +741,7 @@ class ViewManager(CLIManager):
 
     def __gocat(self, action):
         """
-        Callback that is called on ctrl+number press. It moves to the 
+        Callback that is called on ctrl+number press. It moves to the
         requested category like __next_view/__prev_view. 0 is 10
         """
         cat = int(action.get_name()[-1])
@@ -756,7 +756,7 @@ class ViewManager(CLIManager):
     def __next_view(self, action):
         """
         Callback that is called when the next category action is selected.
-        It selects the next category as the active category. If we reach the end, 
+        It selects the next category as the active category. If we reach the end,
         we wrap around to the first.
         """
         curpage = self.notebook.get_current_page()
@@ -808,7 +808,7 @@ class ViewManager(CLIManager):
             self.undoactions.set_visible(False)
             self.redoactions.set_visible(False)
             #self.undohistoryactions.set_visible(False)
-            
+
         self.uistate.widget.set_sensitive(True)
         config.connect("interface.statusbar", self.__statusbar_key_update)
 
@@ -884,9 +884,9 @@ class ViewManager(CLIManager):
         else:
             WarningDialog(
                 _("Cannot abandon session's changes"),
-                _('Changes cannot be completely abandoned because the '
-                  'number of changes made in the session exceeded the '
-                  'limit.'))
+                _('Changes cannot be abandoned at this moment. '
+                  'Hard kill the process, or backup the database directory before closing the '
+                  'application.'))
 
     def __init_action_group(self, name, actions, sensitive=True, toggles=None):
         """
@@ -1025,7 +1025,7 @@ class ViewManager(CLIManager):
         from .views.pageview import DummyPage
         return DummyPage(pdata.name, pdata, self.dbstate, self.uistate,
                     _("View failed to load. Check error output."), error)
-    
+
     def __create_page(self, pdata, page_def):
         """
         Create a new page and set it as the current page.
@@ -1343,7 +1343,7 @@ class ViewManager(CLIManager):
                              })
         hbox.pack_end(file_entry, True, True, 0)
         vbox.pack_start(hbox, False, True, 0)
-        
+
         window.show_all()
         d = window.run()
         window.hide()
@@ -1521,8 +1521,8 @@ def run_plugin(pdata, dbstate, uistate):
         tool.gui_tool(dbstate = dbstate, user = User(uistate = uistate),
                       tool_class = getattr(mod, pdata.toolclass),
                       options_class = getattr(mod, pdata.optionclass),
-                      translated_name = pdata.name, 
-                      name = pdata.id, 
+                      translated_name = pdata.name,
+                      name = pdata.id,
                       category = pdata.category,
                       callback = dbstate.db.request_rebuild)
 

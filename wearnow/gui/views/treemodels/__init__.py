@@ -22,5 +22,6 @@
 Package init for the treemodels package.
 """
 
-#from .mediamodel import MediaModel
-#from .notemodel import NoteModel
+from .mediamodel import MediaModel
+from .notemodel import NoteModel
+from .textilemodel import TextileListModel

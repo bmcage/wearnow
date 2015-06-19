@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2015       Benny Malengier (UgGent)
 # Copyright (C) 2005-2007  Donald N. Allingham
-# Copyright (C) 2008-2009  Gary Burton 
+# Copyright (C) 2008-2009  Gary Burton
 # Copyright (C) 2009-2012  Doug Blank <doug.blank@gmail.com>
 # Copyright (C) 2011       Tim G L Lyons
 #
@@ -95,7 +95,7 @@ def save(filename=None):
     return CONFIGMAN.save(filename)
 
 def connect(key, func):
-    """ 
+    """
     Module shortcut to connect a key to a callback func.
     Returns a unique callback ID number.
     """
@@ -147,6 +147,8 @@ register('interface.width', 775)
 register('interface.view', True)
 register('interface.view-categories',
          ["Garments", "WearNow", "Ensemble", "Media", "Notes"])
+register('interface.attribute-height', 350)
+register('interface.attribute-width', 600)
 register('interface.note-height', 500)
 register('interface.note-sel-height', 450)
 register('interface.note-sel-width', 600)
@@ -168,6 +170,8 @@ register('interface.ensemble-height', 500)
 register('interface.ensemble-sel-height', 450)
 register('interface.ensemble-sel-width', 600)
 register('interface.ensemble-width', 700)
+register('interface.url-height', 150)
+register('interface.url-width', 600)
 register('interface.sidebar-text', True)
 
 register('paths.recent-export-dir', '')
@@ -176,7 +180,7 @@ register('paths.recent-import-dir', '')
 register('paths.report-directory', USER_HOME)
 register('paths.website-directory', USER_HOME)
 register('paths.quick-backup-directory', USER_HOME)
-register('paths.quick-backup-filename', 
+register('paths.quick-backup-filename',
          "%(filename)s_%(year)d-%(month)02d-%(day)02d.%(extension)s")
 
 register('preferences.use-last-view', False)

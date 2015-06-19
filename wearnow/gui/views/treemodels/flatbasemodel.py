@@ -643,12 +643,10 @@ class FlatBaseModel(GObject.GObject, Gtk.TreeModel):
         Row is only added if search/filter data is such that it must be shown
         """
         assert isinstance(handle, str)
-        print ('hh', handle)
         if self.node_map.get_path_from_handle(handle) is not None:
             return # row is already displayed
         data = self.map(handle)
 
-        print ('hh', data)
         insert_val = (self.sort_func(data), handle)
         if not self.search or \
                 (self.search and self.search.match(handle, self.db)):
