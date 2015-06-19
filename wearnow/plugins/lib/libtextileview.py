@@ -202,6 +202,10 @@ class BaseTextileView(ListView):
               <toolitem action="Remove"/>
               <toolitem action="Merge"/>
             </placeholder>
+            <placeholder name = "Scan">
+              <toolitem action="ScanStart"/>
+              <toolitem action="ScanStop"/>
+            </placeholder>
           </toolbar>
           <popup name="Popup">
             <menuitem action="Back"/>
@@ -331,6 +335,8 @@ class BaseTextileView(ListView):
 
         self.all_action = ActionGroup(name=self.title + "/TextileAll")
         self.edit_action = ActionGroup(name=self.title + "/TextileEdit")
+        self.scan_action_start = ActionGroup(name=self.title + "/TextileScanStart")
+        self.scan_action_stop = ActionGroup(name=self.title + "/TextileScanStop")
 
         self.all_action.add_actions([
                 ('FilterEdit', None, _('Textile Filter Editor'), None, None,
@@ -354,8 +360,20 @@ class BaseTextileView(ListView):
                  self.export),
                 ])
 
+        self.scan_action_start.add_actions(
+            [
+                ('ScanStart', 'scan-start', _("_Start Scan"), None,
+                _("Start up Scanner to find RFID tags") ,self.start_scan),
+            ])
+        self.scan_action_stop.add_actions(
+            [
+                ('ScanStop', 'scan-stop', _("_Stop Scan"), None,
+                _("Stop Scanning for RFID tags") ,self.stop_scan),
+            ])
         self._add_action_group(self.edit_action)
         self._add_action_group(self.all_action)
+        self._add_action_group(self.scan_action_start)
+        self._add_action_group(self.scan_action_stop)
 
     def enable_action_group(self, obj):
         """
@@ -365,6 +383,8 @@ class BaseTextileView(ListView):
         self.all_action.set_visible(True)
         self.edit_action.set_visible(True)
         self.edit_action.set_sensitive(not self.dbstate.db.readonly)
+        self.scan_action_start.set_visible(True)
+        self.scan_action_stop.set_visible(False)
         
     def disable_action_group(self):
         """
@@ -374,6 +394,9 @@ class BaseTextileView(ListView):
 
         self.all_action.set_visible(False)
         self.edit_action.set_visible(False)
+        self.scan_action_start.set_visible(False)
+        self.stop_scan(None)
+        self.scan_action_stop.set_visible(False)
 
     def merge(self, obj):
         """
@@ -410,7 +433,17 @@ class BaseTextileView(ListView):
         textile = self.dbstate.db.get_textile_from_handle(textile_handle)
         textile.add_tag(tag_handle)
         self.dbstate.db.commit_textile(textile, transaction)
+
+    def start_scan(self, obj):
+        print ("starting scan")
+        self.scan_action_start.set_visible(False)
+        self.scan_action_stop.set_visible(True)
         
+    def stop_scan(self, obj):
+        print ("stop scanning")
+        self.scan_action_start.set_visible(True)
+        self.scan_action_stop.set_visible(False)
+
     def get_default_gramplets(self):
         """
         Define the default gramplets for the sidebar and bottombar.
