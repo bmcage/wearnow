@@ -31,7 +31,7 @@ from .editattribute import EditAttribute
 #from .editldsord import EditLdsOrd, EditFamilyLdsOrd
 #from .editlocation import EditLocation
 from .editmedia import EditMedia, DeleteMediaQuery
-#from .editmediaref import EditMediaRef
+from .editmediaref import EditMediaRef
 #from .editname import EditName
 from .editnote import EditNote, DeleteNoteQuery
 from .edittextile import EditTextile

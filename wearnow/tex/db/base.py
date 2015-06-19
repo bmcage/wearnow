@@ -128,8 +128,8 @@ class DbReadBase(object):
 
     def find_next_ensemble_wearnow_id(self):
         """
-        Return the next available WearNow ID for a Family object based off the
-        family ID prefix.
+        Return the next available WearNow ID for a Ensemble object based off the
+        Ensemble ID prefix.
         """
         raise NotImplementedError
 
@@ -150,7 +150,7 @@ class DbReadBase(object):
     def find_next_textile_wearnow_id(self):
         """
         Return the next available WearNow ID for a Person object based off the
-        person ID prefix.
+        textile ID prefix.
         """
         raise NotImplementedError
 
@@ -392,7 +392,7 @@ class DbReadBase(object):
 
     def get_raw_ensemble_data(self, handle):
         """
-        Return raw (serialized and pickled) Family object from handle
+        Return raw (serialized and pickled) Ensemble object from handle
         """
         raise NotImplementedError
 
@@ -404,7 +404,7 @@ class DbReadBase(object):
 
     def get_raw_object_data(self, handle):
         """
-        Return raw (serialized and pickled) Family object from handle
+        Return raw (serialized and pickled) Ensemble object from handle
         """
         raise NotImplementedError
 
@@ -735,7 +735,7 @@ class DbWriteBase(DbReadBase):
         """
         DbReadBase.__init__(self)
 
-    def add_ensemble(self, family, transaction, set_gid=True):
+    def add_ensemble(self, ensemble, transaction, set_gid=True):
         """
         Add a ensemble to the database, assigning internal IDs if they have
         not already been defined.
@@ -762,7 +762,7 @@ class DbWriteBase(DbReadBase):
         """
         raise NotImplementedError
 
-    def add_textile(self, person, transaction, set_gid=True):
+    def add_textile(self, textile, transaction, set_gid=True):
         """
         Add a textile to the database, assigning internal IDs if they have
         not already been defined.
@@ -962,7 +962,7 @@ class DbWriteBase(DbReadBase):
         Deletes a textile from the database, cleaning up all associated references.
         """
 
-        # clear out the default person if the person is the default person
+        # clear out the default textile if the textile is the default textile
         if self.get_default_textile() == textile:
             self.set_default_textile_handle(None)
 

@@ -205,7 +205,7 @@ class AttributeRoot(SecondaryObject, PrivacyBase):
 
 #-------------------------------------------------------------------------
 #
-# Attribute for Person/Family/MediaObject/MediaRef
+# Attribute for objects
 #
 #-------------------------------------------------------------------------
 class Attribute(AttributeRoot, NoteBase):

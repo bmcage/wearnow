@@ -101,6 +101,7 @@ def exc_hook(type, value, tb):
     #Use this to show variables in each frame:
     #from wearnow.gen.utils.debug import format_exception
     import traceback
+    #traceback.print_exc()
     LOG.error("Unhandled exception\n" +
               "".join(traceback.format_exception(type, value, tb)))
 

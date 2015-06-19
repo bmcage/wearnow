@@ -817,7 +817,11 @@ class WearNowLocale(object):
         """
         _ = self.translation.gettext
         objclass = objclass_str.lower()
-        if objclass == "person":
+        if objclass == "textile":
+            return _("the garment")
+        elif objclass == "ensemble":
+            return _("the ensemble")
+        elif objclass == "person":
             return _("the person")
         elif objclass == "family":
             return _("the family")

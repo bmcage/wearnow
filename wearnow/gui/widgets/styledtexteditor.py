@@ -598,7 +598,7 @@ class StyledTextEditor(Gtk.TextView):
         """
         Create a link of a selected region of text.
         """
-        # Send in a default link. Could be based on active person.
+        # Send in a default link. Could be based on active textile.
         selection_bounds = self.textbuffer.get_selection_bounds()
         if selection_bounds:
             # Paste text to clipboards
@@ -739,8 +739,8 @@ class StyledTextEditor(Gtk.TextView):
         elif flavor == GENURL:
             pass
         elif flavor == LINK:
-            # wearnow://person/id/VALUE
-            # wearnow://person/handle/VALUE
+            # wearnow://textile/id/VALUE
+            # wearnow://textile/handle/VALUE
             if url.startswith("wearnow://"):
                 # if in a window:
                 win_obj = find_parent_with_attr(self, attr="dbstate")
@@ -838,8 +838,7 @@ def uri_dialog(self, uri, callback):
             # make a default link
             uri = "http://"
             # Check in order for an open page:
-            for object_class in ["Person", "Place", "Event", "Family", 
-                                 "Repository", "Source", "Media"]:
+            for object_class in ["Textile", "Ensemble", "Media"]:
                 handle = obj.uistate.get_active(object_class)
                 if handle:
                     uri = "wearnow://%s/handle/%s" % (object_class, handle)

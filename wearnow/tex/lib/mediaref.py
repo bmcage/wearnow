@@ -1,5 +1,5 @@
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# WearNow - a GTK+/GNOME based program
 #
 # Copyright (C) 2000-2007  Donald N. Allingham
 # Copyright (C) 2010       Michiel D. Nauta
@@ -22,12 +22,12 @@
 #
 
 """
-Media Reference class for Gramps.
+Media Reference class for WearNow.
 """
 
 #-------------------------------------------------------------------------
 #
-# GRAMPS modules
+# WearNow modules
 #
 #-------------------------------------------------------------------------
 from .secondaryobj import SecondaryObject
