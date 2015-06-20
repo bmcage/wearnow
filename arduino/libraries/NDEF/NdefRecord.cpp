@@ -7,9 +7,9 @@ NdefRecord::NdefRecord()
     _typeLength = 0;
     _payloadLength = 0;
     _idLength = 0;
-    _type = (byte *)NULL;
-    _payload = (byte *)NULL;
-    _id = (byte *)NULL;
+    _type = (byte *)NULLNDEF;
+    _payload = (byte *)NULLNDEF;
+    _id = (byte *)NULLNDEF;
 }
 
 NdefRecord::NdefRecord(const NdefRecord& rhs)
@@ -20,9 +20,9 @@ NdefRecord::NdefRecord(const NdefRecord& rhs)
     _typeLength = rhs._typeLength;
     _payloadLength = rhs._payloadLength;
     _idLength = rhs._idLength;
-    _type = (byte *)NULL;
-    _payload = (byte *)NULL;
-    _id = (byte *)NULL;
+    _type = (byte *)NULLNDEF;
+    _payload = (byte *)NULLNDEF;
+    _id = (byte *)NULLNDEF;
 
     if (_typeLength)
     {

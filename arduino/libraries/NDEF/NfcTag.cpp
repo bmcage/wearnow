@@ -5,7 +5,7 @@ NfcTag::NfcTag()
     _uid = 0;
     _uidLength = 0;
     _tagType = "Unknown";
-    _ndefMessage = (NdefMessage*)NULL;
+    _ndefMessage = (NdefMessage*)NULLNDEF;
 }
 
 NfcTag::NfcTag(byte *uid, unsigned int uidLength)
@@ -13,7 +13,7 @@ NfcTag::NfcTag(byte *uid, unsigned int uidLength)
     _uid = uid;
     _uidLength = uidLength;
     _tagType = "Unknown";
-    _ndefMessage = (NdefMessage*)NULL;
+    _ndefMessage = (NdefMessage*)NULLNDEF;
 }
 
 NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType)
@@ -21,7 +21,7 @@ NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType)
     _uid = uid;
     _uidLength = uidLength;
     _tagType = tagType;
-    _ndefMessage = (NdefMessage*)NULL;
+    _ndefMessage = (NdefMessage*)NULLNDEF;
 }
 
 NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType, NdefMessage& ndefMessage)
@@ -98,7 +98,7 @@ String NfcTag::getTagType()
 
 boolean NfcTag::hasNdefMessage()
 {
-    return (_ndefMessage != NULL);
+    return (_ndefMessage != NULLNDEF);
 }
 
 NdefMessage NfcTag::getNdefMessage()
@@ -110,7 +110,7 @@ void NfcTag::print()
 {
     Serial.print(F("NFC Tag - "));Serial.println(_tagType);
     Serial.print(F("UID "));Serial.println(getUidString());
-    if (_ndefMessage == NULL)
+    if (_ndefMessage == NULLNDEF)
     {
         Serial.println(F("\nNo NDEF Message"));
     }
