@@ -64,6 +64,9 @@ class PyMataCommandHandler(threading.Thread):
     SERVO_CONFIG = 0x70  # set servo pin and max and min angles
     STRING_DATA = 0x71  # a string message with 14-bits per char
     STEPPER_DATA = 0x72  # Stepper motor command
+    
+    APPLICATION_DATA = 0x81 # Extensible application command
+    
     I2C_REQUEST = 0x76  # send an I2C read/write request
     I2C_REPLY = 0x77  # a reply to an I2C read request
     I2C_CONFIG = 0x78  # config I2C settings such as delay times and power pins
@@ -733,6 +736,18 @@ class PyMataCommandHandler(threading.Thread):
         """
         self.stepper_library_version = (data[0] & 0x7f) + (data[1] << 7)
 
+    def application_data(self, data):
+        """
+        This method handles the incoming data from Firmata. Application data
+        is general, we assume string data that is added to a list, and 
+        returned
+        """
+        read_tag = []
+        for i in data[::2]:
+            read_tag.append(chr(i))
+        #finished receiving the data, store it for async use
+        self.read_tag = read_tag
+
     def run(self):
         """
         This method starts the thread that continuously runs to receive and interpret
@@ -752,6 +767,8 @@ class PyMataCommandHandler(threading.Thread):
         self.command_dispatch.update({self.PIN_STATE_RESPONSE: [self.pin_state_response, 2]})
         self.command_dispatch.update({self.ANALOG_MAPPING_RESPONSE: [self.analog_mapping_response, 2]})
         self.command_dispatch.update({self.STEPPER_DATA: [self.stepper_version_response, 2]})
+        self.command_dispatch.update({self.APPLICATION_DATA: [self.application_data, 2]})
+        
 
         while not self.is_stopped():
             if len(self.pymata.command_deque):

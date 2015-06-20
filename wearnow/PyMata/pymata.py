@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 """
+from __future__ import print_function
 
 from collections import deque
 import threading
@@ -98,6 +99,15 @@ class PyMata:
     STEPPER_CONFIGURE = 0  # configure a stepper motor for operation
     STEPPER_STEP = 1  # command a motor to move at the provided speed
     STEPPER_LIBRARY_VERSION = 2  # used to get stepper library version number
+
+    # Extinsible Application sub-commands
+    APPLICATION_SUBCOM0 = 0 # subcommand 0 for application
+    APPLICATION_SUBCOM1 = 1 # subcommand 0 for application
+    APPLICATION_SUBCOM2 = 2 # subcommand 0 for application
+    APPLICATION_SUBCOM3 = 3 # subcommand 0 for application
+    APPLICATION_SUBCOM4 = 4 # subcommand 0 for application
+    APPLICATION_SUBCOM5 = 5 # subcommand 0 for application
+    APPLICATION_SUBCOM6 = 6 # subcommand 0 for application
 
     # each byte represents a digital port and its value contains the current port settings
     digital_output_port_pins = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -519,6 +529,21 @@ class PyMata:
                 pass
         return self._command_handler.stepper_library_version
 
+    def get_ndef_read_tag(self, timeout=20):
+        """
+        @param timeout: specify a time to allow arduino to process and return a version
+        @return: the tag read if it was set.
+        """
+        # get current time
+        start_time = time.time()
+        # wait for tag to come from the Arduino
+        while self._command_handler.read_tag == None:
+            if time.time() - start_time > timeout:
+                print ("Read tag request timed-out. Did you send a ndef_request_read_tag command?")
+                return None
+            else:
+                pass
+        return self._command_handler.read_tag
 
     def i2c_config(self, read_delay_time=0, pin_type=None, clk_pin=0, data_pin=0):
         """
@@ -855,3 +880,12 @@ class PyMata:
         data = [self.STEPPER_LIBRARY_VERSION]
         self._command_handler.send_sysex(self._command_handler.STEPPER_DATA, data)
 
+    # Now extensible application methods
+    def ndef_request_read_tag(self):
+        """ 
+        Give command to have tag read
+        # we use extensible subcommand 0 for this.
+        """
+        data = [self.APPLICATION_SUBCOM0]
+        self._command_handler.read_tag = None
+        self._command_handler.send_sysex(self._command_handler.APPLICATION_DATA, data)

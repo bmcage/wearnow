@@ -1,3 +1,9 @@
+// This is the code to run on an Arduino connected with
+// Adafruit PN532 to interoperate with Comfisense Desktop
+// Application
+
+
+// here adaption of FirmataPlus of PyMata for our usecase
 
 /*
  * Firmata is a generic protocol for communicating with microcontrollers
@@ -760,7 +766,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       {
         // command to read a tag. We loop up to a tag seen
         String payloadAsString = "NO TAG";
-        notag = true;
+        boolean notag = true;
         unsigned long starttime = millis();
         while (notag && (millis()-starttime < 5000)) {
           if (nfc.tagPresent())
@@ -1076,6 +1082,4 @@ void printData(char * id,  long data)
   Firmata.sendString(id) ;
   Firmata.sendString(myArray);
 }
-
-
 

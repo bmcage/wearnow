@@ -51,6 +51,7 @@
 #define SONAR_DATA              0x61 // Data returned from sonar distance sensor
 #define STEPPER_DATA            0x72 // stepper motor command
 
+#define APPLICATION_DATA        0x81 // Extensible application command
 
 /* StandardFirmata commands */
 #define SERVO_CONFIG            0x70 // set max angle, minPulse, maxPulse, freq
