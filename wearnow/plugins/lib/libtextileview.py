@@ -362,12 +362,12 @@ class BaseTextileView(ListView):
 
         self.scan_action_start.add_actions(
             [
-                ('ScanStart', 'scan-start', _("_Start Scan"), None,
+                ('ScanStart', 'wearnow-scanstart', _("_Start Scan"), None,
                 _("Start up Scanner to find RFID tags") ,self.start_scan),
             ])
         self.scan_action_stop.add_actions(
             [
-                ('ScanStop', 'scan-stop', _("_Stop Scan"), None,
+                ('ScanStop', 'wearnow-scanstop', _("_Stop Scan"), None,
                 _("Stop Scanning for RFID tags") ,self.stop_scan),
             ])
         self._add_action_group(self.edit_action)
