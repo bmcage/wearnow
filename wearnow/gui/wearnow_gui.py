@@ -239,11 +239,12 @@ def __startwearnow(errors, args):
                    ), exc_info=True)
     
     # start WearNow, errors stop the gtk loop
+    app = None
     try:
         quit_now = False
         exit_code = 0
         if has_display():
-            WearNow(args)
+            app = WearNow(args)
         else:
             print("WearNow terminated because of no DISPLAY")
             sys.exit(exit_code)
@@ -272,6 +273,9 @@ def __startwearnow(errors, args):
                    ), exc_info=True)
 
     if quit_now:
+        #detach board
+        if app and app.vm and app.vm.board:
+            app.vm.board.reset()
         #stop gtk loop and quit
         Gtk.main_quit()
         sys.exit(exit_code)

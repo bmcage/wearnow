@@ -436,11 +436,20 @@ class BaseTextileView(ListView):
 
     def start_scan(self, obj):
         print ("starting scan")
-        self.scan_action_start.set_visible(False)
-        self.scan_action_stop.set_visible(True)
+        self.uistate.viewmanager.do_connect_board()
+        
+        #scan a tag if a board was found and initialized
+        board = self.uistate.viewmanager.board
+        if board:
+            self.scan_action_start.set_visible(False)
+            self.scan_action_stop.set_visible(True)
+            board.ndef_request_read_tag()
+            #at the moment this will block the app.
+            board.get_ndef_read_tag(timeout=20)
         
     def stop_scan(self, obj):
         print ("stop scanning")
+        self.uistate.viewmanager.do_reset_board()
         self.scan_action_start.set_visible(True)
         self.scan_action_stop.set_visible(False)
 

@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 """
-from __future__ import print_function
 
 from collections import deque
 import threading
@@ -258,7 +257,7 @@ class PyMata:
         """
         self._command_handler.send_sysex(self._command_handler.CAPABILITY_QUERY, None)
 
-    def close(self):
+    def close(self, exitafter=True):
         """
         This method will close the transport (serial port) and exit
         @return: No return value, but sys.exit(0) is called.
@@ -269,10 +268,10 @@ class PyMata:
         self.transport.stop()
         self.transport.close()
 
-        if self.verbose:
-            print("PyMata close(): Calling sys.exit(0): Hope to see you soon!")
-
-        sys.exit(0)
+        if exitafter:
+            if self.verbose:
+                print("PyMata close(): Calling sys.exit(0): Hope to see you soon!")
+            sys.exit(0)
 
 
     def digital_read(self, pin):
@@ -493,7 +492,7 @@ class PyMata:
 
         @return:
         """
-        return [2, 07]
+        return [2, 7]
 
 
     # noinspection PyMethodMayBeStatic
@@ -888,4 +887,5 @@ class PyMata:
         """
         data = [self.APPLICATION_SUBCOM0]
         self._command_handler.read_tag = None
+        print ('NDEF request read')
         self._command_handler.send_sysex(self._command_handler.APPLICATION_DATA, data)

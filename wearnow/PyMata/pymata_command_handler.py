@@ -67,6 +67,8 @@ class PyMataCommandHandler(threading.Thread):
     
     APPLICATION_DATA = 0x81 # Extensible application command
     
+    print ('new command app data', APPLICATION_DATA)
+    
     I2C_REQUEST = 0x76  # send an I2C read/write request
     I2C_REPLY = 0x77  # a reply to an I2C read request
     I2C_CONFIG = 0x78  # config I2C settings such as delay times and power pins
@@ -607,6 +609,7 @@ class PyMataCommandHandler(threading.Thread):
         @param sysex_data: data for command
         @return : No return value.
         """
+        print ('in send_sysex')
         if not sysex_data:
             sysex_data = []
 
@@ -641,6 +644,7 @@ class PyMataCommandHandler(threading.Thread):
         It resets the response tables to their initial values
         @return: No return value
         """
+        print ('Sending reset')
         data = chr(self.SYSTEM_RESET)
         self.pymata.transport.write(data)
 
@@ -742,6 +746,7 @@ class PyMataCommandHandler(threading.Thread):
         is general, we assume string data that is added to a list, and 
         returned
         """
+        print ('in application data')
         read_tag = []
         for i in data[::2]:
             read_tag.append(chr(i))
@@ -786,6 +791,9 @@ class PyMataCommandHandler(threading.Thread):
                         pass
                     sysex_command = self.pymata.command_deque.popleft()
                     # retrieve the associated command_dispatch entry for this command
+                    print ('SYSEX_COMMAND',sysex_command)
+                    if sysex_command == 0xff:
+                        continue
                     dispatch_entry = self.command_dispatch.get(sysex_command)
 
                     # get a "pointer" to the method that will process this command

@@ -138,6 +138,9 @@ register('behavior.spellcheck', False)
 register('behavior.addmedia-image-dir', '')
 register('behavior.addmedia-relative-path', False)
 
+register('board.basedir', '/dev/')
+register('board.port-id', 'ttyACM')
+
 register('interface.fullscreen', False)
 register('interface.dont-ask', False)
 register('interface.height', 500)

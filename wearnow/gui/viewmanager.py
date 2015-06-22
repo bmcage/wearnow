@@ -78,7 +78,9 @@ from wearnow.tex.constfunc import is_quartz, conv_to_unicode
 from wearnow.tex.config import config
 from wearnow.tex.errors import WindowActiveError
 from wearnow.tex.utils.config import get_owner
+from wearnow.tex.utils.board import get_the_board
 from wearnow.tex.recentfiles import recent_files
+from ..PyMata.pymata import PyMata
 from .pluginmanager import GuiPluginManager
 from .dialog import ErrorDialog, WarningDialog, QuestionDialog2, InfoDialog
 from .dbloader import DbLoader
@@ -335,6 +337,8 @@ class CLIManager(object):
     """
     def __init__(self, dbstate, setloader, user):
         self.dbstate = dbstate
+        self.boardport = None
+        self.board = None
         if setloader:
             self.db_loader = CLIDbLoader(self.dbstate)
         else:
@@ -437,6 +441,34 @@ class CLIManager(object):
         """
         self._pmgr.reg_plugins(PLUGINS_DIR, dbstate, uistate)
         #self._pmgr.reg_plugins(USER_PLUGINS, dbstate, uistate, load_on_reg=True)
+        
+    def do_connect_board(self):
+        port = None
+        base_dir = config.get('board.basedir')
+        try:
+            port = get_the_board(base_dir   =base_dir,
+                                 identifier =config.get('board.port-id'))
+        except:
+            import traceback
+            LOG.warn("Error obtaining board")
+            traceback.print_exc()
+        
+        if port != self.boardport:
+            if self.boardport:
+                self.board.close(exitafter=False)
+            self.boardport = port
+            # create a PyMata instance
+            if self.boardport:
+                self.board = PyMata(base_dir + os.sep + self.boardport, bluetooth=False, verbose=True)
+
+    def do_reset_board(self):
+        if self.board:
+            self.board.close(exitafter=False)
+            # recreate a PyMata instance
+            self.board = None
+            self.boardport = None
+            
+        
 #-------------------------------------------------------------------------
 #
 # ViewManager

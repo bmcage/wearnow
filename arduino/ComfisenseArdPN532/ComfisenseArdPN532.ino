@@ -762,15 +762,19 @@ void sysexCallback(byte command, byte argc, byte *argv)
       break ;
     case APPLICATION_DATA:
       // determine the command from the application
+      Firmata.sendString("IN APPLICATION DATA");
       if (argv[0] == APPLICATION_SUBCOM0)
       {
+      Firmata.sendString("read tag command");
         // command to read a tag. We loop up to a tag seen
         String payloadAsString = "NO TAG";
         boolean notag = true;
         unsigned long starttime = millis();
         while (notag && (millis()-starttime < 5000)) {
+          Firmata.sendString(" in while loop ");
           if (nfc.tagPresent())
           {
+            Firmata.sendString("tag seen");
             notag = false;
             NfcTag tag = nfc.read();
             String TagId = tag.getUidString();
@@ -781,6 +785,9 @@ void sysexCallback(byte command, byte argc, byte *argv)
 
                 // cycle through the records, printing some info from each
                 int recordCount = message.getRecordCount();
+            char buffer[50];
+            sprintf(buffer, "Ndef mess %d", recordCount);
+            Firmata.sendString(buffer);
                 for (int i = 0; i < recordCount; i++)
                 {
                     NdefRecord record = message.getRecord(i);
@@ -807,10 +814,12 @@ void sysexCallback(byte command, byte argc, byte *argv)
                     String uid = record.getId();
                 }
             }
+          } else {
+            delay(1000);
           }
-          delay(1000);
         } // end while loop
         //Send the result back, max 4k
+            Firmata.sendString("Finished, sending payload");
         char payloadArray[4000] ;
         payloadAsString.toCharArray(payloadArray, 4000) ;
         Firmata.sendString(APPLICATION_DATA, payloadArray);
