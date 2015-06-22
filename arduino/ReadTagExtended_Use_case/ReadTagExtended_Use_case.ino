@@ -19,12 +19,13 @@ NfcAdapter nfc = NfcAdapter(pn532_i2c);
 
 void setup(void) {
   Serial.begin(9600);
+  Serial.setTimeout(5);
   Serial.println("NDEF Reader");
   nfc.begin();
 }
 
 void loop(void) {
-  Serial.println("\nScan a NFC tag\n");
+  Serial.println("Scan a NFC tag");
 
   if (nfc.tagPresent())
   {
@@ -36,7 +37,7 @@ void loop(void) {
     {
 
       NdefMessage message = tag.getNdefMessage();
-      Serial.print("\nThis NFC Tag contains an NDEF Message with ");
+      Serial.print("This NFC Tag contains an NDEF Message with ");
       Serial.print(message.getRecordCount());
       Serial.print(" NDEF Record");
       if (message.getRecordCount() != 1) {
@@ -48,7 +49,7 @@ void loop(void) {
       int recordCount = message.getRecordCount();
       for (int i = 0; i < recordCount; i++)
       {
-        Serial.print("\nNDEF Record ");Serial.println(i+1);
+        Serial.print("NDEF Record ");Serial.println(i+1);
         NdefRecord record = message.getRecord(i);
         // NdefRecord record = message[i]; // alternate syntax
 
@@ -87,6 +88,8 @@ void loop(void) {
         }
       }
     }
+    Serial.println("End Tag");
   }
   delay(3000);
+
 }
