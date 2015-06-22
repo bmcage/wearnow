@@ -69,8 +69,8 @@ void FirmataClass::begin(long speed)
   Serial.begin(speed);
   FirmataSerial = &Serial;
   blinkVersion();
-  printVersion();
-  printFirmwareVersion();
+  //printVersion();
+  //printFirmwareVersion();
 }
 
 /* begin method for overriding default stream */

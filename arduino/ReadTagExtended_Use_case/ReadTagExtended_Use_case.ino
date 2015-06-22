@@ -66,13 +66,19 @@ void loop(void) {
         //PrintHexChar(payload, payloadLength);
 
         // Force the data into a String (might work depending on the content)
-        // Real code should use smarter processing
-        String payloadAsString = "";
-        for (int c = 0; c < payloadLength; c++) {
-          payloadAsString += (char)payload[c];
+        // Real code should use smarter processing    
+        if (record.getTnf() == TNF_WELL_KNOWN && record.getType() == "T") { // text message
+          // skip the language code
+          int startChar = payload[0] + 1;
+          String payloadAsString = "";
+          for (int c = startChar; c < payloadLength; c++) {
+            payloadAsString += (char)payload[c];
+          }
+          //Serial.print("  Payload (as String): ");
+          Serial.println(payloadAsString);
+        } else {
+          Serial.println("record on tag not of type Text, cannot show it");
         }
-        //Serial.print("  Payload (as String): ");
-        Serial.println(payloadAsString);
 
         // id is probably blank and will return ""
         String uid = record.getId();

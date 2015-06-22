@@ -18,15 +18,19 @@ void NfcAdapter::begin(boolean verbose)
 
     if (! versiondata)
     {
+    #ifdef NDEF_DEBUG
         Serial.print(F("Didn't find PN53x board"));
+#endif
         while (1); // halt
     }
 
     if (verbose)
     {
+    #ifdef NDEF_DEBUG
         Serial.print(F("Found chip PN5")); Serial.println((versiondata>>24) & 0xFF, HEX);
         Serial.print(F("Firmware ver. ")); Serial.print((versiondata>>16) & 0xFF, DEC);
         Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
+#endif
     }
     // configure board to read RFID tags
     shield->SAMConfig();
@@ -66,7 +70,9 @@ boolean NfcAdapter::format()
     }
     else
     {
+        #ifdef NDEF_DEBUG
         Serial.print(F("Unsupported Tag."));
+        #endif
         success = false;
     }
     return success;
@@ -94,7 +100,9 @@ boolean NfcAdapter::clean()
     }
     else
     {
+        #ifdef NDEF_DEBUG
         Serial.print(F("No driver for card type "));Serial.println(type);
+        #endif
         return false;
     }
 
@@ -123,12 +131,16 @@ NfcTag NfcAdapter::read()
     }
     else if (type == TAG_TYPE_UNKNOWN)
     {
+    #ifdef NDEF_DEBUG
         Serial.print(F("Can not determine tag type"));
+#endif
         return NfcTag(uid, uidLength);
     }
     else
     {
+    #ifdef NDEF_DEBUG
         Serial.print(F("No driver for card type "));Serial.println(type);
+#endif
         // TODO should set type here
         return NfcTag(uid, uidLength);
     }
@@ -158,12 +170,16 @@ boolean NfcAdapter::write(NdefMessage& ndefMessage)
     }
     else if (type == TAG_TYPE_UNKNOWN)
     {
+    #ifdef NDEF_DEBUG
         Serial.print(F("Can not determine tag type"));
+#endif
         success = false;
     }
     else
     {
+    #ifdef NDEF_DEBUG
         Serial.print(F("No driver for card type "));Serial.println(type);
+#endif
         success = false;
     }
 

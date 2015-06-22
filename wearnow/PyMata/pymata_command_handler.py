@@ -792,8 +792,6 @@ class PyMataCommandHandler(threading.Thread):
                     sysex_command = self.pymata.command_deque.popleft()
                     # retrieve the associated command_dispatch entry for this command
                     print ('SYSEX_COMMAND',sysex_command)
-                    if sysex_command == 0xff:
-                        continue
                     dispatch_entry = self.command_dispatch.get(sysex_command)
 
                     # get a "pointer" to the method that will process this command
@@ -808,7 +806,9 @@ class PyMataCommandHandler(threading.Thread):
                         data = self.pymata.command_deque.popleft()
                         if data != self.END_SYSEX:
                             command_data.append(data)
+                            print ('appending', data)
                         else:
+                            print ('end of sysex')
                             end_of_sysex = True
 
                             # invoke the method to process the command
