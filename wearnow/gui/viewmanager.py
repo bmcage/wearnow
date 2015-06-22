@@ -459,7 +459,7 @@ class CLIManager(object):
             self.boardport = port
             # create a PyMata instance
             if self.boardport:
-                self.board = PyMata(base_dir + os.sep + self.boardport, bluetooth=False, verbose=True)
+                self.board = PyMata(base_dir + os.sep + self.boardport, bluetooth=False, verbose=False)
 
     def do_reset_board(self):
         if self.board:
