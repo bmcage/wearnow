@@ -20,15 +20,16 @@ NfcAdapter nfc = NfcAdapter(pn532_i2c);
 void setup(void) {
   Serial.begin(9600);
   Serial.setTimeout(5);
-  Serial.println("NDEF Reader");
+  Serial.println("NDEF Reader, Scan a NFC tag");
   nfc.begin();
 }
 
 void loop(void) {
-  Serial.println("Scan a NFC tag");
-
-  if (nfc.tagPresent())
+  // 100 retries
+  if (nfc.tagPresent(100))
   {
+    Serial.println("Begin Tag");
+    
     NfcTag tag = nfc.read();
     Serial.println(tag.getTagType());
     Serial.print("NFC Tag ID: ");Serial.println(tag.getUidString());
@@ -90,6 +91,6 @@ void loop(void) {
     }
     Serial.println("End Tag");
   }
-  delay(3000);
+  delay(1000);
 
 }
