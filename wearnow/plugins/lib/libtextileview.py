@@ -31,7 +31,7 @@ Provide the base for a list textile view.
 #
 #-------------------------------------------------------------------------
 from gi.repository import Gtk
-
+import os, sys
 #-------------------------------------------------------------------------
 #
 # set up logging
@@ -54,6 +54,7 @@ from wearnow.gui.dialog import ErrorDialog, MultiSelectDialog, QuestionDialog
 from wearnow.tex.errors import WindowActiveError
 from wearnow.gui.views.bookmarks import TextileBookmarks
 from wearnow.tex.config import config
+from wearnow.tex.utils.board import get_the_board
 from wearnow.gui.ddtargets import DdTargets
 from wearnow.gui.filters.sidebar import TextileSidebarFilter
 from wearnow.tex.plug import CATEGORY_QR_TEXTILE
@@ -436,16 +437,55 @@ class BaseTextileView(ListView):
 
     def start_scan(self, obj):
         print ("starting scan")
-        self.uistate.viewmanager.do_connect_board()
-        
-        #scan a tag if a board was found and initialized
-        board = self.uistate.viewmanager.board
-        if board:
-            self.scan_action_start.set_visible(False)
-            self.scan_action_stop.set_visible(True)
-            board.ndef_request_read_tag()
-            #at the moment this will block the app.
-            board.get_ndef_read_tag(timeout=20)
+        import serial
+        base_dir = config.get('board.basedir')
+        try:
+            port = get_the_board(base_dir   =base_dir,
+                                 identifier =config.get('board.port-id'))
+        except:
+            import traceback
+            _LOG.warn("Error obtaining board")
+            print (port)
+            traceback.print_exc()
+        self.arduino = serial.Serial(base_dir + os.sep + port, 9600,
+                                     timeout=5, writeTimeout=0)
+        if sys.platform == 'linux':
+            # noinspection PyUnresolvedReferences
+            self.arduino.nonblocking()
+        import time
+        time.sleep(5)
+        read = []
+        start = False
+        while 1:
+            input_string = self.arduino.readline()
+            input_string = input_string.decode('utf-8')
+            input_string = input_string.strip('\r\n')
+            print ('read', input_string, type(input_string))
+            if input_string.strip() == "Scan a NFC tag":
+                print ("START ON TRUE")
+                start = True
+            if start:
+                read.append( input_string)
+                print ('test', read)
+                if read[-1] == 'End Tag':
+                    break
+#        self.uistate.viewmanager.do_connect_board()
+#        
+#        #scan a tag if a board was found and initialized
+#        board = self.uistate.viewmanager.board
+#        if board:
+#            self.scan_action_start.set_visible(False)
+#            self.scan_action_stop.set_visible(True)
+#            board.ndef_request_read_tag()
+#            #at the moment this will block the app.
+#            import time
+#            time.sleep(10)
+#            board.get_ndef_read_tag(timeout=20)
+#            
+#            #AGAIN
+#            print ('doing it again')
+#            board.ndef_request_read_tag()
+#            board.get_ndef_read_tag(timeout=20)
         
     def stop_scan(self, obj):
         print ("stop scanning")
