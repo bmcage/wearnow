@@ -31,7 +31,7 @@ Provide the base for a list textile view.
 #
 #-------------------------------------------------------------------------
 from gi.repository import Gtk
-import os, sys
+from gi.repository import GLib
 #-------------------------------------------------------------------------
 #
 # set up logging
@@ -45,7 +45,7 @@ _LOG = logging.getLogger(".gui.textileview")
 # wearnow modules
 #
 #-------------------------------------------------------------------------
-from wearnow.tex.lib import Textile
+from wearnow.tex.lib import Textile, Attribute, AttributeType, TextileType
 from wearnow.tex.db.txn import DbTxn
 from wearnow.gui.views.listview import ListView, TEXT, MARKUP, ICON
 from wearnow.gui.actiongroup import ActionGroup
@@ -435,40 +435,103 @@ class BaseTextileView(ListView):
         textile.add_tag(tag_handle)
         self.dbstate.db.commit_textile(textile, transaction)
 
+    def test_for_tag(self, vm):
+        board = self.uistate.viewmanager.board
+        if board:            
+            tag = self.uistate.viewmanager.obtain_last_read_tag()
+            if tag:
+                GLib.idle_add(self.react_to_new_tag, tag)
+            return True
+        else:
+            #stop the thread
+            return False
+
+    def react_to_new_tag(self, tag):
+        print ("Found a new tag", tag)
+        tagdict = {}
+        stringvalues = ['Type', 'ID']
+        floatvalues = ['Id', 'Vres']
+        for value in tag:
+            if value.startswith('NFC Tag ID:'):
+                tagdict['TAGID'] = value.split(':')[-1].strip()
+            for sv in stringvalues:
+                if value.startswith(sv):
+                    tagdict[sv] = value.split(';')[1].strip()
+            for fv in floatvalues:
+                if value.startswith(fv):
+                    tagdict[fv] = float(value.split(';')[1].strip())
+        
+        textile = Textile()
+        textile.wearnow_id = tagdict.get('ID', None)
+        tagkey2attrkey = {
+            'TAGID'     : AttributeType.RFID_ID,
+            'Id'        : AttributeType.THERM_INS ,
+            'Vres'      : AttributeType.MOIST_VAP_RESIST,
+        }
+        for key in tagkey2attrkey.keys():
+            if key in tagdict:
+                attr = Attribute()
+                attr.set_type(tagkey2attrkey[key])
+                attr.value = str(tagdict[key])
+                textile.add_attribute(attr)
+                print ('added attr', attr)
+        if 'Type' in tagdict:
+            ttype = TextileType()
+            ttype.set_from_xml_str(tagdict['Type'])
+            textile.set_type(ttype)
+        
+        from wearnow.gui.editors import EditTextile
+        try:
+            EditTextile(self.dbstate, self.uistate, [], textile)
+        except WindowActiveError:
+            pass
+        return False
+
     def start_scan(self, obj):
         print ("starting scan")
-        import serial
-        base_dir = config.get('board.basedir')
-        try:
-            port = get_the_board(base_dir   =base_dir,
-                                 identifier =config.get('board.port-id'))
-        except:
-            import traceback
-            _LOG.warn("Error obtaining board")
-            print (port)
-            traceback.print_exc()
-        self.arduino = serial.Serial(base_dir + os.sep + port, 9600,
-                                     timeout=5, writeTimeout=0)
-        if sys.platform == 'linux':
-            # noinspection PyUnresolvedReferences
-            self.arduino.nonblocking()
-        import time
-        time.sleep(5)
-        read = []
-        start = False
-        while 1:
-            input_string = self.arduino.readline()
-            input_string = input_string.decode('utf-8')
-            input_string = input_string.strip('\r\n')
-            print ('read', input_string, type(input_string))
-            if input_string.strip() == "Scan a NFC tag":
-                print ("START ON TRUE")
-                start = True
-            if start:
-                read.append( input_string)
-                print ('test', read)
-                if read[-1] == 'End Tag':
-                    break
+        self.uistate.viewmanager.do_connect_board()
+        
+        #scan a tag if a board was found and initialized
+        board = self.uistate.viewmanager.board
+        if board:
+            self.scan_action_start.set_visible(False)
+            self.scan_action_stop.set_visible(True)
+            GLib.timeout_add(1000, self.test_for_tag, self.uistate.viewmanager)
+            
+        
+#        import serial
+#        base_dir = config.get('board.basedir')
+#        try:
+#            port = get_the_board(base_dir   =base_dir,
+#                                 identifier =config.get('board.port-id'))
+#        except:
+#            import traceback
+#            _LOG.warn("Error obtaining board")
+#            print (port)
+#            traceback.print_exc()
+#        self.arduino = serial.Serial(base_dir + os.sep + port, 9600,
+#                                     timeout=5, writeTimeout=0)
+#        if sys.platform == 'linux':
+#            # noinspection PyUnresolvedReferences
+#            self.arduino.nonblocking()
+#        import time
+#        time.sleep(5)
+#        read = []
+#        start = False
+#        while 1:
+#            input_string = self.arduino.readline()
+#            input_string = input_string.decode('utf-8')
+#            input_string = input_string.strip('\r\n')
+#            print ('read', input_string, type(input_string))
+#            if input_string.strip() == "Scan a NFC tag":
+#                print ("START ON TRUE")
+#                start = True
+#            if start:
+#                read.append( input_string)
+#                print ('test', read)
+#                if read[-1] == 'End Tag':
+#                    break
+        
 #        self.uistate.viewmanager.do_connect_board()
 #        
 #        #scan a tag if a board was found and initialized
