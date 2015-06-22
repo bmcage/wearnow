@@ -51,8 +51,10 @@
 #include <FirmataPlus.h>
 #include <NewPing.h>
 #include <Stepper.h>
-#include <ooPinChangeInt.h> https://code.google.com/p/arduino-pinchangeint/downloads/detail?name=pinchangeint-v2.19beta.zip
-#include <AdaEncoder.h> https://code.google.com/p/adaencoder/downloads/detail?name=adaencoder-v0.7beta.zip
+#include <ooPinChangeInt.h> 
+//https://code.google.com/p/arduino-pinchangeint/downloads/detail?name=pinchangeint-v2.19beta.zip
+//#include <AdaEncoder.h> 
+////https://code.google.com/p/adaencoder/downloads/detail?name=adaencoder-v0.7beta.zip
 
 /*
  *  PN532 library to read mifare cards
@@ -78,8 +80,8 @@ NfcAdapter nfc = NfcAdapter(pn532_i2c);
 
 #define REGISTER_NOT_SPECIFIED -1
 
-#define ENCODER_NOT_PRESENT 0
-#define ENCODER_IS_PRESENT  1
+//#define ENCODER_NOT_PRESENT 0
+//#define ENCODER_IS_PRESENT  1
 
 #define INTER_PING_INTERVAL 40 // 40 ms.
 
@@ -141,11 +143,11 @@ int samplingInterval = 19;          // how often to run the main loop (in ms)
 Servo servos[MAX_SERVOS];
 
 /* Rotary Encoder Support */
-byte  encoderMSB, encoderLSB ;     // sysex data registers
-uint8_t encoderPin1, encoderPin2 ; // user specified encoder pins
-int encoderPostion = 0;            // current position of encoder
-int8_t clicks = 0 ;                // encoder click counter
-boolean encoderPresent = false ;   // encoder installed flag
+//byte  encoderMSB, encoderLSB ;     // sysex data registers
+//uint8_t encoderPin1, encoderPin2 ; // user specified encoder pins
+//int encoderPostion = 0;            // current position of encoder
+//int8_t clicks = 0 ;                // encoder click counter
+//boolean encoderPresent = false ;   // encoder installed flag
 
 // Ping variables
 
@@ -329,14 +331,14 @@ void setPinModeCallback(byte pin, int mode)
       }
       break;
 
-    case ENCODER:
-      // enable the pullups for an encoder pin
-      pinMode(pin, INPUT);
-      digitalWrite(pin, HIGH);
-
-      // used as part of encoder sysex message
-      pinConfig[pin] = ENCODER ;
-      break ;
+//    case ENCODER:
+//      // enable the pullups for an encoder pin
+//      pinMode(pin, INPUT);
+//      digitalWrite(pin, HIGH);
+//
+//      // used as part of encoder sysex message
+//      pinConfig[pin] = ENCODER ;
+//      break ;
 //
 //    case I2C:
 //      if (IS_PIN_I2C(pin)) {
@@ -633,16 +635,16 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
       Firmata.write(END_SYSEX);
       break;
-  case ENCODER_CONFIG:
-    // instantiate an encoder object with user's
-    // requested pin designators
-    encoderPin1 = argv[0] ;
-    encoderPin2 = argv[1] ;
-    static AdaEncoder encoder = 
-      AdaEncoder('a', encoderPin1, encoderPin2) ;
-    //thisEncoder = &encoder ;
-    encoderPresent = true ;
-    break ; 
+//  case ENCODER_CONFIG:
+//    // instantiate an encoder object with user's
+//    // requested pin designators
+//    encoderPin1 = argv[0] ;
+//    encoderPin2 = argv[1] ;
+//    static AdaEncoder encoder = 
+//      AdaEncoder('a', encoderPin1, encoderPin2) ;
+//    //thisEncoder = &encoder ;
+//    encoderPresent = true ;
+//    break ; 
 
 
     case TONE_DATA:
@@ -762,20 +764,20 @@ void sysexCallback(byte command, byte argc, byte *argv)
       break ;
     case APPLICATION_DATA:
       // determine the command from the application
-      Firmata.sendString("IN APPLICATION DATA");
+      //Firmata.sendString("IN APPLICATION DATA");
       if (argv[0] == APPLICATION_SUBCOM0)
       {
-      Firmata.sendString("read tag command");
+      //Firmata.sendString("read tag command");
         // command to read a tag. We loop up to a tag seen
         String payloadAsString = "NO TAG";
         boolean notag = true;
-        unsigned long starttime = millis();
-        while (notag && (millis()-starttime < 5000)) {
-          Firmata.sendString(" in while loop ");
+//        unsigned long starttime = millis();
+//        while (notag && (millis()-starttime < 25000)) {
+//          Firmata.sendString(" in while loop ");
           if (nfc.tagPresent())
           {
             payloadAsString = "TAG:";
-            Firmata.sendString("tag seen");
+            //Firmata.sendString("tag seen");
             notag = false;
             NfcTag tag = nfc.read();
             String TagId = tag.getUidString();
@@ -788,7 +790,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
                 int recordCount = message.getRecordCount();
             char buffer[50];
             sprintf(buffer, "Ndef mess %d", recordCount);
-            Firmata.sendString(buffer);
+            //Firmata.sendString(buffer);
                 for (int i = 0; i < recordCount; i++)
                 {
                     NdefRecord record = message.getRecord(i);
@@ -820,10 +822,12 @@ void sysexCallback(byte command, byte argc, byte *argv)
                     String uid = record.getId();
                 }
             }
-          } else {
-            delay(1000);
-          }
-        } // end while loop
+//            break;
+           }
+//          else {
+//            delay(1000);
+//          }
+//        } // end while loop
         //Send the result back, max 4k
             Firmata.sendString("Finished, sending payload");
         char payloadArray[4000] ;
@@ -980,7 +984,8 @@ void setup()
   /* calculate number of loops per ping */
   numLoops = INTER_PING_INTERVAL / samplingInterval ;
 
-  Firmata.begin(57600);
+  //Firmata.begin(57600);
+  Firmata.begin(9600);
   systemResetCallback();  // reset to default config
   
   /*  NFC BOARD SETUP, should not be verbose as that writes to Serial! */
@@ -1054,36 +1059,36 @@ void loop()
 //        readAndReportData(query[i].addr, query[i].reg, query[i].bytes);
 //      }
 //    }
-    // if encoder was installed, return its data
-    if ( encoderPresent == true)
-    {
-      // read encoder data and return it
-      encoderMSB = 0 ;
-      encoderLSB = 0 ;
-      clicks = 0 ;
-
-      AdaEncoder *encoder = NULL;
-      encoder = AdaEncoder::genie() ;
-      if ( encoder != NULL) {
-        clicks = encoder->query() ;
-        if (clicks > 0) {
-          encoderPostion += clicks ;
-        }
-        if (clicks < 0) {
-          encoderPostion += clicks ;
-        }
-      }
-
-      encoderLSB = encoderPostion & 0x7f ;
-      encoderMSB = (encoderPostion >> 7) & 0x7f ;
-
-      Firmata.write(START_SYSEX);
-      Firmata.write(ENCODER_DATA) ;
-      Firmata.write(encoderPin1) ;
-      Firmata.write(encoderLSB) ;
-      Firmata.write(encoderMSB) ;
-      Firmata.write(END_SYSEX);
-    }
+//    // if encoder was installed, return its data
+//    if ( encoderPresent == true)
+//    {
+//      // read encoder data and return it
+//      encoderMSB = 0 ;
+//      encoderLSB = 0 ;
+//      clicks = 0 ;
+//
+//      AdaEncoder *encoder = NULL;
+//      encoder = AdaEncoder::genie() ;
+//      if ( encoder != NULL) {
+//        clicks = encoder->query() ;
+//        if (clicks > 0) {
+//          encoderPostion += clicks ;
+//        }
+//        if (clicks < 0) {
+//          encoderPostion += clicks ;
+//        }
+//      }
+//
+//      encoderLSB = encoderPostion & 0x7f ;
+//      encoderMSB = (encoderPostion >> 7) & 0x7f ;
+//
+//      Firmata.write(START_SYSEX);
+//      Firmata.write(ENCODER_DATA) ;
+//      Firmata.write(encoderPin1) ;
+//      Firmata.write(encoderLSB) ;
+//      Firmata.write(encoderMSB) ;
+//      Firmata.write(END_SYSEX);
+//    }
   }
 }
 
