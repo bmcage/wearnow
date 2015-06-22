@@ -67,7 +67,7 @@ if win():
     # If running in GUI mode redirect stdout and stderr to log file
     if hasattr(sys.stdout, "fileno") and sys.stdout.fileno() < 0:
         logfile = os.path.join(HOME_DIR, 
-            "WearNow%s%s.log") % (VERSION_TUPLE[0], 
+            "ComfiSense%s%s.log") % (VERSION_TUPLE[0], 
             VERSION_TUPLE[1])
         # We now carry out the first step in build_user_paths(), to make sure
         # that the user home directory is available to store the log file. When
@@ -128,8 +128,8 @@ MIN_PYTHON_VERSION = (3, 2, 0, '', 0)
 if not sys.version_info >= MIN_PYTHON_VERSION :
     logging.warning(_("Your Python version does not meet the "
              "requirements. At least python %(v1)d.%(v2)d.%(v3)d is needed to"
-             " start WearNow.\n\n"
-             "WearNow will terminate now.") % {
+             " start ComfiSense.\n\n"
+             "ComfiSense will terminate now.") % {
              'v1': MIN_PYTHON_VERSION[0], 
              'v2': MIN_PYTHON_VERSION[1],
              'v3': MIN_PYTHON_VERSION[2]})
@@ -240,7 +240,7 @@ def show_settings():
     os_path = get_env_var('PATH','not set')
     os_path = os_path.split(os.pathsep)
     
-    print ("WearNow Settings:")
+    print ("ComfiSense Settings:")
     print ("----------------")
     print (' python    : %s' % py_str)
     print (' wearnow    : %s' % wearnow_str)
@@ -289,9 +289,9 @@ def run():
     if not mime_type_is_defined(APP_WEARNOW):
         error += [(_("Configuration error:"), 
                     _("A definition for the MIME-type %s could not "
-                      "be found \n\n Possibly the installation of WearNow "
+                      "be found \n\n Possibly the installation of ComfiSense "
                       "was incomplete. Make sure the MIME-types "
-                      "of WearNow are properly installed.")
+                      "of ComfiSense are properly installed.")
                     % APP_WEARNOW)]
     
     #we start with parsing the arguments to determine if we have a cli or a
@@ -304,7 +304,7 @@ def run():
     # Calls to LOG must be after setup_logging() and ArgParser() 
     LOG = logging.getLogger(".locale")
     LOG.debug("Encoding: %s", glocale.encoding)
-    LOG.debug("Translating WearNow to %s", glocale.language[0])
+    LOG.debug("Translating ComfiSense to %s", glocale.language[0])
     LOG.debug("Collation Locale: %s", glocale.collation)
     LOG.debug("Date/Time Locale: %s", glocale.calendar)
     LOG.debug("Currency Locale: %s", glocale.currency)

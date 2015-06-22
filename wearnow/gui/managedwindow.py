@@ -573,7 +573,7 @@ def set_titles(window, title, text, msg=None):
         title.set_text('<span weight="bold" size="larger">%s</span>' % text)
         title.set_use_markup(True)
     if msg:
-        window.set_title('%s - WearNow' % msg)
+        window.set_title('%s - ComfiSense' % msg)
     else:
-        window.set_title('%s - WearNow' % text)
+        window.set_title('%s - ComfiSense' % text)
     window.set_icon_from_file(ICON)

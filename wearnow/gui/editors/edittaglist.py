@@ -97,7 +97,7 @@ class EditTagList(ManagedWindow):
         Create a dialog box to select tags.
         """
         # pylint: disable-msg=E1101
-        title = _("%(title)s - WearNow") % {'title': _("Edit Tags")}
+        title = _("%(title)s - ComfiSense") % {'title': _("Edit Tags")}
         top = Gtk.Dialog(title)
         top.set_default_size(360, 400)
         top.set_modal(True)

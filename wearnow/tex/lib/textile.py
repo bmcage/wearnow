@@ -320,7 +320,7 @@ class Textile(NoteBase, AttributeBase, MediaBase, UrlBase, PrimaryObject):
         acquisition_id = acquisition.get_wearnow_id()
         if acquisition_id:
             attr = Attribute()
-            attr.set_type(_("Merged WearNow ID"))
+            attr.set_type(_("Merged ComfiSense ID"))
             attr.set_value(acquisition.get_wearnow_id())
             self.add_attribute(attr)
 

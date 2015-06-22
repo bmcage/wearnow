@@ -716,7 +716,7 @@ class DbManager(CLIDbManager):
 
         QuestionDialog(
             _("Break the lock on the '%s' database?") % store[path][0],
-            _("WearNow believes that someone else is actively editing "
+            _("ComfiSense believes that someone else is actively editing "
               "this database. You cannot edit this database while it "
               "is locked. If no one is editing the database you may "
               "safely break the lock. However, if someone else is editing "
@@ -1010,7 +1010,7 @@ class DbManager(CLIDbManager):
         yes_no = QuestionDialog2(
             _("Repair Collection?"),
             _(
-              "If you click %(bold_start)sProceed%(bold_end)s, WearNow will "
+              "If you click %(bold_start)sProceed%(bold_end)s, ComfiSense will "
               "attempt to recover your Collection from the last good "
               "backup. There are several ways this can cause unwanted "
               "effects, so %(bold_start)sbackup%(bold_end)s the "
@@ -1021,8 +1021,8 @@ class DbManager(CLIDbManager):
               "recover from some errors automatically.\n\n"
               "%(bold_start)sDetails:%(bold_end)s Repairing a Collection "
               "actually uses the last backup of the Collection, which "
-              "WearNow stored on last use. If you have worked for "
-              "several hours/days without closing WearNow, then all "
+              "ComfiSense stored on last use. If you have worked for "
+              "several hours/days without closing ComfiSense, then all "
               "this information will be lost! If the repair fails, then "
               "the original Collection will be lost forever, hence "
               "a backup is needed. If the repair fails, or too much "
@@ -1241,7 +1241,7 @@ def check_in(dbase, filename, user, cursor_func = None):
     """
     Checks in the specified file into RCS
     """
-    init   = [ "rcs", '-x,v', '-i', '-U', '-q', '-t-"WearNow database"' ]
+    init   = [ "rcs", '-x,v', '-i', '-U', '-q', '-t-"ComfiSense database"' ]
     ci_cmd = [ "ci", '-x,v', "-q", "-f" ]
     archive_name = filename + ",v"
     

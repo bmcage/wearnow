@@ -378,7 +378,7 @@ class OrganizeTagsDialog(object):
         Create a dialog box to organize tags.
         """
         # pylint: disable-msg=E1101
-        title = _("%(title)s - WearNow") % {'title': _("Organize Tags")}
+        title = _("%(title)s - ComfiSense") % {'title': _("Organize Tags")}
         top = Gtk.Dialog(title)
         top.set_default_size(400, 350)
         top.set_modal(True)
@@ -584,7 +584,7 @@ class EditTag(object):
             title = _('Tag: %s')  % self.tag.get_name()
         else:
             title = _('New Tag')
-        top = Gtk.Dialog(_("%(title)s - WearNow") % {'title': title})
+        top = Gtk.Dialog(_("%(title)s - ComfiSense") % {'title': title})
         top.set_default_size(300, 100)
         top.set_modal(True)
         top.set_transient_for(self.parent_window)
@@ -600,7 +600,7 @@ class EditTag(object):
         rgba = Gdk.RGBA()
         rgba.parse(self.tag.get_color())
         self.color.set_rgba(rgba)
-        title = _("%(title)s - WearNow") % {'title': _("Pick a Color")}
+        title = _("%(title)s - ComfiSense") % {'title': _("Pick a Color")}
         self.color.set_title(title)
         hbox.pack_start(label, False, False, 5)
         hbox.pack_start(self.entry, True, True, 5)

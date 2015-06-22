@@ -80,7 +80,7 @@ PTYPE_STR   = {
         EXPORT: _('Exporter'), 
         DOCGEN: _('Doc creator'), 
         GENERAL: _('Plugin lib'),
-        VIEW: _('WearNow View'),
+        VIEW: _('ComfiSense View'),
         SIDEBAR: _('Sidebar'),
         DATABASE: _('Database'),
         }

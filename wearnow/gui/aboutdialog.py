@@ -84,7 +84,7 @@ class WearNowAboutDialog(Gtk.AboutDialog):
         self.set_name(PROGRAM_NAME)
         self.set_version(VERSION)
         self.set_copyright(COPYRIGHT_MSG)
-        artists = _("Much of WearNow' artwork is either from\n"
+        artists = _("Much of ComfiSense' artwork is either from\n"
                     "the Tango Project or derived from the Tango\n"
                     "Project. This artwork is released under the\n"
                     "Creative Commons Attribution-ShareAlike 2.5\n"
@@ -99,7 +99,7 @@ class WearNowAboutDialog(Gtk.AboutDialog):
             self.set_license("License file is missing")
 
         self.set_comments(_(COMMENTS) + self.get_versions())
-        self.set_website_label(_('WearNow Homepage'))
+        self.set_website_label(_('ComfiSense Homepage'))
         self.set_website(URL_HOMEPAGE)
         
         authors, contributors = _get_authors()
@@ -125,7 +125,7 @@ class WearNowAboutDialog(Gtk.AboutDialog):
             distribution = " "
 
         return (("\n\n" +
-                 "WearNow: %s \n" +
+                 "ComfiSense: %s \n" +
                  "Python: %s \n" +
                  "LANG: %s\n" +
                  "OS: %s\n" +

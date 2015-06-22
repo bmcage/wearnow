@@ -240,7 +240,7 @@ class RecentParser(object):
                     _("Error parsing list of recent collections from file {fname}: {error}.\n"
                         "This might indicate a damage to your files.\n"
                         "If you're sure there is no problem with other files, "
-                        "delete it, and restart WearNow."
+                        "delete it, and restart ComfiSense."
                         ).format(fname=fname, error=err))
 
     def get(self):

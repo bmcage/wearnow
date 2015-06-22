@@ -155,7 +155,7 @@ class ErrorReportAssistant(Gtk.Assistant):
             distribution = " "
 
         return "Python version: %s \n"\
-               "WearNow version: %s \n"\
+               "ComfiSense version: %s \n"\
                "LANG: %s\n"\
                "OS: %s\n"\
                "Distribution: %s\n\n"\
@@ -645,7 +645,7 @@ class ErrorReportAssistant(Gtk.Assistant):
         """
         Create the summary page.
         """
-        text = _('WearNow is an Open Source project. Its success '
+        text = _('ComfiSense is an Open Source project. Its success '
                  'depends on its users. User feedback is important. '
                  'Thank you for taking the time to submit a bug report.')
         label = Gtk.Label(label=text)

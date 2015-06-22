@@ -85,7 +85,7 @@ class ErrorView(object):
         from wearnow.tex.const import WEARNOW_LOCALE as glocale
         _ = glocale.translation.sgettext
         
-        title = "%s - WearNow" % _("Error Report")
+        title = "%s - ComfiSense" % _("Error Report")
         self.top = Gtk.Dialog(title)
         try:
             self.top.set_transient_for(self.top.list_toplevels()[-2])
@@ -102,7 +102,7 @@ class ErrorView(object):
         image = Gtk.Image()
         image.set_from_icon_name('dialog-error', Gtk.IconSize.DIALOG)
         label = Gtk.Label(label='<span size="larger" weight="bold">%s</span>'
-                          % _("WearNow has experienced an unexpected error"))
+                          % _("ComfiSense has experienced an unexpected error"))
         label.set_use_markup(True)
 
         hbox.pack_start(image, False, True, 0)
@@ -111,8 +111,8 @@ class ErrorView(object):
         vbox.pack_start(hbox, False, False, 5)
 
         instructions_label = Gtk.Label(label=
-            _("Your data will be safe but it would be advisable to restart WearNow immediately. "\
-              "If you would like to report the problem to the WearNow team "\
+            _("Your data will be safe but it would be advisable to restart ComfiSense immediately. "\
+              "If you would like to report the problem to the ComfiSense team "\
               "please click Report and the Error Reporting Wizard will help you "\
               "to make a bug report."))
         instructions_label.set_line_wrap(True)

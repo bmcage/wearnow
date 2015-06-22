@@ -58,7 +58,7 @@ class SaveDialog(object):
         
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % msg1)
+        self.top.set_title("%s - ComfiSense" % msg1)
         
         self.dontask = self.xml.get_object('dontask')
         self.task1 = task1
@@ -89,7 +89,7 @@ class QuestionDialog(object):
                 
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % msg1)
+        self.top.set_title("%s - ComfiSense" % msg1)
 
         label1 = self.xml.get_object('qd_label1')
         label1.set_text('<span weight="bold" size="larger">%s</span>' % msg1)
@@ -121,7 +121,7 @@ class QuestionDialog2(object):
               
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % msg1)
+        self.top.set_title("%s - ComfiSense" % msg1)
 
         label1 = self.xml.get_object('qd_label1')
         label1.set_text('<span weight="bold" size="larger">%s</span>' % msg1)
@@ -153,7 +153,7 @@ class OptionDialog(object):
               
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % msg1)
+        self.top.set_title("%s - ComfiSense" % msg1)
 
         label1 = self.xml.get_object('od_label1')
         label1.set_text('<span weight="bold" size="larger">%s</span>' % msg1)
@@ -190,7 +190,7 @@ class ErrorDialog(Gtk.MessageDialog):
         self.set_markup('<span weight="bold" size="larger">%s</span>' % str(msg1))
         self.format_secondary_text(msg2)
         self.set_icon(ICON)
-        self.set_title("%s - WearNow" % str(msg1))
+        self.set_title("%s - ComfiSense" % str(msg1))
         self.show()
         self.run()
         self.destroy()
@@ -205,7 +205,7 @@ class WarningDialog(Gtk.MessageDialog):
         self.set_markup('<span weight="bold" size="larger">%s</span>' % msg1)
         self.format_secondary_markup(msg2)
         self.set_icon(ICON)
-        self.set_title("%s - WearNow" % msg1)
+        self.set_title("%s - ComfiSense" % msg1)
         self.show()
         self.run()
         self.destroy()
@@ -220,7 +220,7 @@ class OkDialog(Gtk.MessageDialog):
         self.set_markup('<span weight="bold" size="larger">%s</span>' % msg1)
         self.format_secondary_text(msg2)
         self.set_icon(ICON)
-        self.set_title("%s - WearNow" % msg1)
+        self.set_title("%s - ComfiSense" % msg1)
         self.show()
         self.run()
         self.destroy()
@@ -234,7 +234,7 @@ class InfoDialog(object):
               
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % msg1)
+        self.top.set_title("%s - ComfiSense" % msg1)
 
         label = self.xml.get_object('toplabel')
         label.set_text('<span weight="bold" size="larger">%s</span>' % msg1)
@@ -264,7 +264,7 @@ class MissingMediaDialog(object):
               
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % msg1)
+        self.top.set_title("%s - ComfiSense" % msg1)
 
         self.task1 = task1
         self.task2 = task2
@@ -346,7 +346,7 @@ class MultiSelectDialog(object):
                 msg1 = self.msg1_func(item)
                 msg2 = self.msg2_func(item)
                 
-                self.top.set_title("%s - WearNow" % msg1)
+                self.top.set_title("%s - ComfiSense" % msg1)
                 label1.set_text('<span weight="bold" size="larger">%s</span>' % msg1)
                 label1.set_use_markup(True)
                 label2.set_text(msg2)
@@ -392,7 +392,7 @@ class MessageHideDialog(object):
               
         self.top = self.xml.toplevel
         self.top.set_icon(ICON)
-        self.top.set_title("%s - WearNow" % title)
+        self.top.set_title("%s - ComfiSense" % title)
 
         dont_show = self.xml.get_object('dont_show')
         dont_show.set_active(config.get(key))
@@ -417,7 +417,7 @@ class DBErrorDialog(ErrorDialog):
         ErrorDialog.__init__(
             self,
             _("Database corruption detected"),
-            _("WearNow has detected a problem in the underlying "
+            _("ComfiSense has detected a problem in the underlying "
               "database. This can be repaired from "
               "the Collection Manager. Select the database and "
               'click on the Repair button') + '\n\n' + msg, parent)

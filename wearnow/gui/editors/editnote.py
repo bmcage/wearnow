@@ -308,7 +308,7 @@ class EditNote(EditPrimary):
         (uses_dupe_id, id) = self._uses_duplicate_id()
         if uses_dupe_id:
             msg1 = _("Cannot save note. ID already exists.")
-            msg2 = _("You have attempted to use the existing WearNow ID with "
+            msg2 = _("You have attempted to use the existing ComfiSense ID with "
                          "value %(id)s. This value is already used. Please "
                          "enter a different ID or leave "
                          "blank to get the next available ID value.") % {

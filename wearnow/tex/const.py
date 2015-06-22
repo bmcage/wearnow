@@ -47,7 +47,7 @@ from .constfunc import get_env_var, conv_to_unicode
 # WearNow Version
 #
 #-------------------------------------------------------------------------
-PROGRAM_NAME   = "WearNow"
+PROGRAM_NAME   = "ComfiSense"
 from wearnow.version import VERSION, VERSION_TUPLE, major_version
 
 #-------------------------------------------------------------------------
@@ -165,7 +165,7 @@ GTK_GETTEXT_DOMAIN = 'gtk30'
 #
 #-------------------------------------------------------------------------
 COPYRIGHT_MSG  = "© 2015-2016 Benny Malengier (UGENT)\n"
-COMMENTS       = _("WearNow\n (Comfort related assistance to what you should wear."
+COMMENTS       = _("ComfiSense\n (Comfort related assistance to what you should wear."
                    "\n")
 AUTHORS        = [
     "Benny Malengier", 

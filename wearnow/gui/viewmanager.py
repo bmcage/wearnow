@@ -229,7 +229,7 @@ class CLIDbLoader(object):
         """
         self._errordialog( '', _("Low level database corruption detected")
             + '\n' +
-            _("WearNow has detected a problem in the underlying "
+            _("ComfiSense has detected a problem in the underlying "
               "Collection. This can be repaired from "
               "the Collection Manager. Select the collection and "
               'click on the Repair button') + '\n\n' + str(msg))
@@ -677,7 +677,7 @@ class ViewManager(CLIManager):
             ('Preferences', 'preferences-system', _('_Preferences...'), None,
              None, self.preferences_activate),
             ('HelpMenu', None, _('_Help')),
-            ('HomePage', None, _('WearNow _Home Page'), None, None,
+            ('HomePage', None, _('ComfiSense _Home Page'), None, None,
              home_page_activate),
             ('ReportBug', None, _('_Report a Bug'), None, None,
              report_bug_activate),
@@ -1244,11 +1244,11 @@ class ViewManager(CLIManager):
             name = title
 
         if self.dbstate.db.readonly:
-            msg =  "%s (%s) - WearNow" % (name, _('Read Only'))
+            msg =  "%s (%s) - ComfiSense" % (name, _('Read Only'))
             self.uistate.window.set_title(msg)
             self.actiongroup.set_sensitive(False)
         else:
-            msg = "%s - WearNow" % name
+            msg = "%s - ComfiSense" % name
             self.uistate.window.set_title(msg)
             self.actiongroup.set_sensitive(True)
 
@@ -1327,7 +1327,7 @@ class ViewManager(CLIManager):
         Make a quick XML back with or without media.
         """
         from .dialog import QuestionDialog2
-        window = Gtk.Dialog(_("WearNow Backup"),
+        window = Gtk.Dialog(_("ComfiSense Backup"),
                             self.uistate.window,
                             Gtk.DialogFlags.DESTROY_WITH_PARENT, None)
         window.set_size_request(400, -1)
@@ -1532,7 +1532,7 @@ def run_plugin(pdata, dbstate, uistate):
               'If you are unable to fix the fault yourself then you can '
               'submit a bug at %(wearnow_bugtracker_url)s or contact '
               'the plugin author (%(firstauthoremail)s).\n\n'
-              'If you do not want WearNow to try and load this plugin again, '
+              'If you do not want ComfiSense to try and load this plugin again, '
               'you can hide it by using the Plugin Manager on the '
               'Help menu.') % {
                 'name': pdata.name,
@@ -1588,7 +1588,7 @@ def get_available_views():
                   'If you are unable to fix the fault yourself then you can '
                   'submit a bug at %(wearnow_bugtracker_url)s or contact '
                   'the view author (%(firstauthoremail)s).\n\n'
-                  'If you do not want WearNow to try and load this view again, '
+                  'If you do not want ComfiSense to try and load this view again, '
                   'you can hide it by using the Plugin Manager on the '
                   'Help menu.') % {
                     'name': pdata.name,

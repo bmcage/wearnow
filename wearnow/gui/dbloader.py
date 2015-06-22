@@ -109,7 +109,7 @@ class CLIDbLoader(object):
         """
         self._errordialog( '', _("Low level database corruption detected") 
             + '\n' +
-            _("WearNow has detected a problem in the underlying "
+            _("ComfiSense has detected a problem in the underlying "
               "Berkeley database. This can be repaired from "
               "the Collection Manager. Select the database and "
               'click on the Repair button') + '\n\n' + str(msg))
@@ -279,7 +279,7 @@ class DbLoader(CLIDbLoader):
             
         pmgr = GuiPluginManager.get_instance()
         
-        import_dialog = Gtk.FileChooserDialog(_('WearNow: Import Collection'), 
+        import_dialog = Gtk.FileChooserDialog(_('ComfiSense: Import Collection'), 
                                        self.uistate.window, 
                                        Gtk.FileChooserAction.OPEN, 
                                        (_('_Cancel'),
@@ -340,9 +340,9 @@ class DbLoader(CLIDbLoader):
                 # Finally, we give up and declare this an unknown format
                 ErrorDialog(
                     _("Could not open file: %s") % filename, 
-                    _('File type "%s" is unknown to WearNow.\n\n'
-                      'Valid types are: WearNow database, WearNow XML, '
-                      'WearNow package, GEDCOM, and others.') % extension,
+                    _('File type "%s" is unknown to ComfiSense.\n\n'
+                      'Valid types are: ComfiSense database, ComfiSense XML, '
+                      'ComfiSense package, GEDCOM, and others.') % extension,
                     parent=self.uistate.window)
 
         import_dialog.destroy()

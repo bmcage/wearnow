@@ -28,8 +28,8 @@ MODULE_VERSION="0.0"
 
 #plg = newplugin()
 #plg.id    = 'im_gpkg'
-#plg.name  = _('WearNow package (portable XML)')
-#plg.description =  _('Import data from a WearNow package (an archived XML '
+#plg.name  = _('ComfiSense package (portable XML)')
+#plg.description =  _('Import data from a ComfiSense package (an archived XML '
 #                     'Collection together with the media object files.)')
 #plg.version = '0.0'
 #plg.wearnow_target_version = MODULE_VERSION
@@ -47,11 +47,11 @@ MODULE_VERSION="0.0"
 
 plg = newplugin()
 plg.id    = 'im_gramps'
-plg.name  = _('WearNow XML Collection')
-plg.description =  _('The WearNow XML format is a text '
+plg.name  = _('ComfiSense XML Collection')
+plg.description =  _('The ComfiSense XML format is a text '
                      'version of a Collection. It is '
                      'read-write compatible with the '
-                     'present WearNow database format.')
+                     'present ComfiSense database format.')
 plg.version = '0.0'
 plg.wearnow_target_version = MODULE_VERSION
 plg.status = STABLE

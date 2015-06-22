@@ -50,10 +50,10 @@ MODULE_VERSION="0.0"
 
 plg = newplugin()
 plg.id    = 'ex_gramps'
-plg.name  = _('WearNow XML (collection)')
-plg.name_accell  = _('_WearNow _XML (collection)')
-plg.description =  _('WearNow XML export is a complete archived XML backup of a' 
-                 ' WearNow collection without the media object files.'
+plg.name  = _('ComfiSense XML (collection)')
+plg.name_accell  = _('_ComfiSense _XML (collection)')
+plg.description =  _('ComfiSense XML export is a complete archived XML backup of a' 
+                 ' ComfiSense collection without the media object files.'
                  ' Suitable for backup purposes.')
 plg.version = '0.0'
 plg.wearnow_target_version = MODULE_VERSION
@@ -62,5 +62,5 @@ plg.fname = 'exportxml.py'
 plg.ptype = EXPORT
 plg.export_function = 'export_data'
 plg.export_options = 'WriterOptionBox'
-plg.export_options_title = _('WearNow XML export options')
+plg.export_options_title = _('ComfiSense XML export options')
 plg.extension = "gramps"

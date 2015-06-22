@@ -60,7 +60,7 @@ try:
 except:
     print(_("Your version of gi (gnome-introspection) seems to be too old. "
             "You need a version which has the function 'require_version' "
-            "to start WearNow"))
+            "to start ComfiSense"))
     sys.exit(0)
             
 if not PYGOBJ_ERR:
@@ -74,8 +74,8 @@ if not PYGOBJ_ERR:
 if PYGOBJ_ERR:
     print((_("Your pygobject version does not meet the requirements.\n"
              "At least pygobject %(major)d.%(feature)d.%(minor)d "
-             "is needed to start WearNow with a GUI.\n\n"
-             "WearNow will terminate now.") % 
+             "is needed to start ComfiSense with a GUI.\n\n"
+             "ComfiSense will terminate now.") % 
             {'major':MIN_PYGOBJECT_VERSION[0], 
             'feature':MIN_PYGOBJECT_VERSION[1],
             'minor':MIN_PYGOBJECT_VERSION[2]}))
@@ -95,7 +95,7 @@ except (ImportError, ValueError):
              "pygobject version 3.3.2 or later.\n"
              "Then install introspection data for Gdk, Gtk, Pango and "
              "PangoCairo\n\n"
-             "WearNow will terminate now.")))
+             "ComfiSense will terminate now.")))
     sys.exit(0)
 
 try:
@@ -103,7 +103,7 @@ try:
 except ImportError:
     print((_("\ncairo python support not installed. Install cairo for your "
              "version of python (eg package python3-cairo)\n\n"
-             "WearNow will terminate now.")))
+             "ComfiSense will terminate now.")))
     sys.exit(0)
 
 #-------------------------------------------------------------------------
@@ -168,12 +168,12 @@ class WearNow(object):
             # Note: the warning dialog below will likely have wrong stock icons!
             # Translators: the current language will be the one you translate into.
             WarningDialog(
-               _("WearNow detected an incomplete GTK installation"),
+               _("ComfiSense detected an incomplete GTK installation"),
                _("GTK translations for the current language (%(language)s) "
-                 "are missing.\n%(bold_start)sWearNow%(bold_end)s will "
+                 "are missing.\n%(bold_start)sComfiSense%(bold_end)s will "
                  "proceed nevertheless.\nThe GUI will likely be broken "
                  "as a result, especially for RTL languages!\n\n"
-                 "See the WearNow README documentation for installation "
+                 "See the ComfiSense README documentation for installation "
                  "prerequisites,\ntypically located in "
                  "/usr/share/doc/wearnow.\n") % {
                      'language'   : glocale.lang ,
@@ -235,7 +235,7 @@ def __startwearnow(errors, args):
         quit_now = True
         exit_code = 1
         LOG.error(_(
-    "\nWearNow failed to start. Please report a bug about this.\n"
+    "\nComfiSense failed to start. Please report a bug about this.\n"
                    ), exc_info=True)
     
     # start WearNow, errors stop the gtk loop
@@ -246,14 +246,14 @@ def __startwearnow(errors, args):
         if has_display():
             app = WearNow(args)
         else:
-            print("WearNow terminated because of no DISPLAY")
+            print("ComfiSense terminated because of no DISPLAY")
             sys.exit(exit_code)
 
     except SystemExit as e:
         quit_now = True
         if e.code:
             exit_code = e.code
-            LOG.error("WearNow terminated with exit code: %d." \
+            LOG.error("ComfiSense terminated with exit code: %d." \
                       % e.code, exc_info=True)
     except OSError as e:
         quit_now = True
@@ -262,14 +262,14 @@ def __startwearnow(errors, args):
             fn = e.filename
         except AttributeError:
             fn = ""
-        LOG.error("WearNow terminated because of OS Error\n" +
+        LOG.error("ComfiSense terminated because of OS Error\n" +
             "Error details: %s %s" % (repr(e), fn), exc_info=True)
 
     except:
         quit_now = True
         exit_code = 1
         LOG.error(_(
-    "\nWearNow failed to start. Please report a bug about this.\n"
+    "\nComfiSense failed to start. Please report a bug about this.\n"
                    ), exc_info=True)
 
     if quit_now:
@@ -284,7 +284,7 @@ def __startwearnow(errors, args):
     return False
 
 def startgtkloop(errors, argparser):
-    """ We start the gtk loop and run the function to start up WearNow
+    """ We start the gtk loop and run the function to start up ComfiSense
     """
     if GObject.pygobject_version < (3, 10, 2):
         GObject.threads_init()

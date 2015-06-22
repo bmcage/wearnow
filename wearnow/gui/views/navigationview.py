@@ -343,10 +343,10 @@ class NavigationView(PageView):
         """
         A dialog to move to a wearnow ID entered by the user.
         """
-        dialog = Gtk.Dialog(_('Jump to by WearNow ID'))
+        dialog = Gtk.Dialog(_('Jump to by ComfiSense ID'))
         dialog.set_border_width(12)
         label = Gtk.Label(label='<span weight="bold" size="larger">%s</span>' %
-                          _('Jump to by WearNow ID'))
+                          _('Jump to by ComfiSense ID'))
         label.set_use_markup(True)
         dialog.vbox.add(label)
         dialog.vbox.set_spacing(10)
@@ -370,7 +370,7 @@ class NavigationView(PageView):
             else:
                 self.uistate.push_message(
                     self.dbstate,
-                    _("Error: %s is not a valid WearNow ID") % gid)
+                    _("Error: %s is not a valid ComfiSense ID") % gid)
         dialog.destroy()
 
     def get_handle_from_wearnow_id(self, gid):

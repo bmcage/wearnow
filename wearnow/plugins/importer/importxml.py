@@ -136,7 +136,7 @@ def importData(database, filename, user):
             user.notify_error(_("Error reading %s") % filename,
                         str(msg) + "\n" +
                         _("The file is probably either corrupt or not a "
-                          "valid WearNow database."))
+                          "valid ComfiSense database."))
             return
 
     database.commit_import()
@@ -664,7 +664,7 @@ class WearNowParser(UpdateCallback):
             no_magic = True
         else:
             no_magic = False
-        with DbTxn(_("WearNow XML import"), self.db, batch=True,
+        with DbTxn(_("ComfiSense XML import"), self.db, batch=True,
                    no_magic=no_magic) as self.trans:
             self.set_total(linecount)
 
@@ -743,23 +743,23 @@ class WearNowParser(UpdateCallback):
         xmlversion_str = '.'.join(str(i) for i in self.__xml_version)
         if self.__wearnow_version == 'unknown':
             msg = _("The .wearnow file you are importing does not contain information about "
-                    "the version of WearNow with, which it was produced.\n\n"
+                    "the version of ComfiSense with, which it was produced.\n\n"
                     "The file will not be imported.")
-            raise WearNowImportError(_('Import file misses WearNow version'), msg)
+            raise WearNowImportError(_('Import file misses ComfiSense version'), msg)
         if self.__xml_version > libwearnowxml.WEARNOW_XML_VERSION_TUPLE:
             msg = _("The .wnow file you are importing was made by "
                     "version %(newer)s of "
-                    "WearNow, while you are running an older version %(older)s. "
+                    "ComfiSense, while you are running an older version %(older)s. "
                     "The file will not be imported. Please upgrade to the "
-                    "latest version of WearNow and try again." ) % {
+                    "latest version of ComfiSense and try again." ) % {
                     'newer' : self.__wearnow_version, 'older' : VERSION }
             raise WearNowImportError('', msg)
         if self.__xml_version < (0, 0, 0):
             msg = _("The .wnow file you are importing was made by version "
-                    "%(oldwearnow)s of WearNow, while you are running a more "
+                    "%(oldwearnow)s of ComfiSense, while you are running a more "
                     "recent version %(newwearnow)s.\n\n"
                     "The file will not be imported. Please use an older version"
-                    " of WearNow that supports version %(xmlversion)s of the "
+                    " of ComfiSense that supports version %(xmlversion)s of the "
                     "xml.\nSee\n  %(wearnow_wiki_xml_url)s\n for more info."
                     ) % {'oldwearnow': self.__wearnow_version,
                         'newwearnow': VERSION,
@@ -769,11 +769,11 @@ class WearNowParser(UpdateCallback):
             raise WearNowImportError(_('The file will not be imported'), msg)
         elif self.__xml_version < (0, 0, 0):
             msg = _("The .wnow file you are importing was made by version "
-                    "%(oldwearnow)s of WearNow, while you are running a much "
+                    "%(oldwearnow)s of ComfiSense, while you are running a much "
                     "more recent version %(newwearnow)s.\n\n"
                     "Ensure after import everything is imported correctly. In "
                     "the event of problems, please submit a bug and use an "
-                    "older version of WearNow in the meantime to import this "
+                    "older version of ComfiSense in the meantime to import this "
                     "file, which is version %(xmlversion)s of the xml.\nSee\n  "
                     "%(wearnow_wiki_xml_url)s\nfor more info."
                     ) % {'oldwearnow': self.__wearnow_version,
@@ -1068,7 +1068,7 @@ class WearNowParser(UpdateCallback):
         if 'hlink' in attrs:
             handle = self.inaugurate(attrs['hlink'], "note", Note)
         else:
-            raise WearNowImportError(_("The WearNow Xml you are trying to "
+            raise WearNowImportError(_("The ComfiSense Xml you are trying to "
                 "import is malformed."), _("Any note reference must have a "
                 "'hlink' attribute."))
 

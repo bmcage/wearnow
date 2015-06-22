@@ -44,7 +44,7 @@ class HasWearNowId(Rule):
 
     labels      = [ _('ID:') ]
     name        = 'Object with <Id>'
-    description = "Matches objects with a specified WearNow ID"
+    description = "Matches objects with a specified ComfiSense ID"
     category    = _('General filters')
 
     def apply(self, db, obj):

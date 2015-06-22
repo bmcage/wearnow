@@ -22,7 +22,7 @@
 #
 
 """
-This package implements access to WearNow configuration.
+This package implements access to ComfiSense configuration.
 """
 
 #---------------------------------------------------------------
@@ -341,7 +341,7 @@ class ConfigManager(object):
                              filename, str(err))
                 return;
 
-            key_file.write(";; WearNow key file\n")
+            key_file.write(";; ComfiSense key file\n")
             key_file.write((";; Automatically created at %s" % 
                       time.strftime("%Y/%m/%d %H:%M:%S")) + "\n\n")
             sections = sorted(self.data)

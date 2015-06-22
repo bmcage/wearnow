@@ -89,9 +89,9 @@ class DbVersionError(Exception):
 
     def __str__(self):
         return _('The schema version is not supported by this version of '
-                 'WearNow.\n\n'
+                 'ComfiSense.\n\n'
                  'This Garment Collection is schema version %(tree_vers)s, and this '
-                 'version of WearNow supports versions %(min_vers)s to '
+                 'version of ComfiSense supports versions %(min_vers)s to '
                  '%(max_vers)s\n\n'
                  'Please upgrade to the corresponding version or use '
                  'XML for porting data between different schema versions.') %\
@@ -111,15 +111,15 @@ class BsddbDowngradeError(Exception):
 
     def __str__(self):
         return _('The Collections you are trying to load is in the Bsddb '
-                 'version %(env_version)s format. This version of WearNow uses '
+                 'version %(env_version)s format. This version of ComfiSense uses '
                  'Bsddb version %(bdb_version)s. So you are trying to load '
                  'data created in a newer format into an older program, and '
                  'this is bound to fail.\n\n'
                  'You should start your '
-                 '%(bold_start)snewer%(bold_end)s version of WearNow and '
+                 '%(bold_start)snewer%(bold_end)s version of ComfiSense and '
                  '%(wiki_backup_html_start)smake a backup%(html_end)s '
                  'of your Collections. You can then import '
-                 'this backup into this version of WearNow.') % {
+                 'this backup into this version of ComfiSense.') % {
                      'wiki_backup_html_start' : URL_BACKUP1_START ,
                      'html_end'    : '</a>' ,
                      'bold_start'  : '<b>' ,
@@ -141,14 +141,14 @@ class BsddbDowngradeRequiredError(Exception):
 
     def __str__(self):
         return _('The Collections you are trying to load is in the Bsddb '
-                 'version %(env_version)s format. This version of WearNow uses '
+                 'version %(env_version)s format. This version of ComfiSense uses '
                  'Bsddb version %(bdb_version)s. So you are trying to load '
                  'data created in a newer format into an older program. In '
                  'this particular case, the difference is very small, so it '
                  'may work.\n\n'
                  'If you have not already made a backup of your Collections, '
                  'then you should start your '
-                 '%(bold_start)snewer%(bold_end)s version of WearNow and '
+                 '%(bold_start)snewer%(bold_end)s version of ComfiSense and '
                  '%(wiki_backup_html_start)smake a backup%(html_end)s '
                  'of your Collections.') % {
                      'wiki_backup_html_start' : URL_BACKUP1_START ,
@@ -170,16 +170,16 @@ class BsddbUpgradeRequiredError(Exception):
 
     def __str__(self):
         return _('The Collections you are trying to load is in the Bsddb '
-                 'version %(env_version)s format. This version of WearNow uses '
+                 'version %(env_version)s format. This version of ComfiSense uses '
                  'Bsddb version %(bdb_version)s. Therefore you cannot load '
                  'this Collections without upgrading the Bsddb version of the '
                  'Collections.\n\n'
-                 'Opening the Collections with this version of WearNow might '
+                 'Opening the Collections with this version of ComfiSense might '
                  'irretrievably corrupt your Collections. You are strongly '
                  'advised to backup your Collections.\n\n'
                  'If you have not already made a backup of your Collections, '
                  'then you should start your %(bold_start)sold%(bold_end)s '
-                 'version of WearNow and '
+                 'version of ComfiSense and '
                  '%(wiki_backup_html_start)smake a backup%(html_end)s '
                  'of your Collections.') % {
                      'wiki_backup_html_start' : URL_BACKUP1_START ,
@@ -199,18 +199,18 @@ class DbEnvironmentError(Exception):
         self.msg = msg
 
     def __str__(self):
-        return (_("WearNow has detected a problem in opening the 'environment' "
+        return (_("ComfiSense has detected a problem in opening the 'environment' "
                   "of the underlying Berkeley database used to store this "
                   "Collections. The most likely cause "
                   "is that the database was created with an old version "
                   "of the Berkeley database program, "
                   "and you are now using a new version. "
                   "It is quite likely that your database has not been "
-                  "changed by WearNow.\nIf possible, you should revert to your "
-                  "old version of WearNow and its support software; export "
+                  "changed by ComfiSense.\nIf possible, you should revert to your "
+                  "old version of ComfiSense and its support software; export "
                   "your database to XML; close the database; "
                   "then upgrade again "
-                  "to this version of WearNow and import the XML file "
+                  "to this version of ComfiSense and import the XML file "
                   "in an empty Collections. Alternatively, it may be possible "
                   "to use the Berkeley database recovery tools.")
                   + '\n\n' + str(self.msg))
@@ -227,12 +227,12 @@ class DbUpgradeRequiredError(Exception):
 
     def __str__(self):
         return _('The Collections you are trying to load is in the schema '
-                 'version %(oldschema)s format. This version of WearNow uses '
+                 'version %(oldschema)s format. This version of ComfiSense uses '
                  'schema version %(newschema)s. Therefore you cannot load this '
                  'Collections without upgrading the schema version of the ' 
                  'Collections.\n\n'
                  'If you upgrade then you won\'t be able to use the previous '
-                 'version of WearNow, even if you subsequently '
+                 'version of ComfiSense, even if you subsequently '
                  '%(wiki_manual_backup_html_start)sbackup%(html_end)s or '
                  '%(wiki_manual_export_html_start)sexport%(html_end)s '
                  'your upgraded Collections.\n\n'
@@ -240,7 +240,7 @@ class DbUpgradeRequiredError(Exception):
                  'corrupt your Collections if it is interrupted or fails.\n\n'
                  'If you have not already made a backup of your Collections, '
                  'then you should start your %(bold_start)sold%(bold_end)s '
-                 'version of WearNow and '
+                 'version of ComfiSense and '
                  '%(wiki_backup_html_start)smake a backup%(html_end)s '
                  'of your Collections.') % {
                      'wiki_backup_html_start'        : URL_BACKUP1_START ,
@@ -265,16 +265,16 @@ class PythonDowngradeError(Exception):
 
     def __str__(self):
         return _('The Collections you are trying to load was created with '
-                 'Python version %(db_python_version)s. This version of WearNow '
+                 'Python version %(db_python_version)s. This version of ComfiSense '
                  'uses Python version %(current_python_version)s.  So you are '
                  'trying to load '
                  'data created in a newer format into an older program, and '
                  'this is bound to fail.\n\n'
                  'You should start your '
-                 '%(bold_start)snewer%(bold_end)s version of WearNow and '
+                 '%(bold_start)snewer%(bold_end)s version of ComfiSense and '
                  '%(wiki_backup_html_start)smake a backup%(html_end)s '
                  'of your Collections. You can then import '
-                 'this backup into this version of WearNow.') % {
+                 'this backup into this version of ComfiSense.') % {
                      'wiki_backup_html_start' : URL_BACKUP1_START ,
                      'html_end'    : '</a>' ,
                      'bold_start'  : '<b>' ,
@@ -295,12 +295,12 @@ class PythonUpgradeRequiredError(Exception):
 
     def __str__(self):
         return _('The Collections you are trying to load is in the Python '
-                 'version %(db_python_version)s format. This version of WearNow '
+                 'version %(db_python_version)s format. This version of ComfiSense '
                  'uses Python version %(current_python_version)s. Therefore '
                  'you cannot load this Collections without upgrading the '
                  'Python version of the Collections.\n\n'
                  'If you upgrade then you won\'t be able to use the previous '
-                 'version of WearNow, even if you subsequently '
+                 'version of ComfiSense, even if you subsequently '
                  '%(wiki_manual_backup_html_start)sbackup%(html_end)s or '
                  '%(wiki_manual_export_html_start)sexport%(html_end)s '
                  'your upgraded Collections.\n\n'
@@ -308,7 +308,7 @@ class PythonUpgradeRequiredError(Exception):
                  'corrupt your Collections if it is interrupted or fails.\n\n'
                  'If you have not already made a backup of your Collections, '
                  'then you should start your %(bold_start)sold%(bold_end)s '
-                 'version of WearNow and '
+                 'version of ComfiSense and '
                  '%(wiki_backup_html_start)smake a backup%(html_end)s '
                  'of your Collections.') % {
                      'wiki_backup_html_start'        : URL_BACKUP1_START ,
