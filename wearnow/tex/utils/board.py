@@ -159,7 +159,7 @@ class ProcessSerial(threading.Thread):
     port_id = ""
     #baud_rate = 57600
     baud_rate = 9600
-    timeout = 10
+    timeout = 1    # None=wait, 0= non-blocking, x>0 = timeout in sec
     def __init__(self, port_id):
         self.port_id = port_id
 
@@ -249,8 +249,17 @@ class ProcessSerial(threading.Thread):
         self.close()
 
     def processserialinput(self):        
-        input_string = self.arduino.readline()
-        input_string = input_string.decode('utf-8')
+        input_string = self.arduino.readline(512)  #max lines of 512 bytes
+        try:
+            input_string = input_string.decode('utf-8')
+        except UnicodeDecodeError as msg:
+            input_string = ""
+            if self.starttag:
+                #undo what we have read up to now
+                self.starttag = False
+                self.currentread = []
+            print ('ERROR reading line from tag:', msg)
+                
         input_string = input_string.strip('\r\n')
         #print ('read', input_string)
         if input_string.strip() == "Begin Tag":
