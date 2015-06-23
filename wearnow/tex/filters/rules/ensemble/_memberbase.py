@@ -1,7 +1,7 @@
+#
 # Gramps - a GTK+/GNOME based genealogy program
 #
-# Copyright (C) 2009  Benny Malengier
-# Copyright (C) 2011       Tim G L Lyons
+# Copyright (C) 2002-2006  Donald N. Allingham
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,10 +19,21 @@
 #
 
 """
-Package init for the treemodels package.
+Set of wrappers for Ensemble filter rules based on personal rules.
+
+Any rule that matches Ensemble based on personal rule applied
+to father, mother, or any child, just needs to do two things:
+> Set the class attribute 'base_class' to the personal rule
+> Set apply method to be an appropriate wrapper below
+Example:
+in the class body, outside any method:
+>    base_class = SearchName
+>    apply = child_base
 """
 
-from .mediamodel import MediaModel
-from .notemodel import NoteModel
-from .textilemodel import TextileListModel
-from .ensemblemodel import EnsembleModel
+def child_base(self,db,ensemble):
+    for child_ref in ensemble.get_child_ref_list():
+        child = db.get_textile_from_handle(child_ref.ref)
+        if self.base_class.apply(self,db,child):
+            return True
+    return False

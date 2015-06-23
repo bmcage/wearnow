@@ -27,7 +27,7 @@ from .editattribute import EditAttribute
 #from .editdate import EditDate
 #from .editevent import EditEvent, DeleteEventQuery
 #from .editeventref import EditEventRef
-#from .editfamily import EditFamily
+from .editensemble import EditEnsemble
 #from .editldsord import EditLdsOrd, EditFamilyLdsOrd
 #from .editlocation import EditLocation
 from .editmedia import EditMedia, DeleteMediaQuery

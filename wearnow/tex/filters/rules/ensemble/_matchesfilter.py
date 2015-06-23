@@ -1,8 +1,7 @@
 #
-# WearNow - a GTK+/GNOME based program
+# WearNow - a GTK+/GNOME based genealogy program
 #
-# Copyright (C) 2000-2006  Donald N. Allingham
-# Copyright (C) 2011       Tim G L Lyons
+# Copyright (C) 2002-2006  Donald N. Allingham
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,28 +18,29 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+#-------------------------------------------------------------------------
+#
+# Standard Python modules
+#
+#-------------------------------------------------------------------------
+from ....const import WEARNOW_LOCALE as glocale
+_ = glocale.translation.gettext
 
 #-------------------------------------------------------------------------
 #
-# set up logging
+# WearNow modules
 #
 #-------------------------------------------------------------------------
-import logging
-log = logging.getLogger("gui.editors.displaytabs")
+from .. import MatchesFilterBase
 
-# first import models
-#from .childmodel import ChildModel
+#-------------------------------------------------------------------------
+#
+# MatchesFilter
+#
+#-------------------------------------------------------------------------
+class MatchesFilter(MatchesFilterBase):
+    """Rule that checks against another filter."""
 
-# Then import tab classes
-from .wearnowtab import WearNowTab
-from .embeddedlist import EmbeddedList, TEXT_COL, MARKUP_COL, ICON_COL
-from .attrembedlist import AttrEmbedList
-from .backreflist import BackRefList
-from .gallerytab import GalleryTab
-from .mediabackreflist import MediaBackRefList
-from .notebackreflist import NoteBackRefList
-from .notetab import NoteTab
-#from .textilerefembedlist import TextileRefEmbedList
-from .textilebackreflist import TextileBackRefList
-from .webembedlist import WebEmbedList
-from .childmodel import ChildModel
+    name        = _('Ensembles matching the <filter>')
+    description = _("Matches Ensembles matched by the specified filter name")
+    namespace   = 'Ensemble'

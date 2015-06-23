@@ -454,10 +454,11 @@ class WearNowXmlWriter(UpdateCallback):
         if not childref or not childref.ref:
             return
         sp = "  "*index
-        priv_text = conf_priv(childref)
+        
+#        priv_text = conf_priv(childref)
 
-        self.write_ref('childref',childref.ref,index,close=True,
-                       extra_text=priv_text)
+        self.write_ref('childref',childref.ref,index,close=True)
+#                       extra_text=priv_text)
 
     def write_ref(self,tagname, handle,index=1,close=True,extra_text=''):
         if handle:

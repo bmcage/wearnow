@@ -1,8 +1,7 @@
 #
-# WearNow - a GTK+/GNOME based program
+# wearnow - a GTK+/GNOME based genealogy program
 #
-# Copyright (C) 2000-2006  Donald N. Allingham
-# Copyright (C) 2011       Tim G L Lyons
+# Copyright (C) 2002-2006  Donald N. Allingham
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,28 +18,27 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+#-------------------------------------------------------------------------
+#
+# Standard Python modules
+#
+#-------------------------------------------------------------------------
+from ....const import WEARNOW_LOCALE as glocale
+_ = glocale.translation.gettext
 
 #-------------------------------------------------------------------------
 #
-# set up logging
+# wearnow modules
 #
 #-------------------------------------------------------------------------
-import logging
-log = logging.getLogger("gui.editors.displaytabs")
+from .._hasnoteregexbase import HasNoteRegexBase
 
-# first import models
-#from .childmodel import ChildModel
+#-------------------------------------------------------------------------
+# "People having notes that contain a substring"
+#-------------------------------------------------------------------------
+class HasNoteRegexp(HasNoteRegexBase):
 
-# Then import tab classes
-from .wearnowtab import WearNowTab
-from .embeddedlist import EmbeddedList, TEXT_COL, MARKUP_COL, ICON_COL
-from .attrembedlist import AttrEmbedList
-from .backreflist import BackRefList
-from .gallerytab import GalleryTab
-from .mediabackreflist import MediaBackRefList
-from .notebackreflist import NoteBackRefList
-from .notetab import NoteTab
-#from .textilerefembedlist import TextileRefEmbedList
-from .textilebackreflist import TextileBackRefList
-from .webembedlist import WebEmbedList
-from .childmodel import ChildModel
+    name        = _('Ensembles having notes containing <text>')
+    description = _("Matches Ensembles whose notes contain text "
+                    "matching a regular expression")
+

@@ -25,6 +25,6 @@ Package providing sidebar filters for WEARNOW.
 
 from ._sidebarfilter import SidebarFilter
 from ._textilesidebarfilter import TextileSidebarFilter
-#from ._familysidebarfilter import FamilySidebarFilter
+from ._ensemblesidebarfilter import EnsembleSidebarFilter
 from ._mediasidebarfilter import MediaSidebarFilter
 from ._notesidebarfilter import NoteSidebarFilter

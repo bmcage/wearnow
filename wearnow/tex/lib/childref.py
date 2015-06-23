@@ -135,6 +135,7 @@ class ChildRef(SecondaryObject, RefBase):
         :returns: List of (classname, handle) tuples for referenced objects.
         :rtype: list
         """
+        ret = []
         if self.ref:
             ret += [('Textile', self.ref)]
         return ret

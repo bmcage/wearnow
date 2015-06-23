@@ -35,3 +35,4 @@ from ._everything import Everything
 from ._haswearnowid import HasWearNowId
 from ._isprivate import IsPrivate
 from ._matchesfilterbase import MatchesFilterBase
+from ._regexpidbase import RegExpIdBase

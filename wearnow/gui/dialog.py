@@ -411,6 +411,16 @@ class MessageHideDialog(object):
         config.set(constant, obj.get_active())
         config.save()
 
+class RunDatabaseRepair(ErrorDialog):
+    def __init__(self, msg, parent=None):
+        ErrorDialog.__init__(
+            self,
+            _('Error detected in Collection'),
+            _('ComfiSense has detected an error in the collection. This can '
+              'usually be resolved by running the "Check and Repair Collection" '
+              'tool.\n\nIf this problem continues to exist after running this '
+              'tool, please file a bug report', parent))
+
 
 class DBErrorDialog(ErrorDialog):
     def __init__(self, msg, parent=None):
