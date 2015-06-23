@@ -54,3 +54,4 @@ from .textile import Textile
 from .textiletype import TextileType
 from .researcher import Researcher
 from .url import Url
+from .urltype import UrlType

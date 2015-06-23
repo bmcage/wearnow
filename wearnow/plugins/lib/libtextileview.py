@@ -45,7 +45,8 @@ _LOG = logging.getLogger(".gui.textileview")
 # wearnow modules
 #
 #-------------------------------------------------------------------------
-from wearnow.tex.lib import Textile, Attribute, AttributeType, TextileType
+from wearnow.tex.lib import (Textile, Attribute, AttributeType, TextileType,
+                             Url, UrlType)
 from wearnow.tex.db.txn import DbTxn
 from wearnow.gui.views.listview import ListView, TEXT, MARKUP, ICON
 from wearnow.gui.actiongroup import ActionGroup
@@ -449,17 +450,22 @@ class BaseTextileView(ListView):
     def react_to_new_tag(self, tag):
         print ("Found a new tag", tag)
         tagdict = {}
-        stringvalues = ['Type', 'ID']
-        floatvalues = ['Id', 'Vres']
-        for value in tag:
-            if value.startswith('NFC Tag ID:'):
-                tagdict['TAGID'] = value.split(':')[-1].strip()
-            for sv in stringvalues:
-                if value.startswith(sv):
-                    tagdict[sv] = value.split(';')[1].strip()
-            for fv in floatvalues:
-                if value.startswith(fv):
-                    tagdict[fv] = float(value.split(';')[1].strip())
+        stringvalues = ['Type', 'ID', 'URL', 'C']
+        floatvalues = ['Id', 'Vres', 'Th', 'W']
+        for messvalue in tag:
+            # a message contains optionally valuelist;;valuelist;;valuelist
+            if messvalue.startswith('NFC Tag ID:'):
+                tagdict['TAGID'] = messvalue.split(':')[-1].strip()
+            for value in messvalue.split(';;'):
+                print ('processing value', value)
+                vdata = value.split(';')
+                if len(vdata) < 2:
+                    #no data that interests us
+                    continue
+                if vdata[0] in stringvalues:
+                    tagdict[vdata[0]] = vdata[1].strip()
+                elif vdata[0] in floatvalues:
+                    tagdict[vdata[0]] = float(vdata[1].strip())
         
         textile = Textile()
         textile.wearnow_id = tagdict.get('ID', None)
@@ -467,6 +473,9 @@ class BaseTextileView(ListView):
             'TAGID'     : AttributeType.RFID_ID,
             'Id'        : AttributeType.THERM_INS ,
             'Vres'      : AttributeType.MOIST_VAP_RESIST,
+            'C'         : AttributeType.COLOR,
+            'W'         : AttributeType.WEIGHT,
+            'Th'        : AttributeType.THICKNESS,
         }
         for key in tagkey2attrkey.keys():
             if key in tagdict:
@@ -479,6 +488,15 @@ class BaseTextileView(ListView):
             ttype = TextileType()
             ttype.set_from_xml_str(tagdict['Type'])
             textile.set_type(ttype)
+        if 'URL' in tagdict:
+            url = Url()
+            path = tagdict['URL']
+            if not (path.startswith('http://') or path.startswith('https://')):
+                path = 'http://' + path
+            url.set_path(path)
+            url.set_type(UrlType.WEB_HOME)
+            textile.add_url(url)
+            print ('added url', url)
         
         from wearnow.gui.editors import EditTextile
         try:
