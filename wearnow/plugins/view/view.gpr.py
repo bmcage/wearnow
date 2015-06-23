@@ -95,7 +95,7 @@ stock_icon = 'wearnow-tree-list',
 register(VIEW, 
 id    = 'ensembleview',
 name  = _("Ensembles"),
-description =  _("The view showing all ensmbles"
+description =  _("The view showing all ensemblies"
                  " in a flat list"),
 version = '0.0',
 wearnow_target_version = MODULE_VERSION,
@@ -107,5 +107,21 @@ category = ("Ensemble", _("Ensembles")),
 viewclass = 'EnsembleView',
 order = START,
 stock_icon = 'wearnow-list',
+  )
+  
+register(VIEW, 
+id    = 'wearnowview',
+name  = _("Comfort View"),
+description =  _("The view showing comfort of an ensemble"),
+version = '0.0',
+wearnow_target_version = MODULE_VERSION,
+status = STABLE,
+fname = 'wearnowview.py',
+authors = ["UGent Dep. Textiles"],
+authors_email = ["http://www.ugent.be/ea/textiles/"],
+category = ("Ensemble", _("Ensembles")),
+viewclass = 'WearNowView',
+order = START,
+stock_icon = 'wearnow-ensemble',
   )
   
