@@ -35,8 +35,9 @@ class PyMataSerial(threading.Thread):
     arduino = serial.Serial()
 
     port_id = ""
-    baud_rate = 57600
-    timeout = 1
+    #baud_rate = 57600
+    baud_rate = 9600
+    timeout = 10
     command_deque = None
 
     def __init__(self, port_id, command_deque):
@@ -127,14 +128,3 @@ class PyMataSerial(threading.Thread):
             except IOError:
                 self.stop()
         self.close()
-
-
-
-
-
-
-
-
-
-
-

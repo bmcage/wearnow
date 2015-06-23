@@ -3,6 +3,7 @@
 #
 # Copyright (C) pyFirmata authors under BSD license
 # Copyright (C) 2015       Benny Malengier
+# Copyright (C) Alan Yorinks PyMata GPL v3 or later
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -139,3 +140,141 @@ def break_to_bytes(value):
                 least = (c, rest)
     return (c, int(value / c))
 
+
+import threading
+import time
+import sys
+
+import serial
+
+
+class ProcessSerial(threading.Thread):
+    """
+     This class manages the serial port for Arduino serial communications
+    """
+
+    # class variables
+    arduino = serial.Serial()
+
+    port_id = ""
+    #baud_rate = 57600
+    baud_rate = 9600
+    timeout = 10
+    def __init__(self, port_id):
+        self.port_id = port_id
+
+        threading.Thread.__init__(self)
+        
+        self.daemon = True
+        self.arduino = serial.Serial(self.port_id, self.baud_rate,
+                                     timeout=int(self.timeout), writeTimeout=0)
+
+        self.stop_event = threading.Event()
+        self.lock = threading.Lock()
+
+        # without this, running python 3.4 is extremely sluggish -- 
+        # I need it without to have threading working correct ...
+#        if sys.platform == 'linux':
+#            # noinspection PyUnresolvedReferences
+#            self.arduino.nonblocking()
+        self.starttag = False
+        self.lasttag = []
+        self.currentread = []
+
+    def stop(self):
+        print ("stopping thread to watch board")
+        self.stop_event.set()
+
+    def is_stopped(self):
+        return self.stop_event.is_set()
+
+    def open(self, verbose):
+        """
+        open the serial port using the configuration data
+        returns a reference to this instance
+        """
+        # open a serial port
+        if verbose:
+            print('\nOpening Arduino Serial port %s ' % self.port_id)
+
+        try:
+
+            # in case the port is already open, let's close it and then
+            # reopen it
+            self.arduino.close()
+            time.sleep(1)
+            self.arduino.open()
+            time.sleep(1)
+            return self.arduino
+
+        except Exception:
+            # opened failed - will report back to caller
+            raise
+
+    def close(self):
+        """
+            Close the serial port
+            return: None
+        """
+        try:
+            self.arduino.close()
+        except OSError:
+            pass
+
+    def write(self, data):
+        """
+            write the data to the serial port
+            return: None
+        """
+        if sys.version_info[0] < 3:
+            self.arduino.write(data)
+        else:
+            self.arduino.write(bytes([ord(data)]))
+
+    # noinspection PyExceptClausesOrder
+    def run(self):
+        """
+        This method continually runs. 
+        @return: Never Returns
+        """
+        while not self.is_stopped():
+            # we can get an OSError: [Errno9] Bad file descriptor when shutting down
+            # just ignore it
+            try:
+                self.processserialinput()
+            except OSError:
+                pass
+            except IOError:
+                self.stop()
+        self.close()
+
+    def processserialinput(self):        
+        input_string = self.arduino.readline()
+        input_string = input_string.decode('utf-8')
+        input_string = input_string.strip('\r\n')
+        #print ('read', input_string)
+        if input_string.strip() == "Begin Tag":
+            #print ("START ON TRUE")
+            self.starttag = True
+        if self.starttag:
+            self.currentread.append( input_string)
+            #print ('test', read)
+            if self.currentread[-1] == 'End Tag':
+                self.starttag = False
+                self.lock.acquire()
+                try:
+                    self.lasttag = self.currentread
+                    #print ('last tag read')
+                    self.currentread = []
+                finally:
+                    self.lock.release()
+
+    def get_read_tag(self, cleanafter=True):
+        self.lock.acquire()
+        try:
+            tag = self.lasttag
+            if cleanafter:
+                self.lasttag = []
+        finally:
+            self.lock.release()
+        return tag

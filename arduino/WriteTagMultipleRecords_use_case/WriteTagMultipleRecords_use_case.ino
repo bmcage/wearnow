@@ -27,10 +27,10 @@ void loop() {
     Serial.println("\nPlace a formatted Mifare Classic NFC tag on the reader.");
     if (nfc.tagPresent()) {
         NdefMessage message = NdefMessage();
-          message.addTextRecord("Clothing ID = SW-05!");
-        message.addTextRecord("Clothing type = Long sleeve shirt!");
-        message.addTextRecord("Thermal insulation = 0.33 clo!");
-       message.addTextRecord("Moisture Vapor resistance = 0.0044 m2kPa/W!");
+          message.addTextRecord("ID;I001;ComfiSenseId");
+        message.addTextRecord("Type;Long Sleeve shirt;Clothing type");
+        message.addTextRecord("Id;0.33;Thermal insulation in clo");
+       message.addTextRecord("Vres;0.0044;Moisture Vapor resistance in m**2 kPa/W");
     
         boolean success = nfc.write(message);
         if (success) {

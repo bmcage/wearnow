@@ -609,7 +609,7 @@ class PyMataCommandHandler(threading.Thread):
         @param sysex_data: data for command
         @return : No return value.
         """
-        print ('in send_sysex')
+        print ('in send_sysex', sysex_command)
         if not sysex_data:
             sysex_data = []
 

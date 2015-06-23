@@ -78,7 +78,7 @@ from wearnow.tex.constfunc import is_quartz, conv_to_unicode
 from wearnow.tex.config import config
 from wearnow.tex.errors import WindowActiveError
 from wearnow.tex.utils.config import get_owner
-from wearnow.tex.utils.board import get_the_board
+from wearnow.tex.utils.board import get_the_board, ProcessSerial
 from wearnow.tex.recentfiles import recent_files
 from ..PyMata.pymata import PyMata
 from .pluginmanager import GuiPluginManager
@@ -443,6 +443,7 @@ class CLIManager(object):
         #self._pmgr.reg_plugins(USER_PLUGINS, dbstate, uistate, load_on_reg=True)
         
     def do_connect_board(self):
+        
         port = None
         base_dir = config.get('board.basedir')
         try:
@@ -455,20 +456,29 @@ class CLIManager(object):
         
         if port != self.boardport:
             if self.boardport:
-                self.board.close(exitafter=False)
+                self.board.stop()
+            #now a new thread
             self.boardport = port
-            # create a PyMata instance
             if self.boardport:
-                self.board = PyMata(base_dir + os.sep + self.boardport, bluetooth=False, verbose=True)
+                self.board = ProcessSerial(base_dir + os.sep + self.boardport)
+                #start the thread
+                self.board.start()
+                
+#            # create a PyMata instance
+#            if self.boardport:
+#                self.board = PyMata(base_dir + os.sep + self.boardport, bluetooth=False, verbose=False)
 
     def do_reset_board(self):
         if self.board:
-            self.board.close(exitafter=False)
+            self.board.stop()
+            #self.board.stop(exitafter=False)
             # recreate a PyMata instance
             self.board = None
             self.boardport = None
-            
-        
+
+    def obtain_last_read_tag(self):
+        return self.board.get_read_tag()
+
 #-------------------------------------------------------------------------
 #
 # ViewManager

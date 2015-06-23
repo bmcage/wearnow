@@ -68,7 +68,7 @@ void FirmataClass::begin(long speed)
 {
   Serial.begin(speed);
   FirmataSerial = &Serial;
-  blinkVersion();
+  //blinkVersion();
   //printVersion();
   //printFirmwareVersion();
 }

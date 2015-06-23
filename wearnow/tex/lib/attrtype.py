@@ -60,7 +60,7 @@ class AttributeType(GrampsType):
         (COLOR       , _("Color"), "Color"),
         (RFID_ID     , _("RFID Key"), "RFID Key"),
         (THERM_INS   , _("Thermal insulation value"), "Thermal insulation value"),
-        (MOIST_VAP_RESIST, _("Moisture Vapor resistance"), "National Origin"),
+        (MOIST_VAP_RESIST, _("Moisture Vapor resistance"), "Moisture Vapor resistance"),
         (FABRIC_TYPE , _("Fabric Type"), "Fabric Type"),
         (STRUC_WEAVE , _("Structure/Weave"), "Structure/Weave"),
         (THICKNESS   , _("Thickness"), "Thickness"),
