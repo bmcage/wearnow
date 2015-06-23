@@ -80,7 +80,7 @@ from wearnow.tex.errors import WindowActiveError
 from wearnow.tex.utils.config import get_owner
 from wearnow.tex.utils.board import get_the_board, ProcessSerial
 from wearnow.tex.recentfiles import recent_files
-from ..PyMata.pymata import PyMata
+#from ..PyMata.pymata import PyMata
 from .pluginmanager import GuiPluginManager
 from .dialog import ErrorDialog, WarningDialog, QuestionDialog2, InfoDialog
 from .dbloader import DbLoader

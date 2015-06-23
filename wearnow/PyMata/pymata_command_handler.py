@@ -67,8 +67,6 @@ class PyMataCommandHandler(threading.Thread):
     
     APPLICATION_DATA = 0x81 # Extensible application command
     
-    print ('new command app data', APPLICATION_DATA)
-    
     I2C_REQUEST = 0x76  # send an I2C read/write request
     I2C_REPLY = 0x77  # a reply to an I2C read request
     I2C_CONFIG = 0x78  # config I2C settings such as delay times and power pins
