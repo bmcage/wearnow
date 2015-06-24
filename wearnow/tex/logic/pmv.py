@@ -43,7 +43,7 @@ Posture = {
     'Standing stoopped':20,
     }
 
-print (Posture)
+#print (Posture)
     
     #dictionary for Metabolic rate of general activities
 
@@ -52,6 +52,8 @@ Activity = {
     'Reclining':45,
     'At rest,sitting':55,
     'At rest,standing':70,
+    'Car driving':80,
+    'Teacher':95,
     'Walking on level even path at 2km/h':110,
     'Walking on level even path at 3km/h':140,
     'Walking on level even path at 4km/h':165,
@@ -137,9 +139,9 @@ def calc_Icl(ensembledata):
     return Icl
 
 # calculate skin temperature
-def skin_temp(M=55):
-    tsk = 35.7-0.028*(M)
-    return tsk
+#def skin_temp(M=55):
+#    tsk = 35.7-0.028*(M)
+#    return tsk
 
 def calc_tcl(ta,Icl,M,fcl,hc):
     # calculate initial value of clothing temperature(tcl) for iterations
@@ -157,6 +159,10 @@ def calc_tcl(ta,Icl,M,fcl,hc):
     tcl = broyden1(rootfn, tcl_previous, f_tol=1e-10)
     tcl = float(tcl)
     print (tcl, rootfn(tcl))
+    
+    
+    
+    
     
 def calc_comfort(appdata):
     ta = appdata['climate']['ta']
