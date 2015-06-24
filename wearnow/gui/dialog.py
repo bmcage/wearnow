@@ -419,7 +419,7 @@ class RunDatabaseRepair(ErrorDialog):
             _('ComfiSense has detected an error in the collection. This can '
               'usually be resolved by running the "Check and Repair Collection" '
               'tool.\n\nIf this problem continues to exist after running this '
-              'tool, please file a bug report', parent))
+              'tool, please file a bug report'), parent)
 
 
 class DBErrorDialog(ErrorDialog):

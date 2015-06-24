@@ -67,6 +67,7 @@ from wearnow.gui.glade import Glade
 from wearnow.tex.config import config
 from wearnow.gui import widgets
 from wearnow.gui.selectors import SelectorFactory
+from wearnow.gui.editors.editensemble import EditEnsemble, ChildEmbedList
 from wearnow.tex.errors import WindowActiveError
 from wearnow.gui.views.bookmarks import EnsembleBookmarks
 from wearnow.tex.const import CUSTOM_FILTERS
@@ -78,11 +79,42 @@ _SPACE = Gdk.keyval_from_name("space")
 _LEFT_BUTTON = 1
 _RIGHT_BUTTON = 3
 
+Activity = {
+    'Sleeping':40,
+    'Reclining':45,
+    'At rest,sitting':55,
+    'At rest,standing':70,
+    'Sedentary activity(office,dwelling,school,laboratory)':70,
+    'Standing light activity(shopping,laboratory,light industry)':95,
+    'Working with a handtool (light polishing)/ machine tool (light)':100,
+    'Walking on level even path at 2km/h':110,
+    'Standing, medium activity(shop assitant,domestic work,machine work)':115,
+    'Walking on level even path at 3km/h or medium loading with machine tool':140,
+    #'Working on a machine tool(medium loading)':140,
+    'Working with a handtool (medium polishing)':160,
+    'Walking on level even path at 4km/h':165,
+    'Working on a machine tool(heavy)':210,
+    'Carpentry work': 220,
+    'Working with a handtool (heavy drilling)':230,
+    'climbing ladder(11.2m/min)':290
+}
+
 class WearNowView(NavigationView):
     """
     View showing comfort data of an ensemble
     """
     def __init__(self, pdata, dbstate, uistate, nav_group=0):
+        
+        self.VAL2ACT = {}
+        self.VALACTS = []
+        for k,v in Activity.items():
+            self.VAL2ACT[v] = k 
+            self.VALACTS.append(v)
+        self.VALACTS.sort()
+        
+        self.unsaved_ens = True
+        self.ensemble = Ensemble()
+        
         NavigationView.__init__(self, _('Ensemble'),
                                       pdata, dbstate, uistate, 
                                       EnsembleBookmarks,
@@ -219,7 +251,7 @@ class WearNowView(NavigationView):
         This assumes that this icon has already been registered with
         GNOME as a stock icon.
         """
-        return 'wearnow-ensemble'
+        return 'wearnow-comfort'
     
     def get_viewtype_stock(self):
         """Type of view in category
@@ -233,18 +265,26 @@ class WearNowView(NavigationView):
         """
         self.glade = Glade('wearnow.glade')
         self.box = self.glade.get_child_object('box1')
+        self.scroll = self.glade.get_child_object('scrolledwindow1')
+        self.child_list = None
         self.scale_activity = self.glade.get_child_object('scale_activity')
         self.scale_RH = self.glade.get_child_object('scale_RH')
-        self.scale_temp = self.glade.get_child_object('scale_temp')
+        self.scale_temp = self.glade.get_child_object('scale_temp')  
+        self.act_box = self.glade.get_child_object('activitybtnbox')
+        self.actlabel = self.glade.get_child_object('actlabel')
+        self.btnselgar = self.glade.get_child_object('btnselgar')
+        
         #remove box from current container so we can reuse it
         self.glade.get_child_object('windowwearnow').remove(self.box)
         
+        self.btnselgar.connect('clicked', self.select_garment)
         #set up activity slider
         MIN_SLIDER_SIZE = 20
-        self.scale_activity.set_range(0,100)
+        self.scale_activity.set_range(40,350)
         self.scale_activity.set_slider_size_fixed(True) 
         self.scale_activity.set_min_slider_size(MIN_SLIDER_SIZE)
         self.scale_activity.set_value(55)
+        self.actval_changed(self.scale_activity)
         #set up RH slider
         self.scale_RH.set_range(0,100)
         self.scale_RH.set_slider_size_fixed(True) 
@@ -255,8 +295,33 @@ class WearNowView(NavigationView):
         self.scale_temp.set_slider_size_fixed(True) 
         self.scale_temp.set_min_slider_size(MIN_SLIDER_SIZE)
         self.scale_temp.set_value(18)
+              
+        #set up activity responce
+        self.scale_activity.connect('value-changed', self.actval_changed)
+        
         
         return self.box
+
+    def select_garment(self, obj):
+        
+        sel = SelectTextile(self.dbstate, self.uistate, self.track,
+                           _("Select Garment"), skip=[])
+        textile = sel.run()
+        
+        if textile:
+            ref = ChildRef()
+            ref.ref = textile.get_handle()
+            self.ensemble.add_child_ref(ref)
+            self.redraw()
+
+    def actval_changed(self, actrange):
+        val = self.scale_activity.get_value()
+        prevv = self.VALACTS[0]
+        for v in self.VALACTS[1:]:
+            if v > val:
+                break
+            prevv = v
+        self.actlabel.set_markup('<b>'+self.VAL2ACT[prevv]+'</b>')
 
     def additional_ui(self):
         """
@@ -339,7 +404,8 @@ class WearNowView(NavigationView):
             self.change_ensemble(None)
         
     def change_ensemble(self, obj):
-        self.change_active(obj)
+        if not self.unsaved_ens:
+            self.change_active(obj)
         try:
             return self._change_ensemble(obj)
         except AttributeError as msg:
@@ -358,13 +424,26 @@ class WearNowView(NavigationView):
             return False
         self.redrawing = True
 
-        ensemble = self.dbstate.db.get_ensemble_from_handle(obj)
-        if not ensemble:
+        if obj:
+            self.ensemble = self.dbstate.db.get_ensemble_from_handle(obj)
+        else:
+            # obj None, so unsaved ensemble.
+            pass
+#            self.ensemble = Ensemble()
+
+        if not self.ensemble:
             self.redrawing = False
             return
-            
-        self.write_title(ensemble)
-        #TODO REDRAW
+        
+        if self.child_list:
+            self.scroll.remove(self.child_list)
+            self.child_list.destroy()
+            self.child_list = None
+        self.child_list = ChildEmbedList(self.dbstate,
+                                         self.uistate,
+                                         [],
+                                         self.ensemble)
+        self.scroll.add(self.child_list)
 
         return True
 

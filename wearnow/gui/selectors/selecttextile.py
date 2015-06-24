@@ -71,7 +71,7 @@ class SelectTextile(BaseSelector):
         return [
             (_('Description'),         250, BaseSelector.TEXT,   0),
             (_('ID'),            75, BaseSelector.TEXT,   1),
-            (_('Last Change'),  150, BaseSelector.TEXT,   14)
+            (_('Last Change'),  150, BaseSelector.TEXT,   4)
             ]
 
     def get_from_handle_func(self):

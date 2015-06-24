@@ -343,6 +343,17 @@ class Ensemble(NoteBase, MediaBase, PrimaryObject):
                     if ref.ref != child_handle ]
         self.child_ref_list = new_list
 
+    def remove_textile(self, textile_handle):
+        """
+        Convenience function, does same as remove_child_handle, returns 
+        True if an actual change was done, False otherwise
+        """
+        ref_list = [ref.ref for ref in self.child_ref_list]
+        if textile_handle in ref_list:
+            self.remove_child_handle(self, textile_handle)
+            return True
+        return False
+
     def get_child_ref_list(self):
         """
         Return the list of :class:`~.childref.ChildRef` handles identifying the

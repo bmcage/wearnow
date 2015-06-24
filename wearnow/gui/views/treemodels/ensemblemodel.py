@@ -132,5 +132,5 @@ class EnsembleModel(FlatBaseModel):
         """
         Return the sorted list of tags.
         """
-        tag_list = list(map(self.get_tag_name, data[13]))
+        tag_list = list(map(self.get_tag_name, data[6]))
         return ', '.join(sorted(tag_list, key=glocale.sort_key))

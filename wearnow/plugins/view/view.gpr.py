@@ -106,7 +106,7 @@ authors_email = ["http://www.ugent.be/ea/textiles/"],
 category = ("Ensemble", _("Ensembles")),
 viewclass = 'EnsembleView',
 order = START,
-stock_icon = 'wearnow-list',
+stock_icon = 'wearnow-ensemble',
   )
   
 register(VIEW, 
@@ -119,9 +119,9 @@ status = STABLE,
 fname = 'wearnowview.py',
 authors = ["UGent Dep. Textiles"],
 authors_email = ["http://www.ugent.be/ea/textiles/"],
-category = ("Ensemble", _("Ensembles")),
+category = ("WearNow", _("Comfort")),
 viewclass = 'WearNowView',
 order = START,
-stock_icon = 'wearnow-ensemble',
+stock_icon = 'wearnow-comfort',
   )
   

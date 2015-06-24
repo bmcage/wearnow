@@ -749,7 +749,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             if not trans.batch:
                 emit = "textile-add"
         self.textile_map[textile.handle] = textile.serialize()
-        if not (oldid is False):
+        if not (oldid is False) and oldid in self.textile_id_map:
             del self.textile_id_map[oldid]
         self.textile_id_map[textile.wearnow_id] = self.textile_map[textile.handle]
         # Emit after added:
@@ -767,7 +767,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             if not trans.batch:
                     emit = "ensemble-add"
         self.ensemble_map[ensemble.handle] = ensemble.serialize()
-        if not (oldid is False):
+        if not (oldid is False) and oldid in self.ensemble_id_map:
             del self.ensemble_id_map[oldid]
         self.ensemble_id_map[ensemble.wearnow_id] = self.ensemble_map[ensemble.handle]
         # Emit after added:

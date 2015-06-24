@@ -58,7 +58,7 @@ class SelectEnsemble(BaseSelector):
     def get_column_titles(self):
         return [
             (_('ID'),      75, BaseSelector.TEXT, 0),
-            (_('Last Change'), 150, BaseSelector.TEXT, 7),
+            (_('Last Change'), 150, BaseSelector.TEXT, 3),
             ]
 
     def get_from_handle_func(self):

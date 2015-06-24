@@ -84,7 +84,7 @@ class CategorySidebar(BaseSidebar):
             button = self.__make_sidebar_button(use_text, cat_num,
                                                 cat_name, cat_icon)
             vbox.pack_start(button, False, True, 0)
-            
+
             # Enable view switching during DnD
             button.drag_dest_set(0, [], 0)
             button.connect('drag_motion', self.cb_switch_page_on_dnd, cat_num)

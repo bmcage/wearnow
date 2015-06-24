@@ -967,14 +967,15 @@ class DbWriteBase(DbReadBase):
             self.set_default_textile_handle(None)
 
         # loop through the ensemble list
-        for ensemble_handle in textile.get_ensemble_handle_list():
-            if not ensemble_handle:
-                continue
-
+#        for ensemble_handle in textile.get_ensemble_handle_list():
+#            if not ensemble_handle:
+#                continue
+        for ensemble_handle in self.get_ensemble_cursor():
             ensemble = self.get_ensemble_from_handle(ensemble_handle)
 
-            ensemble.remove_textile(textile.get_handle())
-            self.commit_ensemble(ensemble, trans)
+            changed = ensemble.remove_textile(textile.get_handle())
+            if changed:
+                self.commit_ensemble(ensemble, trans)
 
         handle = textile.get_handle()
         self.remove_textile(handle, trans)

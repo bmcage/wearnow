@@ -175,7 +175,7 @@ register('interface.ensemble-sel-width', 600)
 register('interface.ensemble-width', 700)
 register('interface.url-height', 150)
 register('interface.url-width', 600)
-register('interface.sidebar-text', True)
+register('interface.sidebar-text', False)
 
 register('paths.recent-export-dir', '')
 register('paths.recent-file', '')
