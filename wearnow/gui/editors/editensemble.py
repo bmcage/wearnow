@@ -49,6 +49,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import GdkPixbuf
 
 #-------------------------------------------------------------------------
 #
@@ -59,6 +60,7 @@ from wearnow.tex.lib import ChildRef, Ensemble, NoteType, Textile
 from wearnow.tex.db.txn import DbTxn
 from wearnow.tex.errors import WindowActiveError
 from ..glade import Glade
+from wearnow.tex.const import ICON
 
 from .editprimary import EditPrimary
 from .edittextile import EditTextile
@@ -70,6 +72,7 @@ from wearnow.tex.plug import CATEGORY_QR_ENSEMBLE
 from ..dialog import (ErrorDialog, WarningDialog, MessageHideDialog)
 from ..selectors import SelectorFactory
 from wearnow.tex.utils.id import create_id
+from .addmedia import scale_image
 
 SelectTextile = SelectorFactory('Textile')
 
@@ -84,7 +87,7 @@ class ChildEmbedList(EmbeddedList):
     is contained here instead of in displaytabs.
     """
 
-    _HANDLE_COL = 14
+    _HANDLE_COL = 3
     _DND_TYPE = DdTargets.CHILDREF
     _DND_EXTRA = DdTargets.TEXTILE_LINK
 
@@ -101,8 +104,9 @@ class ChildEmbedList(EmbeddedList):
     _column_names = [
         (_('#'), 0, 25, TEXT_COL, -1, None),
         (_('ID'), 1, 60, TEXT_COL, -1, None),
-        (_('Description'), 10, 250, TEXT_COL, -1, None),
-        (_('Private'), 13,  30, ICON_COL, -1, 'wearnow-lock')
+        (_('Description'), 2, 250, TEXT_COL, -1, None),
+        (_('Image'), 3,  30, ICON_COL, -1, 'wearnow-lock')
+
         ]
     
     def __init__(self, dbstate, uistate, track, ensemble):
@@ -138,7 +142,7 @@ class ChildEmbedList(EmbeddedList):
         return self.ensemble.get_child_ref_list()
 
     def column_order(self):
-        return [(1, 0), (1, 1), (1, 2), (0, 3)]
+        return [(1, 0), (1, 1), (1, 2), (1, 3)]
 
     def add_button_clicked(self, obj=None):
         textile = Textile()
@@ -188,6 +192,23 @@ class ChildEmbedList(EmbeddedList):
         skip_list = [_f for _f in skip if _f]
         SelectTextile(self.dbstate, self.uistate, self.track,
                      _("Select Garment"), skip=skip_list)
+
+    def icon_func(self, column, renderer, model, iter_, col_num):
+        '''
+        Set the stock icon property of the cell renderer.  We use a cell data
+        function because there is a problem returning None from a model.
+        '''
+        ref = model.get_value(iter_, self._HANDLE_COL)
+        textile = self.dbstate.db.get_textile_from_handle(ref.ref)
+        medialist = textile.get_media_list()
+        media = None
+        if medialist:
+            media = self.dbstate.db.get_object_from_handle(medialist[0].ref)
+        if media:
+            pixbuf=scale_image(media.get_path(), 48)
+            renderer.set_property('pixbuf', pixbuf)
+        else:
+            renderer.set_property('icon-name', 'wearnow-media')
 
     def del_button_clicked(self, obj=None):
         ref = self.get_selected()

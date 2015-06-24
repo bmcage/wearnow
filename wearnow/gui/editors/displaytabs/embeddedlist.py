@@ -548,7 +548,7 @@ class EmbeddedList(ButtonTab):
         elif icon_name == True:
             icon_name = self.col_icons[col_num]
         renderer.set_property('icon-name', icon_name)
-        
+
     def construct_model(self):
         """
         Method that creates the model using the passed build_model parameter

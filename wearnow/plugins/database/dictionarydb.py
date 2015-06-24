@@ -785,7 +785,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             if not trans.batch:
                 emit = "note-add"
         self.note_map[note.handle] = note.serialize()
-        if not (oldid is False):
+        if not (oldid is False) and oldid in self.note_id_map:
             del self.note_id_map[oldid]
         self.note_id_map[note.wearnow_id] = self.note_map[note.handle]
         # Emit after added:
@@ -815,7 +815,7 @@ class DictionaryDb(DbWriteBase, DbReadBase, UpdateCallback, Callback):
             if not trans.batch:
                 emit = "media-add"
         self.media_map[media.handle] = media.serialize()
-        if not (oldid is False):
+        if not (oldid is False) and oldid in self.media_id_map:
             del self.media_id_map[oldid]
         self.media_id_map[media.wearnow_id] = self.media_map[media.handle]
         # Emit after added:
