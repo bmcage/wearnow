@@ -143,7 +143,7 @@ def calc_Icl(ensembledata):
 #    tsk = 35.7-0.028*(M)
 #    return tsk
 
-def calc_tcl(ta,Icl,M,fcl,hc):
+def calc_tcl_OLD(ta,Icl,M,fcl,hc):
     # calculate initial value of clothing temperature(tcl) for iterations
     tcl_previous=kelvin(ta)+((35.5-ta)/(3.5*Icl+0.1))
     
@@ -160,7 +160,62 @@ def calc_tcl(ta,Icl,M,fcl,hc):
     tcl = float(tcl)
     print (tcl, rootfn(tcl))
     
+    #calculate initial value for tcl
+def calc_tcl_previous(ta,Icl):
+    # calculate initial value of clothing temperature(tcl) for iterations
+    tcl_previous=kelvin(ta)+((35.5-ta)/(3.5*Icl+0.1))
+    return tcl_previous
     
+print ('start tcl', calc_tcl_previous(ta,Icl))
+    
+def calc_tcl(ta,Icl,fcl,M):
+    
+    # hc for forced convection
+    def calc_hcf (vr=0.1): 
+        hcf=12.1*math.sqrt(vr)
+        return hcf
+      
+    P1=Icl*fcl
+    P2=P1*3.96
+    P3=P1*100
+    P4=P1*kelvin(ta)
+    P5=308.7*0.028*M+P2*(kelvin(ta)/100)*4
+    XN=(calc_tcl_previous(ta,Icl))/100
+    XF=XN
+    conv_point=0.00015
+
+    cond = True
+    conv = False
+    it = 0
+    while cond:
+        it += 1
+        XF=(XF+XN)/2
+        HCN=2.38*abs(100*XF-kelvin(ta))**0.25
+      
+        if calc_hcf(vr=0.1)>HCN:
+            HC=calc_hcf(vr=0.1)
+        else:
+            HC=HCN
+        
+        XN=(P5+P4*HC-P2*XF**4)/(100+P3*HC)
+        tcl=100*XN-273
+      
+        if abs(XN-XF)>conv_point:
+            cond=True
+        else:
+            cond=False
+            conv = True
+        if it > 150:
+            #too long to converge
+            cond = False
+        print ('calc', it, tcl,XN, XF, conv)
+        
+    return tcl
+       
+        
+tcl = calc_tcl(ta,Icl,fcl,M)
+
+print ('final tcl', tcl)
     
     
     
@@ -180,17 +235,31 @@ def calc_comfort(appdata):
 
     
 
-#calculation of skin temperature
-
-tsk=35.7-0.028*M    
-
 
 
 #Calculation of Metaboilc rate (W/m2)
 Mb= 45               #basal metabolic rate
 
 comf = calc_comfort(AppData)
+
+
 #dictionary for Metabolic rate of body segment involed
+
+
+#Wetting comfort as an additional criterion
+
+def calc_wetability (Re,M,pa): #Re value here is for the vapor resistance of ensemble
+    
+    w=(0.42*(M-58)*Re/(5770-7.2*M-pa))+0.06
+    return w
+    if w<0.0012*M+0.15:
+        print("comfortable for wetting")
+    else:
+        print("uncomfortable for wetting")
+
+calc_wetability (Re=0.015, M=55, pa=25)
+
+
 
 #def something():
 
