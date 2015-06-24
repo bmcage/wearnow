@@ -468,21 +468,21 @@ class WearNowView(NavigationView):
             # obj None, so unsaved ensemble.
             pass
 #            self.ensemble = Ensemble()
-
         if not self.ensemble:
             self.redrawing = False
             return
         
         if self.child_list:
-            self.scroll.remove(self.child_list)
-            self.child_list.destroy()
-            self.child_list = None
-        self.child_list = ChildEmbedList(self.dbstate,
-                                         self.uistate,
-                                         [],
-                                         self.ensemble)
-        self.scroll.add(self.child_list)
+            #update the existing
+            self.child_list.rebuild()
+        else:
+            self.child_list = ChildEmbedList(self.dbstate,
+                                             self.uistate,
+                                             [],
+                                             self.ensemble)
+            self.scroll.add(self.child_list)
 
+        self.redrawing = False
         return True
 
     def view_photo(self, photo):
@@ -602,7 +602,7 @@ class WearNowView(NavigationView):
             return False
 
     def react_to_new_tag(self, tag):
-        print ("Found a new tag", tag)
+        #print ("Found a new tag", tag)
         tagdict = {}
         stringvalues = ['Type', 'ID', 'URL', 'C']
         floatvalues = ['Id', 'Vres', 'Th', 'W']
@@ -611,7 +611,7 @@ class WearNowView(NavigationView):
             if messvalue.startswith('NFC Tag ID:'):
                 tagdict['TAGID'] = messvalue.split(':')[-1].strip()
             for value in messvalue.split(';;'):
-                print ('processing value', value)
+                #print ('processing value', value)
                 vdata = value.split(';')
                 if len(vdata) < 2:
                     #no data that interests us
@@ -637,7 +637,7 @@ class WearNowView(NavigationView):
                 attr.set_type(tagkey2attrkey[key])
                 attr.value = str(tagdict[key])
                 textile.add_attribute(attr)
-                print ('added attr', attr)
+                #print ('added attr', attr)
         if 'Type' in tagdict:
             ttype = TextileType()
             ttype.set_from_xml_str(tagdict['Type'])
@@ -650,7 +650,7 @@ class WearNowView(NavigationView):
             url.set_path(path)
             url.set_type(UrlType.WEB_HOME)
             textile.add_url(url)
-            print ('added url', url)
+            #print ('added url', url)
         if self.tag and self.tag.get_wearnow_id() == textile.get_wearnow_id():
             #same tag as before read. We do not process it again!
             return False
@@ -661,7 +661,6 @@ class WearNowView(NavigationView):
     
     def local_tag_react(self, textile):
         textiledb = self.dbstate.db.get_textile_from_wearnow_id(textile.get_wearnow_id())
-        print ('obtained in db', textiledb)
         if textiledb:
             #existing garment, add it to the list
             ref = ChildRef()
