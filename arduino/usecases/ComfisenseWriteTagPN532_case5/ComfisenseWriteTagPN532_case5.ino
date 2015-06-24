@@ -27,14 +27,14 @@ void loop() {
     Serial.println("\nPlace a formatted Mifare Classic NFC tag on the reader.");
     if (nfc.tagPresent()) {
       NdefMessage message = NdefMessage();
-      message.addTextRecord("ID;I001;;Type;Long Sleeve shirt;;Id;0.33;clo");
+      message.addTextRecord("ID;I005;;Type;Denim Trousers Fitted;;Id;0.169;m**2 kPa/W");
       //message.addTextRecord("Type;Long Sleeve shirt");   //Clothing type
       //message.addTextRecord("Id;0.33;clo");              //Thermal insulation;
-      message.addTextRecord("Vres;0.0044;m**2 kPa/W;;Th;0.8;mm;;W;100.0;g;;C;#FF0000;hex");   //Moisture Vapor resistance;
+      message.addTextRecord("Vres;0.0304;m**2 kPa/W;;Th;2;mm;;W;100.0;g;;C;#000014;hex");   //Moisture Vapor resistance;
       //message.addTextRecord("Th;0.8;;mm");               //Thickness
       //message.addTextRecord("W;100.0;g");                //Weigth
       //message.addTextRecord("C;#FF0000;hex");            //Color
-      message.addTextRecord("URL;cage.ugent.be/~bm/pics/comfisense/tshirt_case0.png");
+      message.addTextRecord("URL;cage.ugent.be/~bm/pics/comfisense/Denim_fitted_case5.jpg");
 
       boolean success = nfc.write(message);
       if (success) {
