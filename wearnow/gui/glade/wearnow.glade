@@ -421,7 +421,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entry1">
+                          <object class="GtkEntry" id="entr_comfort">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </object>
@@ -433,7 +433,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="btncomfort">
-                            <property name="label" translatable="yes">button</property>
+                            <property name="label" translatable="yes">Calculate Comfort</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>

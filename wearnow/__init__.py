@@ -24,4 +24,4 @@
 The core modules that provide the different packages
 """
 
-__all__ = ["tex", "gui"]
+__all__ = ["tex", "gui", ]

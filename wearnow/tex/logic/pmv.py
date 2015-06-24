@@ -78,18 +78,19 @@ def sat_pressure (ta):
     ps=math.exp(a)
     return ps
     
-print ('test sat pres 25=',sat_pressure(25))
+#print ('test sat pres 25=',sat_pressure(25))
 
 def partial_pressure(ta, RH=(50)):
     pa=10*RH*sat_pressure(ta)
     print (pa)
     return pa
     
-print ('test par pres 25=',partial_pressure(25))
+#print ('test par pres 25=',partial_pressure(25))
 
 
 
 def calc_pmv (M,pa,fcl,tcl,ta,hc,Icl):
+    print ('input pmv:', M,pa,fcl,tcl,ta,hc,Icl)
     pmv=(0.303*math.exp(-0.036*M)+0.028)*(M-3.05e-3)*(5733-6.99*M-pa)-0.42*  \
     (M-58.15)-(1.7e-5)*M*(5867-pa)-0.0014*M*(34-ta)-3.96e-8*fcl*((tcl+273)**4\
     -(ta+273)**4)-fcl*hc*(tcl-ta)
@@ -132,7 +133,7 @@ def calc_Vr(M):
 
 def calc_Icl(ensembledata):
     Icl = 0
-    for I,Vres,Gt in zip(ensembledata['insulation'], 
+    for I, Vres, Gt in zip(ensembledata['insulation'], 
                    ensembledata['vapresist'],
                    ensembledata['garmtype']):
         Icl += I
@@ -166,7 +167,7 @@ def calc_tcl_previous(ta,Icl):
     tcl_previous=kelvin(ta)+((35.5-ta)/(3.5*Icl+0.1))
     return tcl_previous
     
-print ('start tcl', calc_tcl_previous(ta,Icl))
+#print ('start tcl', calc_tcl_previous(ta,Icl))
     
 def calc_tcl(ta,Icl,fcl,M):
     
@@ -213,9 +214,9 @@ def calc_tcl(ta,Icl,fcl,M):
     return tcl
        
         
-tcl = calc_tcl(ta,Icl,fcl,M)
+#tcl = calc_tcl(ta,Icl,fcl,M)
 
-print ('final tcl', tcl)
+#print ('final tcl', tcl)
     
     
     
@@ -223,12 +224,13 @@ def calc_comfort(appdata):
     ta = appdata['climate']['ta']
     RH = appdata['climate']['RH']
     
-    M = Activity[appdata['activity']]
+    #M = Activity[appdata['activity']]
+    M = appdata['activity']
     Icl = calc_Icl(appdata['ensemble'])
     fcl = calc_fcl(Icl)
     Vr = calc_Vr(M)
+    tcl = calc_tcl(ta,Icl,fcl,M)
     hc = calc_hc(Vr,tcl,ta)
-    tcl = calc_tcl(ta,Icl,M,fcl,hc)
     pa = partial_pressure(ta, RH)
     
     return calc_pmv (M,pa,fcl,tcl,ta,hc,Icl)
@@ -237,10 +239,10 @@ def calc_comfort(appdata):
 
 
 
-#Calculation of Metaboilc rate (W/m2)
-Mb= 45               #basal metabolic rate
-
-comf = calc_comfort(AppData)
+##Calculation of Metaboilc rate (W/m2)
+#Mb= 45               #basal metabolic rate
+#
+#comf = calc_comfort(AppData)
 
 
 #dictionary for Metabolic rate of body segment involed
@@ -257,7 +259,7 @@ def calc_wetability (Re,M,pa): #Re value here is for the vapor resistance of ens
     else:
         print("uncomfortable for wetting")
 
-calc_wetability (Re=0.015, M=55, pa=25)
+#calc_wetability (Re=0.015, M=55, pa=25)
 
 
 
