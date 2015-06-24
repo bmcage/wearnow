@@ -3,7 +3,6 @@ import math
 
 #Environmental Variables 
 va=0.05 # condition for static body and still wind
-Vrass=2.5  # relative air velocity assumed
 
 #calculate time weighted average of Metabolic rate (need to be defined in profile)
 AppData = {
@@ -91,9 +90,12 @@ def partial_pressure(ta, RH=(50)):
 
 def calc_pmv (M,pa,fcl,tcl,ta,hc,Icl):
     print ('input pmv:', M,pa,fcl,tcl,ta,hc,Icl)
-    pmv=(0.303*math.exp(-0.036*M)+0.028)*(M-3.05e-3)*(5733-6.99*M-pa)-0.42*  \
-    (M-58.15)-(1.7e-5)*M*(5867-pa)-0.0014*M*(34-ta)-3.96e-8*fcl*((tcl+273)**4\
-    -(ta+273)**4)-fcl*hc*(tcl-ta)
+    hl2 = 0.42* (M-58.15)
+    if M < 58.15:
+        hl2 = 0
+    pmv=(0.303*math.exp(-0.036*M)+0.028)*(M-3.05e-3*(5733-6.99*M-pa)-hl2\
+    -(1.7e-5)*M*(5867-pa)-0.0014*M*(34-ta)-3.96e-8*fcl*((tcl+273)**4\
+    -(ta+273)**4)-fcl*hc*(tcl-ta))
     return pmv
 
 def calc_fcl(Icl):
@@ -125,6 +127,7 @@ def kelvin(ta):
 
 #calculation of relative air velocity (m/s)
 def calc_Vr(M):
+    return 0.1
     if M<58.2:      # metabolic rate in W/m2*
         v_ar=0
     else:
@@ -259,6 +262,28 @@ def calc_wetability (Re,M,pa): #Re value here is for the vapor resistance of ens
     else:
         print("uncomfortable for wetting")
 
+
+if __name__ == "__main__": 
+    #test to determine if our comfort function works
+    ta=19
+    Icl=.155 #0.5
+    M=1.2*58.2
+    vr=0.1
+    RH=40
+
+    fcl = calc_fcl(Icl)
+    Vr = calc_Vr(M)
+    Vr = 0.1
+    print ('relvel', Vr,vr)
+    tcl = calc_tcl(ta,Icl,fcl,M)
+    hc = calc_hc(Vr,tcl,ta)
+    pa = partial_pressure(ta, RH)
+    
+    
+    print('pmv', calc_pmv (M,pa,fcl,tcl,ta,hc,Icl))
+    print ('input pmv 1:', calc_pmv(69.84, 878.488083014345, 1.149975, 99.8658516518887, 19, 3.826355968803739, 0.155))
+    print ('input pmv 2:', calc_pmv(69.84, 878.488083014345, 1.149975, 22.8658516518887, 19, 3.826355968803739, 0.155))
+    print ('input pmv 3:', calc_pmv(69.84, 878.488083014345, 1.149975, 99.8658516518887, 19, 3.826355968803739, 0.155))
 #calc_wetability (Re=0.015, M=55, pa=25)
 
 
