@@ -646,7 +646,9 @@ class WearNowParser(UpdateCallback):
         :returns: The id.
         :rtype: str
         """
-        wearnow_id = id2user_format(id_)
+        #hack, for wearnow, we don't want ID's to change on import at this moment!
+        #wearnow_id = id2user_format(id_)
+        wearnow_id = id_
         if wearnow_id is None or not wearnow_ids.get(id_):
             if wearnow_id is None or self.db.has_wearnow_id(key, wearnow_id):
                 wearnow_ids[id_] = find_next_wearnow_id()
