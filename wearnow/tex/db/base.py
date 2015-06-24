@@ -970,7 +970,8 @@ class DbWriteBase(DbReadBase):
 #        for ensemble_handle in textile.get_ensemble_handle_list():
 #            if not ensemble_handle:
 #                continue
-        for ensemble_handle in self.get_ensemble_cursor():
+        for ensemble in self.get_ensemble_cursor():
+            ensemble_handle = ensemble[1][0]
             ensemble = self.get_ensemble_from_handle(ensemble_handle)
 
             changed = ensemble.remove_textile(textile.get_handle())
