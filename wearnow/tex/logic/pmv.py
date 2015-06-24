@@ -31,7 +31,7 @@ Segment = {
     'Whole body heavy':335,
     }
 
-print(Segment)
+#print(Segment)
     
     #dictionary for Metabolic rate of body posture
 
