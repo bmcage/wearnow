@@ -248,7 +248,8 @@ class ProcessSerial(threading.Thread):
                 self.stop()
         self.close()
 
-    def processserialinput(self):        
+    def processserialinput(self):
+        print ("waiting for a line")
         input_string = self.arduino.readline(512)  #max lines of 512 bytes
         try:
             input_string = input_string.decode('utf-8')
@@ -277,6 +278,7 @@ class ProcessSerial(threading.Thread):
                     self.currentread = []
                 finally:
                     self.lock.release()
+        print ("line end...")
 
     def get_read_tag(self, cleanafter=True):
         self.lock.acquire()
