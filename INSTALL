@@ -7,3 +7,5 @@ sudo apt-get install python3  python3-gi python3-cairo python3-gi-cairo \
   librsvg2-common python-dev libglib2.0-dev libgirepository1.0-dev \
   libcairo2-dev python3-cairo-dev intltool python-pyicu \
   ttf-freefont gtk2-engines-pixbuf python3-serial
+  
+Good Luck!
